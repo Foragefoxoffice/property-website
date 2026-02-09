@@ -10,11 +10,19 @@ export async function generateMetadata() {
       const data = response.data.data;
       // You can implement custom logic here to determine which language to use for SEO
       // For now, let's use English as default for metadata or common values
+      const title = data.homeSeoMetaTitle_en || data.heroTitle_en || "Property Portal";
+      const description = data.homeSeoMetaDescription_en || data.heroDescription_en || "Advanced Property Management and Listing Platform";
+      const ogTitle = data.homeSeoOgTitle_en || title;
+      const ogDescription = data.homeSeoOgDescription_en || description;
+      const ogImages = data.homeSeoOgImages?.length ? data.homeSeoOgImages : (data.heroImage ? [data.heroImage] : []);
+
       return {
-        title: data.homeSeoMetaTitle_en || data.heroTitle_en || "Property Portal",
-        description: data.homeSeoMetaDescription_en || data.heroDescription_en || "Advanced Property Management and Listing Platform",
+        title,
+        description,
         openGraph: {
-          images: data.homeSeoOgImages?.[0] || data.heroImage ? [data.homeSeoOgImages?.[0] || data.heroImage] : [],
+          title: ogTitle,
+          description: ogDescription,
+          images: ogImages,
         },
       };
     }

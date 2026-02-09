@@ -38,6 +38,7 @@ export async function generateMetadata() {
         openGraph: {
             title,
             description,
+            images: Array.isArray(data.contactSeoOgImages) ? data.contactSeoOgImages : (data.contactSeoOgImages ? [data.contactSeoOgImages] : []),
         },
     };
 }

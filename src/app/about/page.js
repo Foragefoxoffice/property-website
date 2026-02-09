@@ -40,7 +40,7 @@ export async function generateMetadata() {
         openGraph: {
             title,
             description,
-            images: data.aboutSeoOgImages || [],
+            images: Array.isArray(data.aboutSeoOgImages) ? data.aboutSeoOgImages : (data.aboutSeoOgImages ? [data.aboutSeoOgImages] : []),
         },
     };
 }
