@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import BlogPageClient from "./BlogPageClient";
 import axios from "axios";
 
@@ -40,5 +41,9 @@ export default async function Page() {
         getBlogPageData(),
     ]);
 
-    return <BlogPageClient initialBlogs={blogs} blogPageData={blogPageData} />;
+    return (
+        <Suspense fallback={null}>
+            <BlogPageClient initialBlogs={blogs} blogPageData={blogPageData} />
+        </Suspense>
+    );
 }

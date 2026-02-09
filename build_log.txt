@@ -1,0 +1,419 @@
+
+> property-nextjs@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/arundurai/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/arundurai/Public/Loki Works/Property/property-nextjs/package-lock.json
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.4s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/22) ...
+  Generating static pages using 11 workers (5/22) 
+(node:55007) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  Generating static pages using 11 workers (10/22) 
+response {
+  status: 200,
+  statusText: 'OK',
+  headers: Object [AxiosHeaders] {
+    server: 'nginx',
+    date: 'Mon, 09 Feb 2026 14:05:36 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'transfer-encoding': 'chunked',
+    connection: 'keep-alive',
+    vary: 'Accept-Encoding, Origin',
+    'access-control-allow-credentials': 'true',
+    'cross-origin-opener-policy': 'same-origin',
+    'origin-agent-cluster': '?1',
+    'referrer-policy': 'no-referrer',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'x-ratelimit-limit': '500',
+    'x-ratelimit-remaining': '490',
+    'x-ratelimit-reset': '1770645996',
+    etag: 'W/"2041-3JwNrwhQCq5ef9KAiDHA7jMn2sQ"',
+    'x-cache': 'MISS'
+  },
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch' ],
+    transformRequest: [ [Function (anonymous)] ],
+    transformResponse: [ [Function (anonymous)] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      'User-Agent': 'axios/1.13.4',
+      'Accept-Encoding': 'gzip, compress, deflate, br'
+    },
+    baseURL: 'https://dev.placetest.in/api/v1',
+    withCredentials: true,
+    method: 'get',
+    url: '/home-page',
+    allowAbsoluteUrls: true,
+    data: undefined
+  },
+  request: <ref *1> ClientRequest {
+    _events: [Object: null prototype] {
+      abort: [Function (anonymous)],
+      aborted: [Function (anonymous)],
+      connect: [Function (anonymous)],
+      error: [Function (anonymous)],
+      socket: [Function (anonymous)],
+      timeout: [Function (anonymous)],
+      finish: [Function: requestOnFinish]
+    },
+    _eventsCount: 7,
+    _maxListeners: undefined,
+    outputData: [],
+    outputSize: 0,
+    writable: true,
+    destroyed: true,
+    _last: true,
+    chunkedEncoding: false,
+    shouldKeepAlive: true,
+    maxRequestsOnConnectionReached: false,
+    _defaultKeepAlive: true,
+    useChunkedEncodingByDefault: false,
+    sendDate: false,
+    _removedConnection: false,
+    _removedContLen: false,
+    _removedTE: false,
+    strictContentLength: false,
+    _contentLength: 0,
+    _hasBody: true,
+    _trailer: '',
+    finished: true,
+    _headerSent: true,
+    _closed: true,
+    _header: 'GET /api/v1/home-page HTTP/1.1\r\n' +
+      'Accept: application/json, text/plain, */*\r\n' +
+      'Content-Type: application/json\r\n' +
+      'User-Agent: axios/1.13.4\r\n' +
+      'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+      'Host: dev.placetest.in\r\n' +
+      'Connection: keep-alive\r\n' +
+      '\r\n',
+    _keepAliveTimeout: 0,
+    _onPendingData: [Function: nop],
+    agent: Agent {
+      _events: [Object: null prototype],
+      _eventsCount: 2,
+      _maxListeners: undefined,
+      options: [Object: null prototype],
+      defaultPort: 443,
+      protocol: 'https:',
+      requests: [Object: null prototype] {},
+      sockets: [Object: null prototype] {},
+      freeSockets: [Object: null prototype],
+      keepAliveMsecs: 1000,
+      keepAlive: true,
+      maxSockets: Infinity,
+      maxFreeSockets: 256,
+      scheduling: 'lifo',
+      maxTotalSockets: Infinity,
+      totalSocketCount: 7,
+      agentKeepAliveTimeoutBuffer: 1000,
+      maxCachedSessions: 100,
+      _sessionCache: [Object],
+      Symbol(shapeMode): false,
+      Symbol(kCapture): false
+    },
+    socketPath: undefined,
+    method: 'GET',
+    maxHeaderSize: undefined,
+    insecureHTTPParser: undefined,
+    joinDuplicateHeaders: undefined,
+    path: '/api/v1/home-page',
+    _ended: true,
+    res: IncomingMessage {
+      _events: [Object],
+      _readableState: [ReadableState],
+      _maxListeners: undefined,
+      socket: null,
+      httpVersionMajor: 1,
+      httpVersionMinor: 1,
+      httpVersion: '1.1',
+      complete: true,
+      rawHeaders: [Array],
+      rawTrailers: [],
+      joinDuplicateHeaders: undefined,
+      aborted: false,
+      upgrade: false,
+      url: '',
+      method: null,
+      statusCode: 200,
+      statusMessage: 'OK',
+      client: [TLSSocket],
+      _consuming: false,
+      _dumped: false,
+      req: [Circular *1],
+      _eventsCount: 4,
+      responseUrl: 'https://dev.placetest.in/api/v1/home-page',
+      redirects: [],
+      Symbol(shapeMode): true,
+      Symbol(kCapture): false,
+      Symbol(kHeaders): [Object],
+      Symbol(kHeadersCount): 48,
+      Symbol(kTrailers): null,
+      Symbol(kTrailersCount): 0
+    },
+    aborted: false,
+    timeoutCb: null,
+    upgradeOrConnect: false,
+    parser: null,
+    maxHeadersCount: null,
+    reusedSocket: true,
+    host: 'dev.placetest.in',
+    protocol: 'https:',
+    _redirectable: Writable {
+      _events: [Object],
+      _writableState: [WritableState],
+      _maxListeners: undefined,
+      _options: [Object],
+      _ended: true,
+      _ending: true,
+      _redirectCount: 0,
+      _redirects: [],
+      _requestBodyLength: 0,
+      _requestBodyBuffers: [],
+      _eventsCount: 3,
+      _onNativeResponse: [Function (anonymous)],
+      _currentRequest: [Circular *1],
+      _currentUrl: 'https://dev.placetest.in/api/v1/home-page',
+      _timeout: null,
+      Symbol(shapeMode): true,
+      Symbol(kCapture): false
+    },
+    Symbol(shapeMode): false,
+    Symbol(kCapture): false,
+    Symbol(kBytesWritten): 0,
+    Symbol(kNeedDrain): false,
+    Symbol(corked): 0,
+    Symbol(kChunkedBuffer): [],
+    Symbol(kChunkedLength): 0,
+    Symbol(kSocket): TLSSocket {
+      _tlsOptions: [Object],
+      _secureEstablished: true,
+      _securePending: false,
+      _newSessionPending: false,
+      _controlReleased: true,
+      secureConnecting: false,
+      _SNICallback: null,
+      servername: 'dev.placetest.in',
+      alpnProtocol: false,
+      authorized: true,
+      authorizationError: null,
+      encrypted: true,
+      _events: [Object: null prototype],
+      _eventsCount: 9,
+      connecting: false,
+      _hadError: false,
+      _parent: null,
+      _host: 'dev.placetest.in',
+      _closeAfterHandlingError: false,
+      _readableState: [ReadableState],
+      _writableState: [WritableState],
+      allowHalfOpen: false,
+      _maxListeners: undefined,
+      _sockname: null,
+      _pendingData: null,
+      _pendingEncoding: '',
+      server: undefined,
+      _server: null,
+      ssl: [TLSWrap],
+      _requestCert: true,
+      _rejectUnauthorized: true,
+      timeout: 5000,
+      parser: null,
+      _httpMessage: null,
+      Symbol(alpncallback): null,
+      Symbol(res): [TLSWrap],
+      Symbol(verified): true,
+      Symbol(pendingSession): null,
+      Symbol(async_id_symbol): -1,
+      Symbol(kHandle): [TLSWrap],
+      Symbol(lastWriteQueueSize): 0,
+      Symbol(timeout): Timeout {
+        _idleTimeout: 5000,
+        _idlePrev: [Timeout],
+        _idleNext: [Timeout],
+        _idleStart: 4197,
+        _onTimeout: [Function: bound ],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        Symbol(refed): false,
+        Symbol(kHasPrimitive): false,
+        Symbol(asyncId): 1598,
+        Symbol(triggerId): 1596,
+        Symbol(kAsyncContextFrame): [AsyncContextFrame [Map]]
+      },
+      Symbol(kBuffer): null,
+      Symbol(kBufferCb): null,
+      Symbol(kBufferGen): null,
+      Symbol(shapeMode): true,
+      Symbol(kCapture): false,
+      Symbol(kSetNoDelay): false,
+      Symbol(kSetKeepAlive): true,
+      Symbol(kSetKeepAliveInitialDelay): 1,
+      Symbol(kBytesRead): 0,
+      Symbol(kBytesWritten): 0,
+      Symbol(connect-options): [Object]
+    },
+    Symbol(kOutHeaders): [Object: null prototype] {
+      accept: [Array],
+      'content-type': [Array],
+      'user-agent': [Array],
+      'accept-encoding': [Array],
+      host: [Array]
+    },
+    Symbol(errored): null,
+    Symbol(kHighWaterMark): 65536,
+    Symbol(kRejectNonStandardBodyWrites): false,
+    Symbol(kUniqueHeaders): null
+  },
+  data: {
+    success: true,
+    data: {
+      _id: '69540ccc3028fa2b0a450a6a',
+      heroTitle_en: 'Ecopark – Vietnam’s Most Livable Green City',
+      heroDescription_en: 'A benchmark eco-living destination where nature blends seamlessly with modern amenities for a balanced and sustainable lifestyle.',
+      heroTitle_vn: 'Ecopark – Thành Phố Xanh Đáng Sống Bậc Nhất',
+      heroDescription_vn: 'Không gian sống sinh thái chuẩn mực, nơi thiên nhiên hòa quyện cùng tiện ích hiện đại, kiến tạo cuộc sống cân bằng và bền vững.',
+      backgroundImage: '/uploads/homepage/1768482853634-354362681.jpg',
+      homeAboutTitle_en: 'A Trusted Real Estate Consultant & Distributor for Ecopark',
+      homeAboutTitle_vn: 'Đơn Vị Tư Vấn & Phân Phối Bất Động Sản Ecopark Uy Tín',
+      homeAboutDescription_en: 'We specialize in consulting and distributing real estate products in Ecopark, committed to transparency, professionalism, and long-term partnership with our clients. Every solution is tailored to real needs, maximizing both living quality and sustainable investment value.',
+      homeAboutDescription_vn: 'Chúng tôi chuyên tư vấn và phân phối các sản phẩm bất động sản tại Ecopark với cam kết minh bạch, chuyên nghiệp và đồng hành lâu dài cùng khách hàng. Mỗi giải pháp được thiết kế dựa trên nhu cầu thực tế, tối ưu giá trị an cư và đầu tư bền vững.',
+      homeAboutButtonText_en: 'Learn More',
+      homeAboutButtonText_vn: 'Tìm Hiểu Thêm',
+      homeAboutButtonLink: 'https://dev.183housingsolutions.com/about',
+      homeAboutStep1Title_en: 'Understanding Client Needs',
+      homeAboutStep1Title_vn: 'Thấu Hiểu Nhu Cầu Khách Hàng',
+      homeAboutStep1Des_en: 'We carefully listen and analyze living or investment goals to recommend the most suitable properties.',
+      homeAboutStep1Des_vn: 'Chúng tôi lắng nghe và phân tích kỹ mục tiêu an cư hoặc đầu tư để đề xuất sản phẩm phù hợp nhất.',
+      homeAboutStep2Title_en: 'Transparent & Accurate Consulting',
+      homeAboutStep2Title_vn: 'Tư Vấn Minh Bạch & Chính Xác',
+      homeAboutStep2Des_en: 'All information regarding legal status, pricing, and progress is clearly provided to ensure confident decision-making.',
+      homeAboutStep2Des_vn: 'Mọi thông tin về pháp lý, giá bán và tiến độ đều được cung cấp rõ ràng, giúp khách hàng yên tâm ra quyết định.',
+      homeAboutStep3Title_en: 'End-to-End Support',
+      homeAboutStep3Title_vn: 'Đồng Hành Trọn Vẹn',
+      homeAboutStep3Des_en: 'We support clients throughout the entire journey—from property selection and transactions to after-sales and long-term value optimization.',
+      homeAboutStep3Des_vn: 'Chúng tôi đồng hành cùng khách hàng từ khâu chọn sản phẩm, giao dịch đến hậu mãi và khai thác giá trị lâu dài.',
+      createdAt: '2025-12-30T17:33:00.852Z',
+      updatedAt: '2026-02-08T09:22:08.232Z',
+      __v: 0,
+      homeFeatureDescription_en: 'Newest Properties First',
+      homeFeatureDescription_vn: 'Bất Động Sản Mới Nhất Trước Tiên',
+      homeFeatureTitle_en: 'Just Listed',
+      homeFeatureTitle_vn: 'Mới Đăng',
+      faqs: [Array],
+      homeFaqBg: '/uploads/homepage/1768483988628-972944676.jpg',
+      homeFaqDescription_en: 'Everything You Need to Know About Ecopark Homes bertnernt',
+      homeFaqDescription_vn: 'Tất Cả Những Điều Bạn Cần Biết Về Nhà Ở Ecopark',
+      homeFaqImageButtonLink: 'https://dev.183housingsolutions.com/contact',
+      homeFaqImageButtonText_en: 'Get in Touch ehtherh',
+      homeFaqImageButtonText_vn: 'Nhận Tư Vấn',
+      homeFaqImageDescription_en: 'Every property on 183 Housing Solutions is verified for accuracy, pricing, and availability — so you can choose with confidence. eehgee',
+      homeFaqImageDescription_vn: 'Mỗi bất động sản trên 183 Housing Solutions đều được xác thực về thông tin, giá và tình trạng — giúp bạn lựa chọn với sự yên tâm tuyệt đối.',
+      homeFaqImageTitle_en: 'Real Homes. Real Peace of Mind. rgehgeh',
+      homeFaqImageTitle_vn: 'Nhà Thật. An Tâm Thật.',
+      homeFaqTitle_en: 'Need Help? berter',
+      homeFaqTitle_vn: 'Cần Hỗ Trợ?',
+      homeFindBg: '/uploads/homepage/1768484059549-776566195.jpg',
+      homeFindDescription_en: 'Find a home that fits your lifestyle, budget, and future, all in one place. fntryeuhjwnjre',
+      homeFindDescription_vn: 'Tìm ngôi nhà phù hợp với phong cách sống, ngân sách và tương lai của bạn  ngay tại một nền tảng.',
+      homeFindTitle_en: 'Your Life in Ecopark Starts Here ethterhjw4rjh',
+      homeFindTitle_vn: 'Cuộc Sống Tại Ecopark Bắt Đầu Từ Đây',
+      homeBlogDescription_en: 'Latest Updates from 183 Housing Solutions thrrtnhjerdhr',
+      homeBlogDescription_vn: 'Cập Nhật Mới Nhất Từ 183 Housing Solutions',
+      homeBlogTitle_en: 'News & Insights nnftrndtn',
+      homeBlogTitle_vn: 'Tin Tức & Góc Nhìn',
+      homeFeatureButtonLink: 'https://dev.183housingsolutions.com/listing',
+      homeFeatureButtonText_en: 'See Best Deals',
+      homeFeatureButtonText_vn: 'Xem Giá Tốt',
+      homeSeoAllowIndexing: true,
+      homeSeoMetaKeywords_en: [Array],
+      homeSeoOgImages: [Array],
+      homeAboutSubTitle_en: 'WHO WE ARE',
+      homeAboutSubTitle_vn: 'VỀ CHÚNG TÔI',
+      homeSeoCanonicalUrl_en: 'https://dev.183housingsolutions.com/',
+      homeSeoCanonicalUrl_vn: 'sdsds',
+      homeSeoMetaDescription_vn: '183 Housing Solutions',
+      homeSeoMetaKeywords_vn: [Array],
+      homeSeoMetaTitle_en: 'Home Page',
+      homeSeoMetaTitle_vn: 'Trang Chủ',
+      homeSeoOgDescription_en: 'Home Page Og Description - 183 Housing Solutions',
+      homeSeoOgDescription_vn: 'sdsds',
+      homeSeoOgTitle_en: 'Home Page - 183 Housing Solutions',
+      homeSeoOgTitle_vn: 'sdsdsdsdsd',
+      homeSeoSchemaType_en: 'House',
+      homeSeoSchemaType_vn: 'House',
+      homeSeoSlugUrl_en: '/',
+      homeSeoSlugUrl_vn: '/',
+      homeSeoMetaDescription_en: 'Home Page - 183 Housing Solutions',
+      homeTestimonialSubTitle_en: 'OUR HAPPY CUSTOMERS',
+      homeTestimonialSubTitle_vn: '',
+      homeTestimonialTitle_en: 'What They Say About Us',
+      homeTestimonialTitle_vn: ''
+    }
+  }
+}
+  Generating static pages using 11 workers (16/22) 
+✓ Generating static pages using 11 workers (22/22) in 4.1s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ○ /blogs
+├ ƒ /blogs/[slug]
+├ ○ /contact
+├ ○ /favorites
+├ ○ /forgot-password
+├ ○ /give-testimonial
+├ ○ /icon.png
+├ ƒ /listing
+├ ○ /login
+├ ○ /privacy-policy
+├ ○ /profile
+├ ƒ /property-showcase/[id]
+├ ƒ /property-showcase/[id]/[slug]
+├ ○ /register
+├ ○ /reset-password
+├ ○ /terms-conditions
+├ ○ /user-dashboard
+├ ○ /user-dashboard/favorites
+├ ○ /user-dashboard/give-testimonial
+└ ○ /user-dashboard/profile
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

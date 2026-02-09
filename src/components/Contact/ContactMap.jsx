@@ -7,9 +7,19 @@ export default function ContactMap({ data }) {
         if (input.trim().startsWith("http")) return input;
         let decoded = input;
         if (input.includes("&lt;")) {
-            const txt = document.createElement("textarea");
-            txt.innerHTML = input;
-            decoded = txt.value;
+            if (typeof document !== 'undefined') {
+                const txt = document.createElement("textarea");
+                txt.innerHTML = input;
+                decoded = txt.value;
+            } else {
+                // Simple server-side decoding for basic entities
+                decoded = input
+                    .replace(/&lt;/g, '<')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&quot;/g, '"')
+                    .replace(/&#39;/g, "'")
+                    .replace(/&amp;/g, '&');
+            }
         }
 
         const srcMatch = decoded.match(/src=["']([^"']+)["']/);

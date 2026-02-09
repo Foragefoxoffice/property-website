@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import BlogDetailClient from "./BlogDetailClient";
 import axios from "axios";
 
@@ -40,5 +41,10 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
     const { slug } = await params;
     const blog = await getBlogData(slug);
-    return <BlogDetailClient blog={blog} />;
+
+    return (
+        <Suspense fallback={null}>
+            <BlogDetailClient blog={blog} />
+        </Suspense>
+    );
 }

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ListingClient from "./ListingClient";
 
 export async function generateMetadata({ searchParams }) {
@@ -24,5 +25,9 @@ export async function generateMetadata({ searchParams }) {
 }
 
 export default function Page() {
-    return <ListingClient />;
+    return (
+        <Suspense fallback={null}>
+            <ListingClient />
+        </Suspense>
+    );
 }
