@@ -38,13 +38,25 @@ export async function generateMetadata({ params }) {
     const title = seoInfo.metaTitle?.en || listingInfo.listingInformationPropertyTitle?.en || "Property Details";
     const description = seoInfo.metaDescription?.en || listingInfo.informationView?.en || "Check out this amazing property!";
 
+    const ogImages = seoInfo.ogImages?.length ? seoInfo.ogImages : (property.imagesVideos?.propertyImages || []);
+
     return {
-        title: `${title} | Property Portal`,
+        title,
         description,
+        alternates: {
+            canonical: `/property-showcase/${id}`,
+        },
         openGraph: {
             title,
             description,
-            images: seoInfo.ogImages?.length ? seoInfo.ogImages : (property.imagesVideos?.propertyImages || []),
+            images: ogImages,
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: ogImages.length > 0 ? [ogImages[0]] : [],
         },
     };
 }
