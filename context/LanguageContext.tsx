@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 
 interface LanguageContextValue {
   language: string
@@ -13,10 +13,12 @@ const LanguageContext = createContext<LanguageContextValue>({
 })
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [language, setLanguage] = useState<string>(() => {
-    if (typeof window === 'undefined') return 'vi'
-    return localStorage.getItem('language') || 'vi'
-  })
+  const [language, setLanguage] = useState<string>('vi')
+
+  useEffect(() => {
+    const saved = localStorage.getItem('language')
+    if (saved) setLanguage(saved)
+  }, [])
 
   const toggleLanguage = (lang: string) => {
     setLanguage(lang)

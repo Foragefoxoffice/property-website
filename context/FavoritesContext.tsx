@@ -36,17 +36,16 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
   const { language } = useLanguage()
   const t = translations[language as keyof typeof translations]
 
-  // Initialize from localStorage
-  const [favorites, setFavorites] = useState<FavoriteItem[]>(() => {
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([])
+
+  useEffect(() => {
     try {
-      if (typeof window === 'undefined') return []
       const saved = localStorage.getItem('localFavorites')
-      return saved ? JSON.parse(saved) : []
-    } catch (e) {
-      console.error('Error parsing favorites from localStorage', e)
-      return []
+      if (saved) setFavorites(JSON.parse(saved))
+    } catch {
+      // ignore
     }
-  })
+  }, [])
 
   const [loading, setLoading] = useState(false)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
@@ -107,7 +106,9 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
       createdAt: new Date().toISOString(),
     }
 
+    setActionLoading('add')
     setFavorites((prev) => [...prev, newFav])
+    setActionLoading(null)
     toast.success(t.addedToFavorites)
     return true
   }
