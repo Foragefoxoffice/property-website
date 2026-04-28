@@ -1,0 +1,43 @@
+// Server-side fetch utilities — use ONLY in Server Components (app/page.tsx etc.)
+// Uses native fetch() with Next.js cache revalidation. Never import in 'use client' files.
+
+const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/$/, '')
+
+export async function serverGet<T>(path: string, revalidate = 300): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    next: { revalidate },
+    headers: { 'Content-Type': 'application/json' },
+  })
+  if (!res.ok) throw new Error(`Server fetch failed: ${path} — ${res.status}`)
+  const json = await res.json()
+  return json
+}
+
+export const fetchAllProperties = (params?: Record<string, string>) => {
+  const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+  return serverGet<{ success: boolean; data: unknown[] }>(`/properties${qs}`)
+}
+
+export const fetchPropertyById = (id: string) =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/properties/${id}`)
+
+export const fetchAllBlogs = () =>
+  serverGet<{ success: boolean; data: unknown[] }>('/blogs')
+
+export const fetchBlogBySlug = (slug: string) =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/blogs/${slug}`)
+
+export const fetchAllProjects = () =>
+  serverGet<{ success: boolean; data: unknown[] }>('/projects')
+
+export const fetchProjectBySlug = (slug: string) =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/projects/${slug}`)
+
+export const fetchHomeCms = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/home')
+
+export const fetchAboutCms = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/about')
+
+export const fetchContactCms = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/contact')

@@ -1,7 +1,6 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-// @ts-ignore – lib/api will be created in Task 4
 import { getRoles } from '@/lib/api'
 
 const PermissionContext = createContext<any>(null)

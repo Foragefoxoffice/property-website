@@ -1,7 +1,6 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-// @ts-ignore – lib/api will be created in Task 4
 import { addFavorite as apiAddFavorite } from '@/lib/api'
 import { toast } from 'react-toastify'
 import { useLanguage } from '@/context/LanguageContext'
