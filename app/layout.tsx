@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Providers from '@/components/Providers'
+import PublicHeader from '@/components/Layout/PublicHeader'
+import PublicFooter from '@/components/Layout/PublicFooter'
 
 export const metadata: Metadata = {
   title: '183 Housing Solutions — Find Your Home in Vietnam',
@@ -21,7 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Providers>
-          {children}
+          <PublicHeader />
+          <main>{children}</main>
+          <PublicFooter />
         </Providers>
       </body>
     </html>
