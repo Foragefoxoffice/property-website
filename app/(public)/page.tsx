@@ -1,4 +1,4 @@
-import { fetchHomeCms, fetchAllProperties } from '@/lib/serverFetch'
+import { fetchHomeCms, fetchListingProperties } from '@/lib/serverFetch'
 import HomePageClient from '@/components/Home/HomePageClient'
 import type { Metadata } from 'next'
 
@@ -19,7 +19,7 @@ export default async function HomePage() {
   try {
     const [cms, props] = await Promise.all([
       fetchHomeCms(),
-      fetchAllProperties({ limit: '6' }),
+      fetchListingProperties({ page: '1', limit: '6', sortBy: 'newest' }),
     ])
     cmsData = (cms.data as Record<string, unknown>) || {}
     featuredProperties = (props.data as unknown[]) || []

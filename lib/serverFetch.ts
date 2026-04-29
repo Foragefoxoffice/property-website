@@ -34,7 +34,12 @@ export const fetchProjectBySlug = (slug: string) =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>(`/projects/${slug}`)
 
 export const fetchHomeCms = () =>
-  serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/home')
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/home-page')
+
+export const fetchListingProperties = (params?: Record<string, string>) => {
+  const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+  return serverGet<{ success: boolean; data: unknown[] }>(`/create-property/listing${qs}`)
+}
 
 export const fetchAboutCms = () =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/about')
