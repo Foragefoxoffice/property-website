@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Providers from '@/components/Providers'
+import FloatingContactButtons from '@/components/FloatingContactButtons'
+import ScrollUpButton from '@/components/ScrollUpButton'
 
 export const metadata: Metadata = {
   title: '183 Housing Solutions — Find Your Home in Vietnam',
@@ -22,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           {children}
+          <FloatingContactButtons />
+          <ScrollUpButton />
         </Providers>
       </body>
     </html>
