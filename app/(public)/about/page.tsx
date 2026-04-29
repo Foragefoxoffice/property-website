@@ -1,9 +1,33 @@
 import { fetchAboutCms } from '@/lib/serverFetch'
+import AboutBanner from '@/components/About/AboutBanner'
+import AboutOverview from '@/components/About/AboutOverview'
+import AboutMissionVission from '@/components/About/AboutMissionVission'
+import AboutHistory from '@/components/About/AboutHistory'
+import AboutWhyChoose from '@/components/About/AboutWhyChoose'
+import AboutBuyProcess from '@/components/About/AboutBuyProcess'
+import AboutFindProperty from '@/components/About/AboutFindProperty'
+import AboutAgent from '@/components/About/AboutAgent'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'About Us | 183 Housing Solutions',
-  description: 'Learn about 183 Housing Solutions and our mission in Vietnam.',
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const res = await fetchAboutCms()
+    const data = (res.data as any) || {}
+    return {
+      title: data.aboutSeoMetaTitle_en || 'About Us | 183 Housing Solutions',
+      description: data.aboutSeoMetaDescription_en || 'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      openGraph: {
+        title: data.aboutSeoOgTitle_en || data.aboutSeoMetaTitle_en,
+        description: data.aboutSeoOgDescription_en || data.aboutSeoMetaDescription_en,
+        images: data.aboutSeoOgImage ? [data.aboutSeoOgImage] : [],
+      }
+    }
+  } catch {
+    return {
+      title: 'About Us | 183 Housing Solutions',
+      description: 'Learn about 183 Housing Solutions and our mission in Vietnam.',
+    }
+  }
 }
 
 export default async function AboutPage() {
@@ -14,13 +38,15 @@ export default async function AboutPage() {
   } catch {}
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-extrabold text-[#41398B] mb-6">{String(data.title || 'About Us')}</h1>
-      {data.content ? (
-        <div className="prose max-w-none text-gray-600" dangerouslySetInnerHTML={{ __html: String(data.content) }} />
-      ) : (
-        <p className="text-gray-500">We are 183 Housing Solutions, your trusted partner for real estate in Vietnam.</p>
-      )}
+    <div className="min-h-screen bg-white">
+      <AboutBanner data={data} />
+      <AboutOverview data={data} />
+      <AboutMissionVission data={data} />
+      <AboutHistory data={data} />
+      <AboutWhyChoose data={data} />
+      <AboutBuyProcess data={data} />
+      <AboutFindProperty data={data} />
+      <AboutAgent data={data} />
     </div>
   )
 }

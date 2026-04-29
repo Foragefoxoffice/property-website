@@ -668,7 +668,7 @@ export const deleteProjectCategory = (id: string): Promise<AxiosResponse> =>
 /* =========================================================
    ENQUIRIES APIs (Next.js additions)
 ========================================================= */
-export const getUserEnquiries = (): Promise<AxiosResponse> => API.get('/enquiries/my')
-export const createEnquiry = (data: object): Promise<AxiosResponse> => API.post('/enquiries', data)
+export const getUserEnquiries = (): Promise<AxiosResponse> => API.get('/favorites')
+export const createEnquiry = (data: object): Promise<AxiosResponse> => API.post('/favorites/add', data)
 
 export default API

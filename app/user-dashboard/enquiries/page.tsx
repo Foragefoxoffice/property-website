@@ -5,7 +5,7 @@ import { getUserEnquiries } from '@/lib/api'
 
 interface Enquiry {
   _id: string
-  properties: { title?: string; _id: string }[]
+  properties: any[]
   message: string
   status: string
   createdAt: string
@@ -46,7 +46,7 @@ export default function EnquiriesPage() {
                   enquiry.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
                   enquiry.status === 'resolved' ? 'bg-green-100 text-green-700' :
                   'bg-gray-100 text-gray-600'
-                }`}>{enquiry.status}</span>
+                }`}>{enquiry.status || 'pending'}</span>
                 <span className="text-xs text-gray-400">
                   {new Date(enquiry.createdAt).toLocaleDateString()}
                 </span>
@@ -57,7 +57,7 @@ export default function EnquiriesPage() {
                   <div className="flex flex-wrap gap-2">
                     {enquiry.properties.map(p => (
                       <span key={p._id} className="px-2 py-1 bg-[#E8E8FF] text-[#41398B] text-xs rounded-md">
-                        {p.title || p._id}
+                        {p.listingInformation?.listingInformationPropertyTitle?.en || p.title || p._id}
                       </span>
                     ))}
                   </div>

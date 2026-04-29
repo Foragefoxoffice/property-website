@@ -24,11 +24,20 @@ export const fetchPropertyById = (id: string) =>
 export const fetchAllBlogs = () =>
   serverGet<{ success: boolean; data: unknown[] }>('/blogs')
 
+export const fetchBlogPage = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/blog-page')
+
 export const fetchBlogBySlug = (slug: string) =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>(`/blogs/${slug}`)
 
 export const fetchAllProjects = () =>
   serverGet<{ success: boolean; data: unknown[] }>('/projects')
+
+export const fetchProjectPage = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/project-page')
+
+export const fetchProjectCategories = () =>
+  serverGet<{ success: boolean; data: unknown[] }>('/project-categories')
 
 export const fetchProjectBySlug = (slug: string) =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>(`/projects/${slug}`)
@@ -42,10 +51,10 @@ export const fetchListingProperties = (params?: Record<string, string>) => {
 }
 
 export const fetchAboutCms = () =>
-  serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/about')
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/about-page')
 
 export const fetchContactCms = () =>
-  serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/contact')
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/contact-page')
 
 export const fetchTermsConditions = () =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>('/terms-conditions-page')

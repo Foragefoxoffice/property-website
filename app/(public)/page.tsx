@@ -2,14 +2,25 @@ import { fetchHomeCms, fetchListingProperties } from '@/lib/serverFetch'
 import HomePageClient from '@/components/Home/HomePageClient'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: '183 Housing Solutions — Find Your Home in Vietnam',
-  description: 'Browse properties for lease, sale, and home stay in Vietnam.',
-  openGraph: {
-    title: '183 Housing Solutions',
-    description: 'Find your perfect home in Vietnam',
-    siteName: '183 Housing Solutions',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const res = await fetchHomeCms()
+    const data = (res.data as any) || {}
+    return {
+      title: data.homeSeoMetaTitle_en || '183 Housing Solutions — Find Your Home in Vietnam',
+      description: data.homeSeoMetaDescription_en || 'Browse properties for lease, sale, and home stay in Vietnam.',
+      openGraph: {
+        title: data.homeSeoOgTitle_en || data.homeSeoMetaTitle_en,
+        description: data.homeSeoOgDescription_en || data.homeSeoMetaDescription_en,
+        images: data.homeSeoOgImage ? [data.homeSeoOgImage] : [],
+      }
+    }
+  } catch {
+    return {
+      title: '183 Housing Solutions — Find Your Home in Vietnam',
+      description: 'Browse properties for lease, sale, and home stay in Vietnam.',
+    }
+  }
 }
 
 export default async function HomePage() {

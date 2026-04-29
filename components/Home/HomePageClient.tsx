@@ -534,10 +534,12 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
+    const el = ref.current
+    if (!el || blogs.length === 0) return
     const ob = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true) }, { threshold: 0.1 })
-    if (ref.current) ob.observe(ref.current)
+    ob.observe(el)
     return () => ob.disconnect()
-  }, [])
+  }, [blogs.length])
 
   useEffect(() => {
     import('@/lib/api').then(({ getBlogs }) => {

@@ -1,9 +1,27 @@
 import { fetchTermsConditions } from '@/lib/serverFetch'
+import TermsConditionBanner from '@/components/TermsConditions/TermsConditionBanner'
+import TermsConditionContent from '@/components/TermsConditions/TermsConditionContent'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Terms & Conditions | 183 Housing Solutions',
-  description: 'Terms and conditions for using 183 Housing Solutions services.',
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const res = await fetchTermsConditions()
+    const data = (res.data as any) || {}
+    return {
+      title: data.termsConditionSeoMetaTitle_en || 'Terms & Conditions | 183 Housing Solutions',
+      description: data.termsConditionSeoMetaDescription_en || 'Terms and conditions for using 183 Housing Solutions services.',
+      openGraph: {
+        title: data.termsConditionSeoOgTitle_en || data.termsConditionSeoMetaTitle_en,
+        description: data.termsConditionSeoOgDescription_en || data.termsConditionSeoMetaDescription_en,
+        images: data.termsConditionSeoOgImages && data.termsConditionSeoOgImages.length > 0 ? [data.termsConditionSeoOgImages[0]] : [],
+      }
+    }
+  } catch {
+    return {
+      title: 'Terms & Conditions | 183 Housing Solutions',
+      description: 'Terms and conditions for using 183 Housing Solutions services.',
+    }
+  }
 }
 
 export const revalidate = 3600
@@ -13,19 +31,15 @@ export default async function TermsConditionsPage() {
   try {
     const res = await fetchTermsConditions()
     data = (res.data as Record<string, unknown>) || {}
-  } catch {}
-
-  const title = String(data.title || 'Terms & Conditions')
-  const content = String(data.content || data.body || '')
+  } catch (error) {
+    console.error('Error fetching Terms & Conditions data:', error)
+  }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-extrabold text-[#41398B] mb-8">{title}</h1>
-      {content ? (
-        <div className="prose max-w-none text-gray-600" dangerouslySetInnerHTML={{ __html: content }} />
-      ) : (
-        <p className="text-gray-500">Terms and conditions content will be available soon.</p>
-      )}
+    <div className="min-h-screen bg-white">
+      <TermsConditionBanner data={data} />
+      <TermsConditionContent data={data} />
     </div>
   )
 }
+

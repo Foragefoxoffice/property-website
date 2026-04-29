@@ -1,10 +1,28 @@
 import { fetchContactCms } from '@/lib/serverFetch'
+import ContactBanner from '@/components/Contact/ContactBanner'
 import ContactForm from '@/components/Contact/ContactForm'
+import ContactMap from '@/components/Contact/ContactMap'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Contact Us | 183 Housing Solutions',
-  description: 'Get in touch with the 183 Housing Solutions team.',
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const res = await fetchContactCms()
+    const data = (res.data as any) || {}
+    return {
+      title: data.contactSeoMetaTitle_en || 'Contact Us | 183 Housing Solutions',
+      description: data.contactSeoMetaDescription_en || 'Get in touch with the 183 Housing Solutions team.',
+      openGraph: {
+        title: data.contactSeoOgTitle_en || data.contactSeoMetaTitle_en,
+        description: data.contactSeoOgDescription_en || data.contactSeoMetaDescription_en,
+        images: data.contactSeoOgImage ? [data.contactSeoOgImage] : [],
+      }
+    }
+  } catch {
+    return {
+      title: 'Contact Us | 183 Housing Solutions',
+      description: 'Get in touch with the 183 Housing Solutions team.',
+    }
+  }
 }
 
 export default async function ContactPage() {
@@ -15,12 +33,10 @@ export default async function ContactPage() {
   } catch {}
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-extrabold text-[#41398B] mb-4">Contact Us</h1>
-      {!!data.address && <p className="text-gray-500 mb-2">📍 {String(data.address)}</p>}
-      {!!data.phone && <p className="text-gray-500 mb-2">📞 {String(data.phone)}</p>}
-      {!!data.email && <p className="text-gray-500 mb-8">✉️ {String(data.email)}</p>}
-      <ContactForm />
+    <div className="min-h-screen bg-white">
+      <ContactBanner data={data} />
+      <ContactForm data={data} />
+      <ContactMap data={data} />
     </div>
   )
 }
