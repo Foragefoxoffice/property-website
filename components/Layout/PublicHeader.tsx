@@ -11,6 +11,7 @@ import { getHeader, getAllProjects, getProjectCategories, getFooter } from '@/li
 import AnimatedNavLink from '@/components/AnimatedNavLink'
 import { useFavorites } from '@/context/FavoritesContext'
 import { Tooltip } from 'antd'
+import { getAssetBaseURL } from '@/utils/baseURL'
 
 // ChangePasswordModal placeholder — will be replaced when the modal is ported
 function ChangePasswordModal({
@@ -213,15 +214,13 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
     if (!logoPath) return '/images/login/logo.png'
     if (logoPath.startsWith('http')) return logoPath
     if (logoPath.startsWith('/uploads')) {
-      const base = process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || ''
+      const base = getAssetBaseURL()
       return `${base}${logoPath}`
     }
     return logoPath
   }
 
-  const baseURL = process.env.NEXT_PUBLIC_API_URL
-    ? process.env.NEXT_PUBLIC_API_URL.replace('/api/v1', '')
-    : ''
+  const baseURL = getAssetBaseURL()
 
   // Staff Header (no public navigation — showNavigation=false)
   if (!showNavigation) {

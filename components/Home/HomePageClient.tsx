@@ -10,7 +10,8 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
 import { getAllZoneSubAreas, getAllBlocks, getAllPropertyTypes, getAllCurrencies, getAllProperties, getVisibleTestimonials } from '@/lib/api'
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/api\/v1$/, '')
+import { getAssetBaseURL } from '@/utils/baseURL'
+const BASE = getAssetBaseURL()
 
 function getImageUrl(path: string) {
   if (!path) return ''

@@ -5,7 +5,8 @@ import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/api\/v1$/, '')
+import { getAssetBaseURL } from '@/utils/baseURL'
+const BASE = getAssetBaseURL()
 function imgUrl(p: string) {
   if (!p) return 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop'
   if (p.startsWith('http') || p.startsWith('data:')) return p

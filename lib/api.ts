@@ -1,10 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
+import { getBaseURL } from '../utils/baseURL'
 
-// Client-side Axios instance (use client components only)
 const API = axios.create({
-  baseURL: (
-    process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
-  ).replace(/\/$/, ''),
+  baseURL: getBaseURL().replace(/\/$/, ''),
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 })
@@ -275,8 +273,7 @@ export const uploadPropertyMedia = (file: File, type: string): Promise<AxiosResp
   formData.append('type', type) // 'image', 'video', or 'floor'
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const envURL = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '') : null
-  const baseURL = envURL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/upload/property-media`, formData, {
     headers: {
@@ -301,7 +298,7 @@ export const uploadBannerImage = (file: File): Promise<AxiosResponse> => {
   formData.append('backgroundImage', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/home-banner/upload`, formData, {
     headers: {
@@ -322,7 +319,7 @@ export const uploadHomePageImage = (file: File): Promise<AxiosResponse> => {
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/home-page/upload`, formData, {
     headers: {
@@ -343,7 +340,7 @@ export const uploadAboutPageImage = (file: File): Promise<AxiosResponse> => {
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/about-page/upload`, formData, {
     headers: {
@@ -364,7 +361,7 @@ export const uploadContactPageImage = (file: File): Promise<AxiosResponse> => {
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/contact-page/upload`, formData, {
     headers: {
@@ -402,7 +399,7 @@ export const uploadBlogImage = (file: File): Promise<AxiosResponse> => {
   formData.append('file', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/upload`, formData, {
     headers: {
@@ -417,7 +414,7 @@ export const uploadGeneralImage = (file: File): Promise<AxiosResponse> => {
   formData.append('file', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/upload`, formData, {
     headers: {
@@ -437,7 +434,7 @@ export const uploadHeaderImage = (file: File): Promise<AxiosResponse> => {
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/header/upload`, formData, {
     headers: {
@@ -457,7 +454,7 @@ export const uploadFooterImage = (file: File): Promise<AxiosResponse> => {
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/footer/upload`, formData, {
     headers: {
@@ -477,7 +474,7 @@ export const uploadAgentImage = (file: File): Promise<AxiosResponse> => {
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/agent/upload`, formData, {
     headers: {
@@ -539,7 +536,7 @@ export const uploadTermsConditionsPageImage = (file: File): Promise<AxiosRespons
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/terms-conditions-page/upload-image`, formData, {
     headers: {
@@ -560,7 +557,7 @@ export const uploadPrivacyPolicyPageImage = (file: File): Promise<AxiosResponse>
   formData.append('image', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/privacy-policy-page/upload-image`, formData, {
     headers: {
@@ -585,7 +582,7 @@ export const uploadTestimonialImage = (file: File): Promise<AxiosResponse> => {
   formData.append('file', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/upload`, formData, {
     headers: {
@@ -607,7 +604,7 @@ export const uploadProjectBannerImage = (file: File): Promise<AxiosResponse> => 
   formData.append('file', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/upload`, formData, {
     headers: {
@@ -629,7 +626,7 @@ export const uploadProjectIntroImage = (file: File): Promise<AxiosResponse> => {
   formData.append('file', file)
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+  const baseURL = getBaseURL()
 
   return axios.post(`${baseURL}/upload`, formData, {
     headers: {
@@ -670,5 +667,7 @@ export const deleteProjectCategory = (id: string): Promise<AxiosResponse> =>
 ========================================================= */
 export const getUserEnquiries = (): Promise<AxiosResponse> => API.get('/favorites')
 export const createEnquiry = (data: object): Promise<AxiosResponse> => API.post('/favorites/add', data)
+
+
 
 export default API

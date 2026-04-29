@@ -9,7 +9,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useLanguage } from '@/context/LanguageContext'
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/api\/v1$/, '')
+import { getAssetBaseURL } from '@/utils/baseURL'
+const BASE = getAssetBaseURL()
 
 function imgUrl(p: string) {
   if (!p) return ''

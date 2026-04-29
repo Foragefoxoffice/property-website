@@ -1,7 +1,6 @@
-// Server-side fetch utilities — use ONLY in Server Components (app/page.tsx etc.)
-// Uses native fetch() with Next.js cache revalidation. Never import in 'use client' files.
+import { getBaseURL } from '../utils/baseURL'
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/$/, '')
+const BASE = getBaseURL().replace(/\/$/, '')
 
 export async function serverGet<T>(path: string, revalidate = 300): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {

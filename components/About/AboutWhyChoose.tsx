@@ -5,7 +5,8 @@ import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/api\/v1$/, '')
+import { getAssetBaseURL } from '@/utils/baseURL'
+const BASE = getAssetBaseURL()
 
 type Box = { icon?: string; title_en?: string; title_vn?: string; title?: string; description_en?: string; description_vn?: string; description?: string }
 

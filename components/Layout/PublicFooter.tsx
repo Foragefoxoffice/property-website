@@ -6,6 +6,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { getFooter, createSubscription } from '@/lib/api'
 import { toast } from 'react-toastify'
+import { getAssetBaseURL } from '@/utils/baseURL'
 
 const staticTranslations: Record<string, { en: string; vi: string }> = {
   propertyForSale: { en: 'Property For Sale', vi: 'Bất động sản bán' },
@@ -89,9 +90,7 @@ export default function PublicFooter() {
     return staticTranslations[key]?.[language] || staticTranslations[key]?.en || ''
   }
 
-  const baseURL = process.env.NEXT_PUBLIC_API_URL
-    ? process.env.NEXT_PUBLIC_API_URL.replace('/api/v1', '')
-    : ''
+  const baseURL = getAssetBaseURL()
 
   return (
     <footer className="bg-[#161616] text-white pt-12 md:pt-16 pb-8">

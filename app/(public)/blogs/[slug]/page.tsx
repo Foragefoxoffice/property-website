@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const b = (res.data as Record<string, unknown>) || {}
     const title = (b.title as Record<string, string>)?.en || String(b.title || 'Blog')
     const mainImage = String(b.mainImage || '')
-    const BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1').replace(/\/api\/v1$/, '')
+    import { getAssetBaseURL } from '@/utils/baseURL'
+const BASE = getAssetBaseURL()
     const imageUrl = mainImage ? (mainImage.startsWith('http') ? mainImage : `${BASE}${mainImage.startsWith('/') ? '' : '/'}${mainImage}`) : ''
     return {
       title: `${title} | 183 Housing Solutions`,

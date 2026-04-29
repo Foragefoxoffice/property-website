@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
+import { getAssetBaseURL } from '@/utils/baseURL'
 
 interface SocketContextValue {
   socket: Socket | null
@@ -24,8 +25,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Initialize socket connection - Ensure we use the base URL, not the /api/v1 path
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-    const socketTarget = apiUrl.replace(/\/api\/v1\/?$/, '') || apiUrl
+    const socketTarget = getAssetBaseURL()
 
     const socketInstance = io(socketTarget, {
       transports: ['websocket', 'polling'],

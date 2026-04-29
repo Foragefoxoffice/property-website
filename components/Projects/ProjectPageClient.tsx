@@ -7,7 +7,8 @@ import { useLanguage } from '@/context/LanguageContext'
 import ProjectBanner from './ProjectBanner'
 import ProjectIntroduction from './ProjectIntroduction'
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'https://183housingsolutions.com/api/v1'
+import { getBaseURL } from '@/utils/baseURL'
+const BASE = getBaseURL()
 const SERVER_BASE = BASE.replace(/\/api\/v1$/, '')
 
 function imgUrl(p: string) {
