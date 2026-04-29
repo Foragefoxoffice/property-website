@@ -7,14 +7,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import axios from 'axios'
 import { useLanguage } from '@/context/LanguageContext'
 
-import { getBaseURL } from '@/utils/baseURL'
+import { getBaseURL, getAssetBaseURL } from '@/utils/baseURL'
 const BASE = getBaseURL()
-const SERVER_BASE = BASE.replace(/\/api\/v1$/, '')
+const ASSET_BASE = getAssetBaseURL()
 
 function imgUrl(p: string) {
   if (!p) return ''
   if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${SERVER_BASE}${p.startsWith('/') ? '' : '/'}${p}`
+  return `${ASSET_BASE}${p.startsWith('/') ? '' : '/'}${p}`
 }
 
 type Blog = { _id: string; slug?: { en?: string; vi?: string }; title?: { en?: string; vi?: string }; mainImage?: string; createdAt?: string; published?: boolean }

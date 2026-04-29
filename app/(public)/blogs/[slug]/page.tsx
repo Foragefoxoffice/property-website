@@ -2,6 +2,9 @@ import { fetchBlogBySlug } from '@/lib/serverFetch'
 import BlogDetailClient from '@/components/Blog/BlogDetailClient'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getAssetBaseURL } from '@/utils/baseURL'
+
+const BASE = getAssetBaseURL()
 
 export const revalidate = 300
 
@@ -13,8 +16,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const b = (res.data as Record<string, unknown>) || {}
     const title = (b.title as Record<string, string>)?.en || String(b.title || 'Blog')
     const mainImage = String(b.mainImage || '')
-    import { getAssetBaseURL } from '@/utils/baseURL'
-const BASE = getAssetBaseURL()
     const imageUrl = mainImage ? (mainImage.startsWith('http') ? mainImage : `${BASE}${mainImage.startsWith('/') ? '' : '/'}${mainImage}`) : ''
     return {
       title: `${title} | 183 Housing Solutions`,

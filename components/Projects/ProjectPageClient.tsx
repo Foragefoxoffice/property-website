@@ -7,14 +7,13 @@ import { useLanguage } from '@/context/LanguageContext'
 import ProjectBanner from './ProjectBanner'
 import ProjectIntroduction from './ProjectIntroduction'
 
-import { getBaseURL } from '@/utils/baseURL'
-const BASE = getBaseURL()
-const SERVER_BASE = BASE.replace(/\/api\/v1$/, '')
+import { getAssetBaseURL } from '@/utils/baseURL'
+const BASE = getAssetBaseURL()
 
 function imgUrl(p: string) {
   if (!p) return ''
   if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${SERVER_BASE}${p.startsWith('/') ? '' : '/'}${p}`
+  return `${BASE}${p.startsWith('/') ? '' : '/'}${p}`
 }
 
 function stripHtml(html: string) {
