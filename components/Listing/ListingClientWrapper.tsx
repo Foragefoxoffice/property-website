@@ -31,9 +31,6 @@ export default function ListingClientWrapper({
     return (initialProperties as Record<string, unknown>[]).filter((p) => {
       const listing =
         (p.listingInformation as Record<string, unknown>) || {}
-      const propInfo =
-        (p.propertyInformation as Record<string, unknown>) || {}
-
       // Filter by transaction type (Lease / Sale / Home Stay)
       if (filters.type) {
         const txType = String(

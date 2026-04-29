@@ -13,8 +13,6 @@ interface AnimatedNavLinkProps {
 const AnimatedNavLink = ({
   text,
   onClick,
-  hasDropdown = false,
-  isDropdownOpen = false,
 }: AnimatedNavLinkProps) => {
   const [isHovered, setIsHovered] = useState(false)
 

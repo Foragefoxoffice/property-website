@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { getUserEnquiries } from '@/lib/api'
-import { useLanguage } from '@/context/LanguageContext'
-import { translations } from '@/language/translations'
 
 interface Enquiry {
   _id: string
@@ -14,8 +12,6 @@ interface Enquiry {
 }
 
 export default function EnquiriesPage() {
-  const { language } = useLanguage()
-  const t = translations[language as keyof typeof translations] as Record<string, string>
   const [enquiries, setEnquiries] = useState<Enquiry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

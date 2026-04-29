@@ -25,7 +25,7 @@ export default function PropertyCard({ property }: { property: Record<string, un
       <div className="relative h-48 overflow-hidden">
         <img src={thumbnail} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
         <button
-          onClick={(e) => { e.preventDefault(); favorited ? removeFavorite(id) : addFavorite(property) }}
+          onClick={(e) => { e.preventDefault(); if (favorited) { removeFavorite(id) } else { addFavorite(property) } }}
           className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:scale-110 transition">
           <Heart size={16} className={favorited ? 'fill-[#41398B] text-[#41398B]' : 'text-gray-400'} />
         </button>

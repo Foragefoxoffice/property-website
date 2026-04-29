@@ -56,8 +56,9 @@ export default function RegisterPage() {
         toast.success(t.registerSuccess)
         router.push('/login')
       }
-    } catch (err: any) {
-      setError(err.response?.data?.error || t.registerFailed)
+    } catch (err) {
+      const e = err as { response?: { data?: { error?: string } } }
+      setError(e.response?.data?.error || t.registerFailed)
     } finally {
       setLoading(false)
     }

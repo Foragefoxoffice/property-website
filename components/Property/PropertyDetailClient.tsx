@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Heart, MapPin, BedDouble, Bath, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Heart, MapPin, BedDouble, Bath, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useFavorites } from '@/context/FavoritesContext'
 import { useLanguage } from '@/context/LanguageContext'
 import { createEnquiry } from '@/lib/api'

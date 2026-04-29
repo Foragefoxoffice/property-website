@@ -40,8 +40,9 @@ function ResetPasswordForm() {
       setMessage(res.data.message)
       // Redirect to login page
       setTimeout(() => router.push('/login'), 1500)
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to reset password.')
+    } catch (err) {
+      const e = err as { response?: { data?: { error?: string } } }
+      setError(e.response?.data?.error || 'Failed to reset password.')
     } finally {
       setLoading(false)
     }

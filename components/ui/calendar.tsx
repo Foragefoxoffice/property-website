@@ -166,7 +166,7 @@ function Calendar({
           )
         },
         DayButton: CalendarDayButton,
-        WeekNumber: ({ week, children, ...weekProps }: WeekNumberProps) => {
+        WeekNumber: ({ children, ...weekProps }: WeekNumberProps) => {
           return (
             <td {...weekProps}>
               <div className="flex size-(--cell-size) items-center justify-center text-center">

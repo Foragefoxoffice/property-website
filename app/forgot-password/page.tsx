@@ -28,8 +28,9 @@ export default function ForgotPasswordPage() {
       setMessage(res.data.message)
       // Redirect to reset page after success
       setTimeout(() => router.push('/reset-password'), 1000)
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to send OTP.')
+    } catch (err) {
+      const e = err as { response?: { data?: { error?: string } } }
+      setError(e.response?.data?.error || 'Failed to send OTP.')
     } finally {
       setLoading(false)
     }

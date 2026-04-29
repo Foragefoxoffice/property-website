@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Heart, Trash2, Calendar, MapPin, AlertTriangle } from 'lucide-react'
+import { Heart, Trash2, Calendar, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 import { Skeleton } from 'antd'
 import { useLanguage } from '@/context/LanguageContext'

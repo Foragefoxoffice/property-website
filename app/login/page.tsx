@@ -65,8 +65,9 @@ function LoginForm() {
           window.location.href = `${adminUrl}${firstPath}`
         }
       }
-    } catch (err: any) {
-      setError(err.response?.data?.error || t.loginFailed)
+    } catch (err) {
+      const e = err as { response?: { data?: { error?: string } } }
+      setError(e.response?.data?.error || t.loginFailed)
     } finally {
       setLoading(false)
     }
