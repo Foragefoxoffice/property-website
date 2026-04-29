@@ -41,3 +41,9 @@ export const fetchAboutCms = () =>
 
 export const fetchContactCms = () =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>('/cms/contact')
+
+export const fetchTermsConditions = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/terms-conditions-page')
+
+export const fetchPrivacyPolicy = () =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>('/privacy-policy-page')
