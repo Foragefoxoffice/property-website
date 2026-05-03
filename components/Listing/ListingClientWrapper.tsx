@@ -419,7 +419,7 @@ function ListingInner() {
           {/* Filter card */}
           <div className="bg-white rounded-2xl shadow-sm md:p-8 p-4 border border-gray-100">
             <div className="flex justify-end mb-2">
-              <Select className="custom-selects" popupClassName="custom-dropdown" value={sortBy} onChange={v => setSortBy(v)} style={{ width: 180 }} size="large">
+              <Select className="custom-selects" dropdownClassName="custom-dropdown" value={sortBy} onChange={v => setSortBy(v)} style={{ width: 180 }} size="large">
                 <Select.Option value="default">{t.defaultSort || 'Default'}</Select.Option>
                 <Select.Option value="price-low">{t.priceLowHigh || 'Price: Low → High'}</Select.Option>
                 <Select.Option value="price-high">{t.priceHighLow || 'Price: High → Low'}</Select.Option>
@@ -445,7 +445,7 @@ function ListingInner() {
               {/* Project */}
               <div className={showFilters ? 'block' : 'hidden md:block'}>
                 <label className="block text-[15px] font-bold text-black mb-3">{t.projectCommunity || 'Project / Community'}</label>
-                <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.projectId || undefined} onChange={v => setFilter('projectId', v || '')}
+                <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.projectId || undefined} onChange={v => setFilter('projectId', v || '')}
                   placeholder={language === 'en' ? 'Select Project' : 'Chọn Dự Án'} style={{ width: '100%' }} size="large" allowClear showSearch
                   filterOption={(input, opt) => String(opt?.children ?? '').toLowerCase().includes(input.toLowerCase())}>
                   {projects.map(p => <Select.Option key={String(p._id)} value={loc(p.name, language)}>{loc(p.name, language) || 'Unnamed'}</Select.Option>)}
@@ -455,7 +455,7 @@ function ListingInner() {
               {/* Zone */}
               <div className={showFilters ? 'block' : 'hidden md:block'}>
                 <label className="block text-[15px] font-bold text-black mb-3">{t.areaZone || 'Area / Zone'}</label>
-                <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.zoneId || undefined} onChange={v => setFilter('zoneId', v || '')}
+                <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.zoneId || undefined} onChange={v => setFilter('zoneId', v || '')}
                   placeholder={language === 'en' ? 'Select Area/Zone' : 'Chọn Khu Vực'} style={{ width: '100%' }} size="large" allowClear showSearch
                   filterOption={(input, opt) => String(opt?.children ?? '').toLowerCase().includes(input.toLowerCase())}>
                   {zones.map(z => <Select.Option key={String(z._id)} value={loc(z.name, language)}>{loc(z.name, language) || 'Unnamed'}</Select.Option>)}
@@ -465,7 +465,7 @@ function ListingInner() {
               {/* Block */}
               <div className={showFilters ? 'block' : 'hidden md:block'}>
                 <label className="block text-[15px] font-bold text-black mb-3">{t.blockName || 'Block Name'}</label>
-                <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.blockId || undefined} onChange={v => setFilter('blockId', v || '')}
+                <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.blockId || undefined} onChange={v => setFilter('blockId', v || '')}
                   placeholder={language === 'en' ? 'Select Block' : 'Chọn Khối'} style={{ width: '100%' }} size="large" allowClear>
                   {blocks.map(b => <Select.Option key={String(b._id)} value={loc(b.name, language)}>{loc(b.name, language) || 'Unnamed'}</Select.Option>)}
                 </Select>
@@ -493,7 +493,7 @@ function ListingInner() {
                   {/* Property Type */}
                   <div>
                     <label className="block text-[15px] font-bold text-black mb-3">{t.propertyType || 'Property Type'}</label>
-                    <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.propertyType || undefined} onChange={v => setFilter('propertyType', v || '')}
+                    <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.propertyType || undefined} onChange={v => setFilter('propertyType', v || '')}
                       placeholder={t.propertyType || 'Property Type'} style={{ width: '100%' }} size="large" allowClear>
                       {propertyTypes.map(tp => <Select.Option key={String(tp._id)} value={loc(tp.name, language)}>{loc(tp.name, language) || 'Unnamed'}</Select.Option>)}
                     </Select>
@@ -501,7 +501,7 @@ function ListingInner() {
                   {/* Bedrooms */}
                   <div>
                     <label className="block text-[15px] font-bold text-black mb-3">{t.bedrooms || 'Bedrooms'}</label>
-                    <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.bedrooms || undefined} onChange={v => setFilter('bedrooms', v || '')}
+                    <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.bedrooms || undefined} onChange={v => setFilter('bedrooms', v || '')}
                       placeholder="Any" style={{ width: '100%' }} size="large" allowClear>
                       {['1', '2', '3', '4+'].map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
                     </Select>
@@ -509,7 +509,7 @@ function ListingInner() {
                   {/* Bathrooms */}
                   <div>
                     <label className="block text-[15px] font-bold text-black mb-3">{t.bathrooms || 'Bathrooms'}</label>
-                    <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.bathrooms || undefined} onChange={v => setFilter('bathrooms', v || '')}
+                    <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.bathrooms || undefined} onChange={v => setFilter('bathrooms', v || '')}
                       placeholder="Any" style={{ width: '100%' }} size="large" allowClear>
                       {['1', '2', '3+'].map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
                     </Select>
@@ -517,7 +517,7 @@ function ListingInner() {
                   {/* Currency */}
                   <div>
                     <label className="block text-[15px] font-bold text-black mb-3">{t.currency || 'Currency'}</label>
-                    <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.currency || undefined} onChange={v => setFilter('currency', v || '')}
+                    <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.currency || undefined} onChange={v => setFilter('currency', v || '')}
                       placeholder={t.currency || 'Currency'} style={{ width: '100%' }} size="large" allowClear>
                       {currencies.map(c => {
                         const name = loc(c.currencyName, language) || 'N/A'
@@ -627,7 +627,7 @@ function ListingInner() {
 
 export default function ListingClientWrapper() {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">Loading properties...</div>}>
       <ListingInner />
     </Suspense>
   )

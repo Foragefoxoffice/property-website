@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LogOut, ChevronDown, Heart, Lock, Menu, X, Phone, Mail } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -62,6 +62,11 @@ interface FooterData {
 
 export default function PublicHeader({ showNavigation = true }: { showNavigation?: boolean }) {
   const router = useRouter()
+  const pathname = usePathname()
+
+  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
+    return null
+  }
   const [showLogout, setShowLogout] = useState(false)
   const [showPropertiesDropdown, setShowPropertiesDropdown] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)

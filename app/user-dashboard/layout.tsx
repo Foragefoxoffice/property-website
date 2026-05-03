@@ -8,7 +8,6 @@ import { Heart, User, MessageSquare } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
-import PublicHeader from '@/components/Layout/PublicHeader'
 
 export default function UserDashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -45,9 +44,7 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
   ]
 
   return (
-    <>
-      <PublicHeader />
-      <div className="flex h-[calc(100vh-80px)] bg-gradient-to-b from-[#F7F6F9] to-[#EAE8FD] pt-4 pb-16 lg:pb-0 relative">
+    <div className="flex h-[calc(100vh-80px)] bg-gradient-to-b from-[#F7F6F9] to-[#EAE8FD] pt-4 pb-16 lg:pb-0 relative">
         {/* Desktop sidebar */}
         <div className="hidden lg:flex w-[280px] flex-col items-center py-6 h-full overflow-y-auto scrollbar-hide" data-lenis-prevent>
           <div className="flex flex-col w-full gap-4 px-4">
@@ -87,6 +84,6 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
           })}
         </div>
       </div>
-    </>
   )
 }
+

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { getFooter, createSubscription } from '@/lib/api'
@@ -30,6 +31,12 @@ interface FooterData {
 }
 
 export default function PublicFooter() {
+  const pathname = usePathname()
+
+  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
+    return null
+  }
+
   const { language: langRaw } = useLanguage()
   const language = langRaw as 'en' | 'vi'
   const [footerData, setFooterData] = useState<FooterData | null>(null)

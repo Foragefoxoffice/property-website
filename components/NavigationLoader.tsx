@@ -15,7 +15,6 @@ function LoaderContent() {
       const error = (event as any).error || (event as any).reason || event;
       const errorMessage = error?.message || '';
       
-      // If we see a chunk load error, force a hard reload to get fresh assets
       if (
         errorMessage.includes('ChunkLoadError') || 
         errorMessage.includes('Loading chunk') ||
@@ -29,7 +28,7 @@ function LoaderContent() {
     window.addEventListener('error', handleChunkError, true);
     window.addEventListener('unhandledrejection', handleChunkError);
 
-    // 2. Handle anchor clicks
+    // 2. Handle anchor clicks (covers most navigations)
     const handleAnchorClick = (event: MouseEvent) => {
       if (event.defaultPrevented) return
       const target = event.target as HTMLElement
@@ -46,26 +45,6 @@ function LoaderContent() {
       }
     }
 
-    // Intercept programmatic navigation
-    const originalPushState = window.history.pushState
-    const originalReplaceState = window.history.replaceState
-
-    window.history.pushState = function (...args) {
-      const url = args[2]
-      if (url && String(url) !== window.location.pathname + window.location.search) {
-        setIsNavigating(true)
-      }
-      return originalPushState.apply(this, args)
-    }
-
-    window.history.replaceState = function (...args) {
-      const url = args[2]
-      if (url && String(url) !== window.location.pathname + window.location.search) {
-        setIsNavigating(true)
-      }
-      return originalReplaceState.apply(this, args)
-    }
-
     document.addEventListener('click', handleAnchorClick)
 
     // Safety timeout: If navigation takes > 10 seconds, hide loader
@@ -73,8 +52,6 @@ function LoaderContent() {
 
     return () => {
       document.removeEventListener('click', handleAnchorClick)
-      window.history.pushState = originalPushState
-      window.history.replaceState = originalReplaceState
       window.removeEventListener('error', handleChunkError, true);
       window.removeEventListener('unhandledrejection', handleChunkError);
       clearTimeout(timeout);

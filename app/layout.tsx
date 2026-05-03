@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
+import PublicHeader from '@/components/PublicHeader'
+import PublicFooter from '@/components/PublicFooter'
 import FloatingContactButtons from '@/components/FloatingContactButtons'
 import ScrollUpButton from '@/components/ScrollUpButton'
 import SmoothScroll from '@/components/SmoothScroll'
@@ -38,11 +40,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={manrope.variable}>
       <body className={manrope.className}>
         <Providers>
-          <NavigationLoader />
-          <SmoothScroll />
-          {children}
-          <FloatingContactButtons />
-          <ScrollUpButton />
+          <div className="flex flex-col min-h-screen">
+            <NavigationLoader />
+            <SmoothScroll />
+            <PublicHeader />
+            <main className="flex-1">
+              {children}
+            </main>
+            <PublicFooter />
+            <FloatingContactButtons />
+            <ScrollUpButton />
+          </div>
         </Providers>
       </body>
     </html>
