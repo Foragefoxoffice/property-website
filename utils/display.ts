@@ -82,3 +82,16 @@ export function normalizeFancyText(text: unknown): unknown {
     return match
   })
 }
+
+/**
+ * Strips HTML tags from a string and normalizes whitespace.
+ * Replaces block-level tags with spaces to prevent words from sticking together.
+ */
+export function stripHtml(html: unknown): string {
+  if (!html || typeof html !== 'string') return ''
+  return html
+    .replace(/<[^>]*>?/gm, ' ') // Replace all tags with a space
+    .replace(/&nbsp;/g, ' ')     // Replace non-breaking spaces
+    .replace(/\s+/g, ' ')       // Collapse multiple spaces/newlines into one
+    .trim()
+}

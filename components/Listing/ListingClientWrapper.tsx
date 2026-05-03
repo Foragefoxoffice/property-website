@@ -15,9 +15,10 @@ import {
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
+import { stripHtml } from '@/utils/display'
+import { getAssetBaseURL } from '@/utils/baseURL'
 import Link from 'next/link'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
 const BASE = getAssetBaseURL()
 
 function imgUrl(path: string) {
@@ -125,6 +126,8 @@ function PropertyCard({
   return (
     <Link
       href={url}
+      target="_blank"
+      rel="noopener noreferrer"
       className="card-house style-default hover-image group bg-white rounded-2xl shadow-sm overflow-hidden transition-all duration-500 cursor-pointer flex flex-col h-full"
     >
       {/* Image */}
@@ -181,10 +184,9 @@ function PropertyCard({
 
         {/* Description */}
         {descHtml && (
-          <div
-            className="md:text-[16px] text-[14px] text-gray-500 mb-4 line-clamp-2 ql-editor-summary"
-            dangerouslySetInnerHTML={{ __html: descHtml }}
-          />
+          <p className="md:text-[14px] text-[14px] text-gray-500 mb-4 line-clamp-2">
+            {stripHtml(descHtml)}
+          </p>
         )}
 
         {/* Bed / Bath / Sqft */}

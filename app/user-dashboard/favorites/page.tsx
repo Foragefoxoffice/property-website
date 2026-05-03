@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Skeleton } from 'antd'
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
-import { normalizeFancyText } from '@/utils/display'
+import { normalizeFancyText, stripHtml } from '@/utils/display'
 
 export default function FavoritesPage() {
   const { language } = useLanguage()
@@ -117,7 +117,7 @@ export default function FavoritesPage() {
 
   return (
     <div className={isDashboard ? 'w-full' : 'min-h-screen bg-gray-50 flex flex-col'}>
-      <main className={isDashboard ? 'w-full' : 'flex-grow max-w-7xl mx-auto w-full px-6 py-10'}>
+      <main className={`${isDashboard ? 'w-full' : 'flex-grow max-w-7xl mx-auto w-full px-6 py-10'} animate-slideUpFade`}>
         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8">
           <div className="flex items-center gap-2">
             <Heart className="text-[#eb4d4d] fill-[#eb4d4d]" size={32} />
@@ -230,14 +230,13 @@ export default function FavoritesPage() {
                           <h3 className="font-bold text-gray-900 line-clamp-1 mb-1 group-hover:text-[#41398B] text-base sm:text-[20px] transition-colors">
                             {normalizeFancyText(getLocalizedValue(listingInfo.listingInformationPropertyTitle) || t.untitledProperty) as string}
                           </h3>
-                          <div
-                            className="text-xs sm:text-sm text-gray-500 mb-1 line-clamp-2 ql-editor-summary"
-                            dangerouslySetInnerHTML={{
-                              __html: getLocalizedValue(whatNearby.whatNearbyDescription) ||
+                          <p className="text-xs sm:text-sm text-gray-500 mb-1 line-clamp-2">
+                            {stripHtml(
+                              getLocalizedValue(whatNearby.whatNearbyDescription) ||
                                 getLocalizedValue(listingInfo.listingInformationZoneSubArea) ||
-                                t.locationNA,
-                            }}
-                          />
+                                t.locationNA
+                            )}
+                          </p>
                           <p className="text-[#41398B] font-bold text-base sm:text-lg">{displayPrice}</p>
                         </div>
                       </div>
@@ -276,25 +275,25 @@ export default function FavoritesPage() {
 
       {/* Confirm Delete Modal */}
       {deleteId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 text-red-600">
-                <AlertTriangle size={24} />
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-xl p-4 transition-all">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-modalPop border border-gray-100">
+            <div className="flex flex-col items-center text-center mb-8">
+              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4 text-red-500">
+                <AlertTriangle size={32} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{t.removeProperty}</h3>
-              <p className="text-gray-500">{t.deleteConfirmation}</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{t.removeProperty}</h3>
+              <p className="text-gray-500 leading-relaxed">{t.deleteConfirmation}</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <button
                 onClick={() => setDeleteId(null)}
-                className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors"
+                className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all active:scale-95"
               >
                 {t.cancel}
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-4 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-200"
+                className="flex-1 px-6 py-3 bg-[#eb4d4d] text-white font-semibold rounded-xl hover:bg-[#d44545] transition-all shadow-lg shadow-red-100 active:scale-95"
               >
                 {t.remove}
               </button>
@@ -305,38 +304,38 @@ export default function FavoritesPage() {
 
       {/* Send Enquiry Modal */}
       {showEnquiryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <div className="flex flex-col mb-4">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-xl p-4 transition-all">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 animate-modalPop border border-gray-100">
+            <div className="flex flex-col mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 {t.favoritesEnquiryTitle}
               </h3>
-              <p className="text-gray-500 text-sm mb-4">
+              <p className="text-gray-500 text-sm mb-6 leading-relaxed">
                 {t.favoritesEnquiryDesc}
               </p>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 {t.message}
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder={t.enterMessage}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] transition-all resize-none h-32 text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] transition-all resize-none h-40 text-sm"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <button
                 onClick={() => {
                   setShowEnquiryModal(false)
                   setMessage('')
                 }}
-                className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors"
+                className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all active:scale-95"
               >
                 {t.cancel}
               </button>
               <button
                 onClick={handleSendEnquiry}
-                className="flex-1 px-4 py-2.5 bg-[#41398B] text-white font-semibold rounded-xl hover:bg-[#352e7a] transition-colors shadow-lg"
+                className="flex-1 px-6 py-3 bg-[#41398B] text-white font-semibold rounded-xl hover:bg-[#352e7a] transition-all shadow-lg active:scale-95"
               >
                 {t.send || 'Send'}
               </button>

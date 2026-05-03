@@ -15,6 +15,7 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
 import { getImageUrl } from '@/utils/baseURL'
 import { createEnquiry, getAgent, getListingProperties, addFavorite as apiAddFavorite } from '@/lib/api'
+import { stripHtml } from '@/utils/display'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Skeleton } from 'antd'
@@ -115,7 +116,12 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
   const descHtml = nearbyDesc || zoneDesc || ''
 
   return (
-    <Link href={url} className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-all duration-300">
+    <Link 
+      href={url} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-all duration-300"
+    >
       <div className="relative h-56 overflow-hidden">
         <img src={getImageUrl(img)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
         <div className="absolute top-3 left-3 flex gap-2">
@@ -131,10 +137,9 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
         <h3 className="text-[17px] font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#41398B] transition-colors">{title}</h3>
 
         {descHtml && (
-          <div
-            className="text-[14px] text-gray-500 mb-4 line-clamp-2"
-            dangerouslySetInnerHTML={{ __html: descHtml }}
-          />
+          <p className="text-[14px] text-gray-500 mb-4 line-clamp-2">
+            {stripHtml(descHtml)}
+          </p>
         )}
 
         <div className="flex items-center pt-3 border-t border-gray-100 justify-between mt-auto">

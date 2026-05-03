@@ -31,7 +31,7 @@ export default function EnquiriesPage() {
   if (error) return <p className="text-center text-red-500 py-8">{error}</p>
 
   return (
-    <div className="max-w-3xl mx-auto py-6">
+    <div className="max-w-6xl mx-auto py-6 animate-slideUpFade">
       <h1 className="text-2xl font-bold text-[#41398B] mb-6">My Enquiries</h1>
       {enquiries.length === 0 ? (
         <div className="text-center py-16 text-gray-400">

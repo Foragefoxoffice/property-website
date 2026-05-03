@@ -31,7 +31,7 @@ const CustomDatePicker = ({ label, value, onChange }: CustomDatePickerProps) => 
     if (value && (!date || new Date(value).getTime() !== date.getTime())) {
       setDate(new Date(value))
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   const handleSelect = (selectedDate: Date | undefined) => {
@@ -152,7 +152,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     fetchUserData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchUserData = async () => {
@@ -402,7 +402,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 pb-10">
+    <div className="max-w-6xl mx-auto space-y-8 pb-10 animate-slideUpFade">
 
       {/* Header */}
       <div>
@@ -481,7 +481,7 @@ export default function ProfilePage() {
                     name="name"
                     value={userForm.name}
                     onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
-                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all"
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all text-[#000]"
                     placeholder={t?.enterName || 'Enter your name'}
                   />
                 </div>
@@ -497,7 +497,7 @@ export default function ProfilePage() {
                     name="mobile"
                     value={userForm.mobile}
                     onChange={(e) => setUserForm({ ...userForm, mobile: e.target.value })}
-                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all"
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all text-[#000]"
                     placeholder={t?.enterMobile || 'Enter your mobile'}
                   />
                 </div>
@@ -514,7 +514,7 @@ export default function ProfilePage() {
                     value={userForm.email}
                     onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
                     readOnly
-                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none cursor-not-allowed"
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none cursor-not-allowed text-[#000]"
                     placeholder={t?.enterEmail || 'Enter your email'}
                   />
                 </div>
@@ -530,7 +530,7 @@ export default function ProfilePage() {
                     name="employeeId"
                     value={userForm.employeeId}
                     readOnly
-                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none cursor-not-allowed"
+                    className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none cursor-not-allowed text-[#000]"
                     placeholder="ID"
                   />
                 </div>
@@ -603,7 +603,7 @@ export default function ProfilePage() {
                   type="email"
                   value={staffForm.email}
                   readOnly
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 cursor-not-allowed outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 cursor-not-allowed outline-none text-[#000]"
                 />
               </div>
               <div>
@@ -612,7 +612,7 @@ export default function ProfilePage() {
                   type="text"
                   value={staffForm.employeeId}
                   readOnly
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 cursor-not-allowed outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 cursor-not-allowed outline-none text-[#000]"
                 />
               </div>
             </div>
@@ -730,7 +730,7 @@ export default function ProfilePage() {
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all text-[#000]"
                   placeholder="••••••••"
                 />
                 <button
@@ -752,7 +752,7 @@ export default function ProfilePage() {
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all text-[#000]"
                   placeholder="••••••••"
                 />
                 <button
@@ -774,7 +774,7 @@ export default function ProfilePage() {
                   name="confirmPassword"
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] outline-none transition-all text-[#000]"
                   placeholder="••••••••"
                 />
                 <button

@@ -9,7 +9,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
 import { getAllZoneSubAreas, getAllBlocks, getAllPropertyTypes, getAllCurrencies, getAllProperties, getVisibleTestimonials } from '@/lib/api'
-import { formatNumber, parseNumber } from '@/utils/display'
+import { formatNumber, parseNumber, stripHtml } from '@/utils/display'
 import { usePermissions } from '@/context/PermissionContext'
 
 import { getAssetBaseURL, getImageUrl } from '@/utils/baseURL'
@@ -558,6 +558,8 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
               return (
                 <Link key={propId}
                   href={`/property-showcase/${id}${slug ? `/${slug}` : ''}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                   style={{ transitionDelay: `${200 + index * 100}ms` }}>
                   <div className="relative h-56 overflow-hidden">
@@ -581,10 +583,9 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                     <h3 className="text-[17px] font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#41398B] transition-colors">{title}</h3>
 
                     {descHtml && (
-                      <div
-                        className="text-[14px] text-gray-500 mb-4 line-clamp-2"
-                        dangerouslySetInnerHTML={{ __html: descHtml }}
-                      />
+                      <p className="text-[14px] text-gray-500 mb-4 line-clamp-2">
+                        {stripHtml(descHtml)}
+                      </p>
                     )}
 
                     <div className="flex items-center pt-3 border-t border-gray-100 justify-between mt-auto">

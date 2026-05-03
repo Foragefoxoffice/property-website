@@ -1,7 +1,11 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { addFavorite as apiAddFavorite } from '@/lib/api'
+import { 
+  addFavorite as apiAddFavorite, 
+  getFavorites as apiGetFavorites,
+  removeFavorite as apiRemoveFavorite 
+} from '@/lib/api'
 import { toast } from 'react-toastify'
 import { useLanguage } from '@/context/LanguageContext'
 import { translations } from '@/language/translations'
@@ -36,16 +40,7 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
   const t = translations[language as keyof typeof translations]
 
   const [favorites, setFavorites] = useState<FavoriteItem[]>([])
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('localFavorites')
-      if (saved) setFavorites(JSON.parse(saved))
-    } catch {
-      // ignore
-    }
-  }, [])
-
+  const [isInitialized, setIsInitialized] = useState(false)
   const [loading, setLoading] = useState(false)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
 
@@ -55,17 +50,53 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
     sending: { en: 'Sending Enquiry...', vi: 'Đang gửi yêu cầu...' },
   }
 
-  // Sync to localStorage
+  // Load from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('localFavorites')
+        if (saved) setFavorites(JSON.parse(saved))
+      } catch (e) {
+        console.error('Error loading favorites from localStorage', e)
+      }
+      setIsInitialized(true)
+    }
+  }, [])
+
+  // Sync to localStorage (Only AFTER initialization)
+  useEffect(() => {
+    if (isInitialized && typeof window !== 'undefined') {
       localStorage.setItem('localFavorites', JSON.stringify(favorites))
     }
-  }, [favorites])
+  }, [favorites, isInitialized])
 
   const fetchFavorites = async () => {
-    // No-op for API sync as we are local-first
-    setLoading(false)
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    if (!token) return
+
+    setLoading(true)
+    try {
+      const res = await apiGetFavorites()
+      if (res.data?.data) {
+        // Map the API response to the FavoriteItem structure
+        const apiFavs: FavoriteItem[] = res.data.data.map((item: any) => ({
+          _id: item._id,
+          property: item.properties?.[0] || item.property || {},
+          createdAt: item.createdAt || new Date().toISOString()
+        }))
+        setFavorites(apiFavs)
+      }
+    } catch (error) {
+      console.error('Error fetching favorites:', error)
+    } finally {
+      setLoading(false)
+    }
   }
+
+  // Fetch favorites from API if token exists
+  useEffect(() => {
+    fetchFavorites()
+  }, [])
 
   const isFavorite = (propertyId: string): boolean => {
     return favorites.some((fav) => {
@@ -94,6 +125,11 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
     const propId =
       property._id || property.listingInformation?.listingInformationPropertyId
 
+    if (!propId) {
+      toast.error(t.errorAddingFavorite)
+      return false
+    }
+
     if (isFavorite(propId)) {
       toast.warning(t.alreadyInFavorites)
       return false
@@ -106,26 +142,57 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
     }
 
     setActionLoading('add')
-    setFavorites((prev) => [...prev, newFav])
-    setActionLoading(null)
-    toast.success(t.addedToFavorites)
-    return true
+    try {
+      // Optimistic update
+      setFavorites((prev) => [...prev, newFav])
+      
+      // API sync
+      await apiAddFavorite(propId as string)
+      
+      toast.success(t.addedToFavorites)
+      return true
+    } catch (error) {
+      console.error('Error adding favorite to API:', error)
+      // Rollback on failure
+      setFavorites((prev) => prev.filter(f => (f.property._id || f.property.listingInformation?.listingInformationPropertyId) !== propId))
+      toast.error(t.errorAddingFavorite || 'Failed to sync with account')
+      return false
+    } finally {
+      setActionLoading(null)
+    }
   }
 
   const removeFavorite = async (propertyId: string): Promise<boolean> => {
     if (!propertyId) return false
 
-    setFavorites((prev) =>
-      prev.filter((f) => {
-        const fPropId =
-          f.property._id ||
-          f.property.listingInformation?.listingInformationPropertyId
-        return f._id !== propertyId && fPropId !== propertyId
-      })
-    )
+    setActionLoading('remove')
+    try {
+      // Get the actual property ID if what we have is the Favorite Item _id
+      const favoriteToRemove = favorites.find(f => f._id === propertyId || (f.property._id === propertyId))
+      const actualPropertyId = favoriteToRemove?.property._id || propertyId
 
-    toast.success(t.removedFromFavorites)
-    return true
+      // API sync
+      await apiRemoveFavorite(actualPropertyId)
+
+      // Local update
+      setFavorites((prev) =>
+        prev.filter((f) => {
+          const fPropId =
+            f.property._id ||
+            f.property.listingInformation?.listingInformationPropertyId
+          return f._id !== propertyId && fPropId !== propertyId
+        })
+      )
+
+      toast.success(t.removedFromFavorites)
+      return true
+    } catch (error) {
+      console.error('Error removing favorite from API:', error)
+      toast.error(t.errorRemovingFavorite || 'Failed to sync with account')
+      return false
+    } finally {
+      setActionLoading(null)
+    }
   }
 
   // Send enquiry (Sync to Backend)
