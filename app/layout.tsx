@@ -4,6 +4,8 @@ import Providers from '@/components/Providers'
 import FloatingContactButtons from '@/components/FloatingContactButtons'
 import ScrollUpButton from '@/components/ScrollUpButton'
 
+
+
 export const metadata: Metadata = {
   title: '183 Housing Solutions — Find Your Home in Vietnam',
   description: 'Browse properties for lease, sale, and home stay in Vietnam.',
