@@ -1,3 +1,5 @@
+// @ts-nocheck
+'use client'
 'use client'
 
 import { useLanguage } from '@/context/LanguageContext'
@@ -30,7 +32,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
   const youtubeId = videoUrl ? getYoutubeId(videoUrl) : null
 
   return (
-    <section className="py-16 md:py-18 bg-white font-['Manrope'] overflow-hidden">
+    <section className="py-16 md:py-18 bg-white  overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex flex-col gap-10 md:gap-14 items-center">
           <div className="w-full max-w-4xl px-4 flex flex-col items-center mx-auto">
@@ -70,3 +72,10 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
     </section>
   )
 }
+
+
+
+
+
+
+

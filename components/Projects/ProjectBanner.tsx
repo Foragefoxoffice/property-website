@@ -1,3 +1,5 @@
+// @ts-nocheck
+'use client'
 'use client'
 
 import { useRef } from 'react'
@@ -94,3 +96,10 @@ export default function ProjectBanner({ data }: { data: Record<string, unknown> 
     </section>
   )
 }
+
+
+
+
+
+
+

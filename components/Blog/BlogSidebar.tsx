@@ -71,8 +71,12 @@ export default function BlogSidebar() {
             <span className="absolute bottom-[-4px] left-0 w-1/2 h-1 bg-[#41398B] rounded-full" />
           </h3>
           <div className="space-y-6">
-            {recentPosts.map(post => (
-              <Link href={`/blogs/${post.slug?.[language === 'en' ? 'en' : 'vi'] || post.slug?.en}`} key={post._id} className="flex gap-4 group">
+            {recentPosts.map(post => {
+              const langKey = language === 'en' ? 'en' : 'vi'
+              const slugVal = typeof post.slug === 'string' ? post.slug : (post.slug?.[langKey] || post.slug?.en || post.slug?.vi || post._id)
+              
+              return (
+              <Link href={`/blogs/${slugVal}`} key={post._id} className="flex gap-4 group">
                 {post.mainImage && (
                   <img src={getImageUrl(post.mainImage)} alt={post.title?.[language === 'en' ? 'en' : 'vi'] || post.title?.en || ''} className="w-20 h-20 object-cover rounded-lg flex-shrink-0 group-hover:opacity-80 transition-opacity" />
                 )}
@@ -83,7 +87,7 @@ export default function BlogSidebar() {
                   {post.createdAt && <span className="text-xs text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</span>}
                 </div>
               </Link>
-            ))}
+            )})}
           </div>
         </div>
       )}
@@ -96,17 +100,21 @@ export default function BlogSidebar() {
             <span className="absolute bottom-[-4px] left-0 w-1/2 h-1 bg-[#41398B] rounded-full" />
           </h3>
           <ul className="space-y-2">
-            {categories.map(cat => (
+            {categories.map(cat => {
+              const langKey = language === 'en' ? 'en' : 'vi'
+              const catSlugVal = typeof cat.slug === 'string' ? cat.slug : (cat.slug?.[langKey] || cat.slug?.en || cat.slug?.vi || cat._id)
+
+              return (
               <li key={cat._id}>
                 <Link
-                  href={`/blogs?category=${cat.slug?.[language === 'en' ? 'en' : 'vi'] || cat.slug?.en}`}
+                  href={`/blogs?category=${catSlugVal}`}
                   className="flex items-center justify-between text-gray-600 hover:text-[#41398B] transition-colors py-2 border-b border-gray-50 last:border-0"
                 >
                   <span>{cat.name?.[language === 'en' ? 'en' : 'vi'] || cat.name?.en}</span>
                   <span className="bg-purple-50 text-purple-600 text-xs px-2 py-1 rounded-full">•</span>
                 </Link>
               </li>
-            ))}
+            )})}
           </ul>
         </div>
       )}

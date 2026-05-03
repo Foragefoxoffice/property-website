@@ -865,7 +865,15 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9">
           {blogs.map((blog, i) => {
             const btitle = loc(blog.title, lang) || 'Untitled'
-            const slug = String(blog.slug || blog._id)
+            const slugRaw = blog.slug || blog._id
+            let slug = ''
+            if (typeof slugRaw === 'string') {
+              slug = slugRaw
+            } else if (typeof slugRaw === 'object' && slugRaw !== null) {
+              slug = (slugRaw as any)[lang] || (slugRaw as any).en || (slugRaw as any).vi || String(blog._id)
+            } else {
+              slug = String(blog._id)
+            }
             const imgs = (blog.images as { url: string }[]) || []
             const cover = imgs[0]?.url || ''
             const excerpt = loc(blog.excerpt, lang) || ''

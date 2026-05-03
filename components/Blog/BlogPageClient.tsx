@@ -82,13 +82,13 @@ function BlogPageInner({ pageData }: { pageData: PageData | null }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {filtered.map(blog => {
                   const title = blog.title?.[lang] || blog.title?.en || 'Untitled'
-                  const slugVal = blog.slug?.[lang] || blog.slug?.en || blog._id
+                  const slugVal = typeof blog.slug === 'string' ? blog.slug : (blog.slug?.[lang] || blog.slug?.en || blog.slug?.vi || blog._id)
                   const content = blog.content?.[lang] || blog.content?.en || ''
                   const plainText = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
                   const excerpt = plainText.length > 150 ? plainText.slice(0, 150) + '...' : plainText
                   return (
                     <Link href={`/blogs/${slugVal}`} key={blog._id} className="group">
-                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
+                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
                         {blog.mainImage ? (
                           <div className="overflow-hidden">
                             <img src={getImageUrl(blog.mainImage)} alt={title} className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500" />

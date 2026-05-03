@@ -27,7 +27,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
   const content = blog.content?.[lang] || blog.content?.en || ''
   const mainImage = getImageUrl(blog.mainImage)
   const categoryName = blog.category?.name?.[lang] || blog.category?.name?.en || ''
-  const dateStr = blog.createdAt ? new Date(blog.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : ''
+  const dateStr = blog.createdAt ? new Date(blog.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''
   const tags = blog.tags?.[lang] || blog.tags?.en || []
 
   const handleShare = () => {
@@ -87,8 +87,8 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
       <div className="container mx-auto md:px-11 px-2 md:py-16 py-8 -mt-32 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Main Content */}
-          <div className="lg:col-span-8">
-            <div className="bg-white rounded-xl shadow-xl p-4 md:p-10 border border-gray-100 ring-1 ring-black/5">
+          <div className="lg:col-span-8 min-w-0">
+            <div className="bg-white rounded-xl shadow-xl p-4 md:p-10 border border-gray-100 ring-1 ring-black/5 overflow-hidden">
               <article
                 style={{ lineHeight: '1.8' }}
                 className="news-content prose prose-lg max-w-none w-full
@@ -100,7 +100,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
                   prose-blockquote:border-l-4 prose-blockquote:border-[#41398B] prose-blockquote:bg-purple-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg
                   prose-strong:text-gray-900 prose-li:marker:text-[#41398B]"
               >
-                <div className="overflow-hidden" dangerouslySetInnerHTML={{ __html: content }} />
+                <div className="overflow-hidden" dangerouslySetInnerHTML={{ __html: content.replace(/&nbsp;/g, ' ') }} />
               </article>
 
               <div className="flex justify-between mt-8 pt-8 border-t border-gray-100 flex-wrap gap-6">

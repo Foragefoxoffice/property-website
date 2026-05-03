@@ -2,6 +2,7 @@ import { fetchProjectBySlug } from '@/lib/serverFetch'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import ProjectDetailClient from '@/components/Projects/ProjectDetailClient'
 
 export const revalidate = 300
 
@@ -47,40 +48,5 @@ export default async function ProjectDetailPage({ params }: Props) {
   const location = String((project.location as Record<string, string>)?.en || project.location || '')
   const status = String(project.status || '')
 
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <Link href="/projects" className="inline-flex items-center gap-1 text-sm text-[#41398B] hover:underline mb-8">
-        ← Back to Projects
-      </Link>
-
-      {images.length > 0 && (
-        <div className="rounded-2xl overflow-hidden mb-8 h-72 sm:h-96">
-          <img src={images[0].url} alt={title} className="w-full h-full object-cover" />
-        </div>
-      )}
-
-      <div className="flex items-start gap-4 flex-wrap mb-4">
-        <h1 className="text-3xl font-extrabold text-gray-800 flex-1">{title}</h1>
-        {status && <span className="px-3 py-1 bg-[#41398B] text-white text-xs rounded-full">{status}</span>}
-      </div>
-
-      {location && <p className="text-gray-500 text-sm mb-6">📍 {location}</p>}
-
-      {images.length > 1 && (
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-8">
-          {images.slice(1, 9).map((img, i) => (
-            <div key={i} className="rounded-xl overflow-hidden h-24">
-              <img src={img.url} alt="" className="w-full h-full object-cover" />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {description ? (
-        <div className="prose max-w-none text-gray-600" dangerouslySetInnerHTML={{ __html: description }} />
-      ) : (
-        <p className="text-gray-400">No description available.</p>
-      )}
-    </div>
-  )
+  return <ProjectDetailClient project={project} />
 }
