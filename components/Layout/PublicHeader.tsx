@@ -853,7 +853,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               <div className="p-5 flex items-center justify-between border-b border-gray-100">
                 <img
                   className="h-8 object-contain"
-                  src={getLogoUrl(headerLogo)}
+                  src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                   alt="Logo"
                 />
                 <button
