@@ -7,6 +7,9 @@ import ScrollUpButton from '@/components/ScrollUpButton'
 export const metadata: Metadata = {
   title: '183 Housing Solutions — Find Your Home in Vietnam',
   description: 'Browse properties for lease, sale, and home stay in Vietnam.',
+  icons: {
+    icon: '/favicon.png',
+  },
   openGraph: {
     siteName: '183 Housing Solutions',
     locale: 'en_US',
