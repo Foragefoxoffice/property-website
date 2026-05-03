@@ -84,7 +84,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#f6f4ff] to-[#e5defc] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#f6f4ff] to-[#e5defc] relative overflow-hidden pt-5">
       {/* Subtle skyline background */}
       <div
         className="absolute bottom-0 left-0 w-full bg-contain bg-bottom bg-no-repeat h-120"
@@ -94,7 +94,7 @@ function LoginForm() {
       />
 
       {/* Logo */}
-      <div className="mb-16 text-center z-10">
+      <div className="mb-5 text-center z-10">
         <img className="h-16" src="/images/login/logo.png" alt="" />
       </div>
 
@@ -175,7 +175,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full cursor-pointer py-3 bg-[#41398B] hover:bg-[#41398be1] text-white font-semibold rounded-4xl shadow-md transition-all flex justify-center items-center"
+            className="w-full cursor-pointer py-3 bg-[#41398B] hover:bg-[#41398be1] text-white font-semibold rounded-full shadow-md transition-all flex justify-center items-center"
           >
             {loading ? (
               <>

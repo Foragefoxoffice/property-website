@@ -119,8 +119,6 @@ function ProjectPageInner({
               return (
                 <Link
                   href={`/projects/${slugVal}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   key={project._id}
                   className="group flex flex-col h-full bg-white rounded-[16px] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2 overflow-hidden"
                 >

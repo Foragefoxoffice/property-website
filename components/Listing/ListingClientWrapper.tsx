@@ -73,8 +73,8 @@ function PropertyCard({
   const title =
     (!property.titleVisibility
       ? loc(listing.listingInformationPropertyTitle, language) ||
-        loc(listing.listingInformationBlockName, language) ||
-        loc(listing.listingInformationProjectCommunity, language)
+      loc(listing.listingInformationBlockName, language) ||
+      loc(listing.listingInformationProjectCommunity, language)
       : '') || t.untitledProperty || 'Untitled Property'
 
   const nearbyDesc = loc((property.whatNearby as Prop)?.whatNearbyDescription, language)
@@ -125,7 +125,6 @@ function PropertyCard({
   return (
     <Link
       href={url}
-      target="_blank"
       className="card-house style-default hover-image group bg-white rounded-2xl shadow-sm overflow-hidden transition-all duration-500 cursor-pointer flex flex-col h-full"
     >
       {/* Image */}
@@ -151,7 +150,11 @@ function PropertyCard({
         {/* Favorite */}
         <div className="absolute top-3 right-3 z-20 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
           <button
-            onClick={(e) => onToggleFav(e, property)}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onToggleFav(e, property)
+            }}
             className="p-1 bg-white rounded-md shadow-sm text-black hover:scale-105 transition-transform cursor-pointer"
           >
             <Tooltip title={isFav ? 'Remove from Favorites' : 'Add to Favorites'}>
@@ -274,7 +277,7 @@ function ListingInner() {
         setPropertyTypes(active(tr.data?.data || []))
         setCurrencies(active(cr.data?.data || []))
       })
-      .catch(() => {})
+      .catch(() => { })
   }, [])
 
   // Cascade: project → zones
@@ -324,7 +327,7 @@ function ListingInner() {
         else setProperties(prev => [...prev, ...incoming])
         setHasMore(currentPage < totalPages)
       }
-    } catch {}
+    } catch { }
     finally { setLoading(false); setLoadingMore(false) }
   }, [selectedCategory, filters, sortBy])
 
@@ -385,8 +388,7 @@ function ListingInner() {
   }
 
   const tabClass = (cat: string) =>
-    `w-full md:w-auto px-4 py-4 md:py-3 md:px-10 rounded-t-lg font-bold text-sm md:text-base cursor-pointer transition-all border-none ${
-      selectedCategory === cat ? 'bg-[#41398B] text-white shadow-lg' : 'bg-[#515151] text-white hover:bg-gray-600'
+    `w-full md:w-auto px-4 py-4 md:py-3 md:px-10 rounded-t-lg font-bold text-sm md:text-base cursor-pointer transition-all border-none ${selectedCategory === cat ? 'bg-[#41398B] text-white shadow-lg' : 'bg-[#515151] text-white hover:bg-gray-600'
     }`
 
   return (
@@ -424,7 +426,7 @@ function ListingInner() {
               </Select>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-4 pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 items-end gap-4 pt-2">
               {/* Keyword */}
               <div>
                 <label className="block text-[15px] font-bold text-black mb-3">{t.lookingFor || 'Looking For'}</label>
@@ -499,7 +501,7 @@ function ListingInner() {
                     <label className="block text-[15px] font-bold text-black mb-3">{t.bedrooms || 'Bedrooms'}</label>
                     <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.bedrooms || undefined} onChange={v => setFilter('bedrooms', v || '')}
                       placeholder="Any" style={{ width: '100%' }} size="large" allowClear>
-                      {['1','2','3','4+'].map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
+                      {['1', '2', '3', '4+'].map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
                     </Select>
                   </div>
                   {/* Bathrooms */}
@@ -507,7 +509,7 @@ function ListingInner() {
                     <label className="block text-[15px] font-bold text-black mb-3">{t.bathrooms || 'Bathrooms'}</label>
                     <Select className="custom-selectss w-full" popupClassName="custom-dropdown" value={filters.bathrooms || undefined} onChange={v => setFilter('bathrooms', v || '')}
                       placeholder="Any" style={{ width: '100%' }} size="large" allowClear>
-                      {['1','2','3+'].map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
+                      {['1', '2', '3+'].map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
                     </Select>
                   </div>
                   {/* Currency */}
@@ -562,7 +564,7 @@ function ListingInner() {
         <main>
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[1,2,3,4,5,6,7,8].map(i => (
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
                 <div key={i} className="bg-white rounded-2xl overflow-hidden p-4">
                   <Skeleton.Image active className="!w-full !h-56 rounded-2xl mb-4" />
                   <Skeleton active paragraph={{ rows: 3 }} />
@@ -599,7 +601,7 @@ function ListingInner() {
 
               {loadingMore && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-                  {[1,2,3].map(i => (
+                  {[1, 2, 3].map(i => (
                     <div key={i} className="bg-white rounded-2xl overflow-hidden p-4">
                       <Skeleton.Image active className="!w-full !h-56 rounded-2xl mb-4" />
                       <Skeleton active paragraph={{ rows: 3 }} />

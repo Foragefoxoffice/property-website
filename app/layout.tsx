@@ -1,8 +1,18 @@
 import type { Metadata, Viewport } from 'next'
+import { Manrope } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
 import FloatingContactButtons from '@/components/FloatingContactButtons'
 import ScrollUpButton from '@/components/ScrollUpButton'
+import SmoothScroll from '@/components/SmoothScroll'
+import NavigationLoader from '@/components/NavigationLoader'
+
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  variable: '--font-manrope',
+})
 
 
 
@@ -25,9 +35,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={manrope.variable}>
+      <body className={manrope.className}>
         <Providers>
+          <NavigationLoader />
+          <SmoothScroll />
           {children}
           <FloatingContactButtons />
           <ScrollUpButton />

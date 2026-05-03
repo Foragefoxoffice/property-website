@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 interface AnimatedNavLinkProps {
   text: string
+  href?: string
   onClick?: () => void
   hasDropdown?: boolean
   isDropdownOpen?: boolean
@@ -12,6 +14,7 @@ interface AnimatedNavLinkProps {
 
 const AnimatedNavLink = ({
   text,
+  href,
   onClick,
 }: AnimatedNavLinkProps) => {
   const [isHovered, setIsHovered] = useState(false)
@@ -19,7 +22,7 @@ const AnimatedNavLink = ({
   // Split text into characters
   const characters = text.split('')
 
-  return (
+  const content = (
     <div
       className="relative overflow-hidden h-6 flex items-center cursor-pointer group"
       onClick={onClick}
@@ -27,7 +30,7 @@ const AnimatedNavLink = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* First layer (slides up) */}
-      <div className="flex">
+      <div className="flex text-black">
         {characters.map((char, index) => (
           <motion.span
             key={`top-${index}`}
@@ -63,6 +66,16 @@ const AnimatedNavLink = ({
       </div>
     </div>
   )
+
+  if (href) {
+    return (
+      <Link href={href} className="no-underline">
+        {content}
+      </Link>
+    )
+  }
+
+  return content
 }
 
 export default AnimatedNavLink

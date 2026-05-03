@@ -18,7 +18,7 @@ export const fetchAllProperties = (params?: Record<string, string>) => {
 }
 
 export const fetchPropertyById = (id: string) =>
-  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/properties/${id}`)
+  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/create-property/pid/${encodeURIComponent(id)}`)
 
 export const fetchAllBlogs = () =>
   serverGet<{ success: boolean; data: unknown[] }>('/blogs')

@@ -422,19 +422,21 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
 
           {/* Logo Section */}
           <div className="flex items-center">
-            <img
-              className="hidden lg:block object-contain cursor-pointer h-8 md:h-10"
-              src={getImageUrl(headerLogo) || '/images/login/logo.png'}
-              alt="Logo"
-              onClick={() => router.push('/')}
-            />
-            <div className="lg:hidden absolute left-15 flex items-center justify-center">
+            <Link href="/">
               <img
-                className="h-6 object-contain cursor-pointer"
+                className="hidden lg:block object-contain cursor-pointer h-8 md:h-10"
                 src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                 alt="Logo"
-                onClick={() => router.push('/')}
               />
+            </Link>
+            <div className="lg:hidden absolute left-15 flex items-center justify-center">
+              <Link href="/">
+                <img
+                  className="h-6 object-contain cursor-pointer"
+                  src={getImageUrl(headerLogo) || '/images/login/logo.png'}
+                  alt="Logo"
+                />
+              </Link>
             </div>
           </div>
 
@@ -444,7 +446,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               <div className="font-semibold text-[16px]">
                 <AnimatedNavLink
                   text={labels.homepages[language]}
-                  onClick={() => router.push('/')}
+                  href="/"
                 />
               </div>
 
@@ -456,7 +458,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               >
                 <div className="flex items-center gap-1 font-semibold text-[16px]">
                   <AnimatedNavLink
-                    onClick={() => router.push('/listing')}
+                    href="/listing"
                     text={labels.properties[language]}
                     hasDropdown={true}
                     isDropdownOpen={showPropertiesDropdown}
@@ -517,7 +519,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               >
                 <div className="flex items-center gap-1 font-semibold text-[16px]">
                   <AnimatedNavLink
-                    onClick={() => router.push('/projects')}
+                    href="/projects"
                     text={labels.project[language]}
                     hasDropdown={true}
                     isDropdownOpen={showProjectDropdown}
@@ -638,21 +640,21 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               <div className="font-semibold text-[16px]">
                 <AnimatedNavLink
                   text={labels.aboutus[language]}
-                  onClick={() => router.push('/about')}
+                  href="/about"
                 />
               </div>
 
               <div className="font-semibold text-[16px]">
                 <AnimatedNavLink
                   text={labels.blog[language]}
-                  onClick={() => router.push('/blogs')}
+                  href="/blogs"
                 />
               </div>
 
               <div className="font-semibold text-[16px]">
                 <AnimatedNavLink
                   text={labels.contacts[language]}
-                  onClick={() => router.push('/contact')}
+                  href="/contact"
                 />
               </div>
             </nav>
@@ -682,7 +684,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
             {!token && (
               <div className="hidden md:block">
                 <Link
-                  className="font-medium text-[16px] hover:text-[#41398B]"
+                  className="font-medium text-[16px] text-black hover:text-[#41398B]"
                   href="/login"
                 >
                   {labels.loginRegister[language]}

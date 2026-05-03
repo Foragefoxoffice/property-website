@@ -12,6 +12,15 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      spacing: {
+        '120': '30rem',
+      },
+      borderRadius: {
+        '4xl': '2rem',
+      },
+      fontFamily: {
+        sans: ["var(--font-manrope)", "sans-serif"],
+      },
     },
   },
   plugins: [],
