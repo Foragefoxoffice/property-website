@@ -11,7 +11,7 @@ import { getHeader, getAllProjects, getProjectCategories, getFooter } from '@/li
 import AnimatedNavLink from '@/components/AnimatedNavLink'
 import { useFavorites } from '@/context/FavoritesContext'
 import { Tooltip } from 'antd'
-import { getAssetBaseURL } from '@/utils/baseURL'
+import { getImageUrl } from '@/utils/baseURL'
 
 // ChangePasswordModal placeholder — will be replaced when the modal is ported
 function ChangePasswordModal({
@@ -209,18 +209,6 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
 
   const initials = userName ? userName.slice(0, 2).toUpperCase() : 'US'
 
-  // Get logo URL with proper base path
-  const getLogoUrl = (logoPath: string) => {
-    if (!logoPath) return '/images/login/logo.png'
-    if (logoPath.startsWith('http')) return logoPath
-    if (logoPath.startsWith('/uploads')) {
-      const base = getAssetBaseURL()
-      return `${base}${logoPath}`
-    }
-    return logoPath
-  }
-
-  const baseURL = getAssetBaseURL()
 
   // Staff Header (no public navigation — showNavigation=false)
   if (!showNavigation) {
@@ -234,7 +222,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
           <div className="flex items-center gap-4">
             <img
               className="h-10 object-contain"
-              src={getLogoUrl(headerLogo)}
+              src={getImageUrl(headerLogo) || '/images/login/logo.png'}
               alt="Logo"
             />
           </div>
@@ -407,7 +395,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 className="w-5 h-5 flex items-center justify-center hover:scale-110 transition-all opacity-90 hover:opacity-100"
               >
                 <img
-                  src={item.icon.startsWith('/') ? `${baseURL}${item.icon}` : item.icon}
+                  src={getImageUrl(item.icon)}
                   alt="social"
                   className="w-full h-full object-contain rounded-sm"
                 />
@@ -436,14 +424,14 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
           <div className="flex items-center">
             <img
               className="hidden lg:block object-contain cursor-pointer h-8 md:h-10"
-              src={getLogoUrl(headerLogo)}
+              src={getImageUrl(headerLogo) || '/images/login/logo.png'}
               alt="Logo"
               onClick={() => router.push('/')}
             />
             <div className="lg:hidden absolute left-15 flex items-center justify-center">
               <img
                 className="h-6 object-contain cursor-pointer"
-                src={getLogoUrl(headerLogo)}
+                src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                 alt="Logo"
                 onClick={() => router.push('/')}
               />

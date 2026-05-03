@@ -3,13 +3,7 @@
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
-const BASE = getAssetBaseURL()
-function imgUrl(p: string) {
-  if (!p) return ''
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
+import { getImageUrl } from '@/utils/baseURL'
 
 export default function AboutBanner({ data }: { data: Record<string, unknown> }) {
   const { language } = useLanguage()
@@ -17,7 +11,7 @@ export default function AboutBanner({ data }: { data: Record<string, unknown> })
     ? String(data?.aboutBannerTitle_en || 'About Us')
     : String(data?.aboutBannerTitle_vn || 'Về chúng tôi')
   const bg = data?.aboutBannerBg
-    ? imgUrl(String(data.aboutBannerBg))
+    ? getImageUrl(String(data.aboutBannerBg))
     : 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2669&auto=format&fit=crop'
 
   return (

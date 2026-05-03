@@ -10,14 +10,8 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
 import { getAllZoneSubAreas, getAllBlocks, getAllPropertyTypes, getAllCurrencies, getAllProperties, getVisibleTestimonials } from '@/lib/api'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
+import { getAssetBaseURL, getImageUrl } from '@/utils/baseURL'
 const BASE = getAssetBaseURL()
-
-function getImageUrl(path: string) {
-  if (!path) return ''
-  if (path.startsWith('http')) return path
-  return `${BASE}${path}`
-}
 
 function loc(val: unknown, lang: string): string {
   if (!val) return ''
@@ -313,7 +307,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                   style={{ transitionDelay: `${200 + index * 100}ms` }}
                   onClick={() => router.push(`/property-showcase/${id}${slug ? `/${slug}` : ''}`)}>
                   <div className="relative h-56 overflow-hidden">
-                    <img src={imgs[0] || '/images/property/dummy-img.avif'} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                    <img src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                     <button onClick={e => { e.stopPropagation(); if (favorited) { removeFavorite(propId) } else { addFavorite(property) } }}
                       className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:scale-110 transition">
                       <Heart size={16} className={favorited ? 'fill-[#41398B] text-[#41398B]' : 'text-gray-400'} />
@@ -576,7 +570,7 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
                 className={`group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                 style={{ transitionDelay: `${200 + i * 150}ms` }}>
                 <div className="h-48 overflow-hidden">
-                  {cover ? <img src={cover} alt={btitle} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" /> : <div className="w-full h-full bg-[#E8E8FF] flex items-center justify-center"><span className="text-[#41398B] text-4xl font-bold opacity-30">183</span></div>}
+                  {cover ? <img src={getImageUrl(cover)} alt={btitle} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" /> : <div className="w-full h-full bg-[#E8E8FF] flex items-center justify-center"><span className="text-[#41398B] text-4xl font-bold opacity-30">183</span></div>}
                 </div>
                 <div className="p-5">
                   <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-[#41398B] transition">{btitle}</h3>

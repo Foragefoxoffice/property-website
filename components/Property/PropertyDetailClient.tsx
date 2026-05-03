@@ -7,6 +7,7 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { useLanguage } from '@/context/LanguageContext'
 import { createEnquiry } from '@/lib/api'
 import { toast } from 'react-toastify'
+import { getImageUrl } from '@/utils/baseURL'
 
 export default function PropertyDetailClient({ property }: { property: Record<string, unknown> }) {
   const { isFavorite, addFavorite, removeFavorite } = useFavorites()
@@ -60,7 +61,7 @@ export default function PropertyDetailClient({ property }: { property: Record<st
           {/* Image gallery */}
           {images.length > 0 ? (
             <div className="relative rounded-2xl overflow-hidden h-72 sm:h-96 bg-gray-100 mb-4">
-              <img src={images[currentImage]?.url} alt={title} className="w-full h-full object-cover" />
+              <img src={getImageUrl(images[currentImage]?.url)} alt={title} className="w-full h-full object-cover" />
               {images.length > 1 && (
                 <>
                   <button onClick={prevImage} className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white transition">
@@ -83,7 +84,7 @@ export default function PropertyDetailClient({ property }: { property: Record<st
                   {images.slice(0, 6).map((img, i) => (
                     <button key={i} onClick={() => setCurrentImage(i)}
                       className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition ${i === currentImage ? 'border-[#41398B]' : 'border-transparent'}`}>
-                      <img src={img.url} alt="" className="w-full h-full object-cover" />
+                      <img src={getImageUrl(img.url)} alt="" className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>

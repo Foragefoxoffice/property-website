@@ -6,13 +6,7 @@ import Link from 'next/link'
 import BlogSidebar from './BlogSidebar'
 import { useLanguage } from '@/context/LanguageContext'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
-const BASE = getAssetBaseURL()
-function imgUrl(p: string) {
-  if (!p) return ''
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
+import { getImageUrl } from '@/utils/baseURL'
 
 type Blog = {
   _id?: string
@@ -31,7 +25,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
 
   const title = blog.title?.[lang] || blog.title?.en || 'Untitled'
   const content = blog.content?.[lang] || blog.content?.en || ''
-  const mainImage = imgUrl(blog.mainImage || '')
+  const mainImage = getImageUrl(blog.mainImage)
   const categoryName = blog.category?.name?.[lang] || blog.category?.name?.en || ''
   const dateStr = blog.createdAt ? new Date(blog.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : ''
   const tags = blog.tags?.[lang] || blog.tags?.en || []

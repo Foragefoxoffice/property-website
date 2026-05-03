@@ -6,7 +6,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { getFooter, createSubscription } from '@/lib/api'
 import { toast } from 'react-toastify'
-import { getAssetBaseURL } from '@/utils/baseURL'
+import { getImageUrl } from '@/utils/baseURL'
 
 const staticTranslations: Record<string, { en: string; vi: string }> = {
   propertyForSale: { en: 'Property For Sale', vi: 'Bất động sản bán' },
@@ -90,7 +90,6 @@ export default function PublicFooter() {
     return staticTranslations[key]?.[language] || staticTranslations[key]?.en || ''
   }
 
-  const baseURL = getAssetBaseURL()
 
   return (
     <footer className="bg-[#161616] text-white pt-12 md:pt-16 pb-8">
@@ -101,11 +100,7 @@ export default function PublicFooter() {
             {footerData?.footerLogo && (
               <Link href="/" className="block mb-4">
                 <img
-                  src={
-                    footerData.footerLogo.startsWith('/')
-                      ? `${baseURL}${footerData.footerLogo}`
-                      : footerData.footerLogo
-                  }
+                  src={getImageUrl(footerData.footerLogo)}
                   alt="Logo"
                   className="h-20 md:h-24 w-auto object-contain"
                 />
@@ -292,7 +287,7 @@ export default function PublicFooter() {
                 className="w-6 h-6 flex items-center justify-center text-white hover:text-[#7f75d5] hover:opacity-80 transition-all"
               >
                 <img
-                  src={item.icon.startsWith('/') ? `${baseURL}${item.icon}` : item.icon}
+                  src={getImageUrl(item.icon)}
                   alt="social"
                   className="w-full h-full object-contain"
                 />

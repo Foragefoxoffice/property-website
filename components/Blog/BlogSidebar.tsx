@@ -7,15 +7,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import axios from 'axios'
 import { useLanguage } from '@/context/LanguageContext'
 
-import { getBaseURL, getAssetBaseURL } from '@/utils/baseURL'
+import { getBaseURL, getImageUrl } from '@/utils/baseURL'
 const BASE = getBaseURL()
-const ASSET_BASE = getAssetBaseURL()
-
-function imgUrl(p: string) {
-  if (!p) return ''
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${ASSET_BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
 
 type Blog = { _id: string; slug?: { en?: string; vi?: string }; title?: { en?: string; vi?: string }; mainImage?: string; createdAt?: string; published?: boolean }
 type Category = { _id: string; slug?: { en?: string; vi?: string }; name?: { en?: string; vi?: string } }
@@ -81,7 +74,7 @@ export default function BlogSidebar() {
             {recentPosts.map(post => (
               <Link href={`/blogs/${post.slug?.[language === 'en' ? 'en' : 'vi'] || post.slug?.en}`} key={post._id} className="flex gap-4 group">
                 {post.mainImage && (
-                  <img src={imgUrl(post.mainImage)} alt={post.title?.[language === 'en' ? 'en' : 'vi'] || post.title?.en || ''} className="w-20 h-20 object-cover rounded-lg flex-shrink-0 group-hover:opacity-80 transition-opacity" />
+                  <img src={getImageUrl(post.mainImage)} alt={post.title?.[language === 'en' ? 'en' : 'vi'] || post.title?.en || ''} className="w-20 h-20 object-cover rounded-lg flex-shrink-0 group-hover:opacity-80 transition-opacity" />
                 )}
                 <div>
                   <h4 className="font-bold text-gray-800 leading-snug mb-1 line-clamp-2 group-hover:text-[#41398B] transition-colors">

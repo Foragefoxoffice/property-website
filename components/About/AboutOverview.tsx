@@ -4,13 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useLanguage } from '@/context/LanguageContext'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
-const BASE = getAssetBaseURL()
-function imgUrl(p: string) {
-  if (!p) return 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=1932&auto=format&fit=crop'
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
+import { getImageUrl } from '@/utils/baseURL'
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -28,7 +22,7 @@ export default function AboutOverview({ data }: { data: Record<string, unknown> 
   const description = language === 'en'
     ? String(data?.aboutOverviewDescription_en || '')
     : String(data?.aboutOverviewDescription_vn || '')
-  const bg = imgUrl(String(data?.aboutOverviewBg || ''))
+  const bg = getImageUrl(String(data?.aboutOverviewBg || '')) || 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=1932&auto=format&fit=crop'
 
   return (
     <section ref={ref} className="md:py-14 py-9 pb-0 md:px-6 px-2 bg-white">

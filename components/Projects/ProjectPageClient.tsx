@@ -7,14 +7,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import ProjectBanner from './ProjectBanner'
 import ProjectIntroduction from './ProjectIntroduction'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
-const BASE = getAssetBaseURL()
-
-function imgUrl(p: string) {
-  if (!p) return ''
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
+import { getImageUrl } from '@/utils/baseURL'
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()
@@ -133,7 +126,7 @@ function ProjectPageInner({
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                     {project.mainImage ? (
-                      <img src={imgUrl(project.mainImage)} alt={title} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                      <img src={getImageUrl(project.mainImage)} alt={title} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                     ) : (
                       <div className="h-full w-full bg-[#E8E8FF] flex items-center justify-center">
                         <span className="text-[#41398B] text-4xl font-bold opacity-30">183</span>

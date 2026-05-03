@@ -15,3 +15,16 @@ export const getAssetBaseURL = () => {
   // This will strip /api/v1 or /api from the end
   return baseUrl.replace(/\/api(\/v1)?$/, '');
 };
+
+/**
+ * Centralized utility to handle image URLs.
+ * Prepends the asset base URL if the path is relative.
+ */
+export const getImageUrl = (path: string | undefined | null) => {
+  if (!path) return '';
+  if (path.startsWith('http') || path.startsWith('data:')) return path;
+  
+  const base = getAssetBaseURL();
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${cleanPath}`;
+};

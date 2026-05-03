@@ -4,13 +4,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 
-import { getAssetBaseURL } from '@/utils/baseURL'
-const BASE = getAssetBaseURL()
-function imgUrl(p: string) {
-  if (!p) return 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670&auto=format&fit=crop'
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
+import { getImageUrl } from '@/utils/baseURL'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -23,7 +17,7 @@ const itemVariants = {
 
 export default function BlogBanner({ title, backgroundImage }: { title: string; backgroundImage?: string }) {
   const { language } = useLanguage()
-  const bg = imgUrl(backgroundImage || '')
+  const bg = getImageUrl(backgroundImage) || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670&auto=format&fit=crop'
 
   return (
     <div className="relative lg:h-[400px] h-96 w-full flex items-center justify-center bg-cover bg-center">

@@ -8,15 +8,8 @@ import BlogSidebar from './BlogSidebar'
 import { useLanguage } from '@/context/LanguageContext'
 import axios from 'axios'
 
-import { getBaseURL, getAssetBaseURL } from '@/utils/baseURL'
+import { getBaseURL, getImageUrl } from '@/utils/baseURL'
 const BASE = getBaseURL()
-const ASSET_BASE = getAssetBaseURL()
-
-function imgUrl(p: string) {
-  if (!p) return ''
-  if (p.startsWith('http') || p.startsWith('data:')) return p
-  return `${ASSET_BASE}${p.startsWith('/') ? '' : '/'}${p}`
-}
 
 type Blog = {
   _id: string
@@ -98,7 +91,7 @@ function BlogPageInner({ pageData }: { pageData: PageData | null }) {
                       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
                         {blog.mainImage ? (
                           <div className="overflow-hidden">
-                            <img src={imgUrl(blog.mainImage)} alt={title} className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                            <img src={getImageUrl(blog.mainImage)} alt={title} className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500" />
                           </div>
                         ) : (
                           <div className="h-48 bg-[#E8E8FF] flex items-center justify-center">
