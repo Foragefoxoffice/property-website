@@ -3,11 +3,9 @@ export const getBaseURL = () => {
   return process.env.NEXT_PUBLIC_API_URL || "https://api.183housingsolutions.com/api/v1";
 };
 
-
 export const baseUrl = getBaseURL();
 
 export const getAssetBaseURL = () => {
-  // Deriving asset base from API URL to ensure consistency across subdomains
-  return baseUrl.replace('/api/v1', '');
+  // Deriving asset base from API URL by removing /api or /api/v1
+  return baseUrl.replace(/\/api(\/v1)?$/, '');
 };
-

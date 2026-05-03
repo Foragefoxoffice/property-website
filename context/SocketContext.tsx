@@ -24,7 +24,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    // Initialize socket connection - Ensure we use the base URL, not the /api/v1 path
+    // Initialize socket connection - Ensure we use the base URL, not the /api path
     const socketTarget = getAssetBaseURL()
 
     const socketInstance = io(socketTarget, {
