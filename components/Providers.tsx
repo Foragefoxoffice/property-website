@@ -11,14 +11,32 @@ import { useEffect } from 'react'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    const handleError = (e: ErrorEvent) => {
-      if (e.message && e.message.includes('ChunkLoadError')) {
+    const handleError = (event: ErrorEvent | PromiseRejectionEvent) => {
+      let message = ''
+      if ('message' in event) {
+        message = event.message
+      } else if ('reason' in event && event.reason) {
+        message = event.reason.message || String(event.reason)
+      }
+
+      const isChunkError =
+        message.includes('ChunkLoadError') ||
+        message.includes('Loading chunk') ||
+        message.includes('unexpected token <') ||
+        message.includes('Failed to fetch dynamically imported module')
+
+      if (isChunkError) {
         window.location.reload()
       }
     }
 
-    window.addEventListener('error', handleError)
-    return () => window.removeEventListener('error', handleError)
+    window.addEventListener('error', handleError as EventListener)
+    window.addEventListener('unhandledrejection', handleError as EventListener)
+
+    return () => {
+      window.removeEventListener('error', handleError as EventListener)
+      window.removeEventListener('unhandledrejection', handleError as EventListener)
+    }
   }, [])
 
   return (
