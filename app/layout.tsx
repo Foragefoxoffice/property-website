@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next'
+export const dynamic = 'force-dynamic'
+
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
