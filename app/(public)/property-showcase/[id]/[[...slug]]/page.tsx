@@ -1,6 +1,8 @@
 import { fetchPropertyById } from '@/lib/serverFetch'
 import PropertyDetailClient from '@/components/Property/PropertyDetailClient'
 import type { Metadata } from 'next'
+import { getImageUrl } from '@/utils/baseURL'
+import { stripHtml, safeVal } from '@/utils/display'
 
 interface PageProps {
   params: { id: string; slug?: string[] }
@@ -11,15 +13,25 @@ export const revalidate = 300
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
     const res = await fetchPropertyById(params.id)
-    const property = res.data as Record<string, unknown>
-    const listing = (property.listingInformation as Record<string, unknown>) || {}
+    const property = res.data as Record<string, any>
+    const listing = property.listingInformation || {}
+    const seo = property.seoInformation || {}
 
-    const title = String(property.title || listing.title || '183 Housing Solutions')
-    const description = String(property.description || listing.description || 'View property details on 183 Housing Solutions')
-    const images = (property.images as { url: string }[]) || []
-    const imageUrl = images[0]?.url || ''
-    const slug = params.slug?.[0] || String(property.slug || params.id)
-    const url = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'}/property-showcase/${params.id}/${slug}`
+    // 1. Get Title (Localized)
+    const title = safeVal(listing.listingInformationPropertyTitle) || String(property.title || '183 Housing Solutions')
+
+    // 2. Get Description (Localized & Stripped of HTML)
+    const rawDesc = safeVal(property.whatNearby?.whatNearbyDescription) || safeVal(property.description)
+    const description = stripHtml(rawDesc) || 'View property details on 183 Housing Solutions'
+
+    // 3. Get Image (Absolute URL)
+    const propImages = property.imagesVideos?.propertyImages || []
+    const imageUrl = getImageUrl(propImages[0])
+
+    // 4. Get URL
+    const slug = params.slug?.[0] || safeVal(seo.slugUrl) || params.id
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
+    const url = `${siteUrl}/property-showcase/${params.id}/${slug}`
 
     return {
       title: `${title} | 183 Housing Solutions`,
@@ -39,7 +51,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         images: imageUrl ? [imageUrl] : [],
       },
     }
-  } catch {
+  } catch (error) {
+    console.error('Metadata generation error:', error)
     return {
       title: 'Property | 183 Housing Solutions',
       description: 'Real estate listings in Vietnam',
