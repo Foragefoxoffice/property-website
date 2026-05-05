@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const seo = property.seoInformation || {}
 
     // 1. Get Title (Localized)
-    const title = safeVal(listing.listingInformationPropertyTitle) || String(property.title || '183 Housing Solutions')
+    const title = String(safeVal(listing.listingInformationPropertyTitle) || property.title || '183 Housing Solutions')
 
     // 2. Get Description (Localized & Stripped of HTML)
     const rawDesc = safeVal(property.whatNearby?.whatNearbyDescription) || safeVal(property.description)
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const imageUrl = getImageUrl(propImages[0])
 
     // 4. Get URL
-    const slug = params.slug?.[0] || safeVal(seo.slugUrl) || params.id
+    const slug = String(params.slug?.[0] || safeVal(seo.slugUrl) || params.id)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
     const url = `${siteUrl}/property-showcase/${params.id}/${slug}`
 

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const res = await fetchProjectBySlug(params.slug)
     const p = (res.data as Record<string, any>) || {}
     
-    const title = safeVal(p.projectBannerTitle) || safeVal(p.title) || 'Project'
+    const title = String(safeVal(p.projectBannerTitle) || safeVal(p.title) || 'Project')
     const descHtml = safeVal(p.projectBannerDesc) || safeVal(p.description)
     const description = stripHtml(descHtml) || 'View project details on 183 Housing Solutions'
     

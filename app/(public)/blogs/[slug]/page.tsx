@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const res = await fetchBlogBySlug(params.slug)
     const b = (res.data as Record<string, any>) || {}
     
-    const title = safeVal(b.title) || 'Blog'
+    const title = String(safeVal(b.title) || 'Blog')
     const content = safeVal(b.content)
     const description = stripHtml(content).substring(0, 160) || 'Read our latest blog posts on 183 Housing Solutions'
     

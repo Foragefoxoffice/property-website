@@ -21,14 +21,24 @@ const manrope = Manrope({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://183housingsolutions.com'),
   title: '183 Housing Solutions — Find Your Home in Vietnam',
   description: 'Browse properties for lease, sale, and home stay in Vietnam.',
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.png' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/favicon.png' },
+    ],
   },
   openGraph: {
+    title: '183 Housing Solutions — Find Your Home in Vietnam',
+    description: 'Browse properties for lease, sale, and home stay in Vietnam.',
     siteName: '183 Housing Solutions',
     locale: 'en_US',
+    type: 'website',
   },
 }
 
