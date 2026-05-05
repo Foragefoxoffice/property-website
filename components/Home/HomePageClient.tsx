@@ -546,12 +546,12 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
               let displaySuffix = ''
 
               if (typeLower === 'sale' && priceSale) {
-                displayPrice = `${formatNumber(priceSale)} VND`
+                displayPrice = `${Number(priceSale).toLocaleString()} VND`
               } else if (typeLower === 'lease' && priceLease) {
-                displayPrice = `${formatNumber(priceLease)} VND`
+                displayPrice = `${Number(priceLease).toLocaleString()} VND`
                 displaySuffix = lang === 'en' ? '/ month' : '/ tháng'
               } else if (typeLower === 'home stay' && priceNight) {
-                displayPrice = `${formatNumber(priceNight)} VND`
+                displayPrice = `${Number(priceNight).toLocaleString()} VND`
                 displaySuffix = lang === 'en' ? '/ night' : '/ đêm'
               }
 
@@ -599,7 +599,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Ruler size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">{formatNumber(sqft)} {loc(info.listingInformationUnit, lang) || 'Sqft'}</span>
+                        <span className="text-[13px] font-bold text-gray-700">{sqft.toLocaleString()} {loc(info.listingInformationUnit, lang) || 'Sqft'}</span>
                       </div>
                     </div>
                   </div>
