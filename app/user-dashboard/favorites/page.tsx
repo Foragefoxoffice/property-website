@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Skeleton } from 'antd'
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
-import { normalizeFancyText, stripHtml } from '@/utils/display'
+import { normalizeFancyText, stripHtml, formatNumber } from '@/utils/display'
 
 export default function FavoritesPage() {
   const { language } = useLanguage()
@@ -190,7 +190,7 @@ export default function FavoritesPage() {
                 else if (type === 'Lease' && financialVisibility.leasePrice) isPriceHidden = true
                 else if (type === 'Home Stay' && financialVisibility.pricePerNight) isPriceHidden = true
 
-                const formatP = (p: number) => `${Number(p).toLocaleString()} ${dispCurrency}`.trim()
+                const formatP = (p: number) => `${formatNumber(p)} ${dispCurrency}`.trim()
 
                 if (!isPriceHidden) {
                   if (type === 'Sale' && priceSale) displayPrice = formatP(priceSale)
