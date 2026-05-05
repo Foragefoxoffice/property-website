@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProjectDetailClient from '@/components/Projects/ProjectDetailClient'
 
+import { getImageUrl } from '@/utils/baseURL'
+import { stripHtml, safeVal } from '@/utils/display'
+
 export const revalidate = 300
 
 interface Props { params: { slug: string } }
@@ -11,22 +14,34 @@ interface Props { params: { slug: string } }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const res = await fetchProjectBySlug(params.slug)
-    const p = (res.data as Record<string, unknown>) || {}
-    const title = (p.title as Record<string, string>)?.en || String(p.title || 'Project')
-    const description = (p.description as Record<string, string>)?.en || String(p.description || '')
-    const images = (p.images as { url: string }[]) || []
-    const imageUrl = images[0]?.url || ''
+    const p = (res.data as Record<string, any>) || {}
+    
+    const title = String(safeVal(p.projectBannerTitle) || safeVal(p.title) || 'Project')
+    const descHtml = safeVal(p.projectBannerDesc) || safeVal(p.description)
+    const description = stripHtml(descHtml) || 'View project details on 183 Housing Solutions'
+    
+    const bannerImages = (p.projectBannerImages as string[]) || []
+    const imageUrl = getImageUrl(bannerImages[0])
+    
     return {
       title: `${title} | 183 Housing Solutions`,
       description,
       openGraph: {
         title,
         description,
-        images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [],
+        type: 'website',
+        siteName: '183 Housing Solutions',
+        images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630, alt: title }] : [],
       },
-      twitter: { card: 'summary_large_image', title, description, images: imageUrl ? [imageUrl] : [] },
+      twitter: { 
+        card: 'summary_large_image', 
+        title, 
+        description, 
+        images: imageUrl ? [imageUrl] : [] 
+      },
     }
-  } catch {
+  } catch (error) {
+    console.error('Project metadata error:', error)
     return { title: 'Project | 183 Housing Solutions' }
   }
 }
