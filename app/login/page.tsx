@@ -21,11 +21,9 @@ function LoginForm() {
   const t = translations[language as keyof typeof translations]
 
   const [formData, setFormData] = useState({ email: '', password: '' })
-  const [staffFormData, setStaffFormData] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const [isStaffModalOpen, setIsStaffModalOpen] = useState(false)
 
   // Check for error in URL params
   React.useEffect(() => {
@@ -37,8 +35,6 @@ function LoginForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value })
 
-  const handleStaffChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setStaffFormData({ ...staffFormData, [e.target.name]: e.target.value })
 
   const handleLogin = async (data: { email: string; password: string }) => {
     setError('')
@@ -47,22 +43,17 @@ function LoginForm() {
       const res = await loginUser(data)
       if (res.data.success) {
         const user = res.data.user
-        localStorage.setItem('token', res.data.token)
-        localStorage.setItem('userId', user?._id || user?.id || '')
-        localStorage.setItem('userName', user?.name || '')
-        localStorage.setItem('userRole', user?.role || 'user')
-        const newPermissions = await refreshPermissions()
-        await fetchFavorites()
-        toast.success(t.loginSuccess)
-
-        // Redirect based on user role
         if (user?.role === 'user') {
+          localStorage.setItem('token', res.data.token)
+          localStorage.setItem('userId', user?._id || user?.id || '')
+          localStorage.setItem('userName', user?.name || '')
+          localStorage.setItem('userRole', user?.role || 'user')
+          await refreshPermissions()
+          await fetchFavorites()
+          toast.success(t.loginSuccess)
           router.push('/')
         } else {
-          // Staff, Admin, or other roles go to admin subdomain
-          const firstPath = getFirstAccessiblePath(newPermissions)
-          const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.183housingsolutions.com'
-          window.location.href = `${adminUrl}${firstPath}`
+          setError(t.staffLoginError || 'Please login via the Staff Login button below.')
         }
       }
     } catch (err) {
@@ -78,10 +69,6 @@ function LoginForm() {
     handleLogin(formData)
   }
 
-  const handleStaffSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    handleLogin(staffFormData)
-  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#f6f4ff] to-[#e5defc] relative overflow-hidden pt-5">
@@ -213,110 +200,6 @@ function LoginForm() {
         </form>
       </div>
 
-      {/* Staff Login Modal */}
-      {isStaffModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 animate-in zoom-in-95 duration-200">
-            <button
-              onClick={() => setIsStaffModalOpen(false)}
-              className="absolute cursor-pointer top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <X size={20} />
-            </button>
-
-            {/* Logo */}
-            <div className="mb-8 text-center">
-              <img className="h-10 mx-auto mb-4" src="/images/login/logo.png" alt="" />
-              <h2
-                style={{ fontWeight: 800, fontSize: 28 }}
-                className="text-gray-800 mb-2"
-              >
-                {t.staffLogin}
-              </h2>
-              <p className="text-gray-500 text-sm">
-                {t.staffLoginSubtitle}
-              </p>
-            </div>
-
-            <form onSubmit={handleStaffSubmit} className="space-y-5">
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-[#2a2a2a] mb-1">
-                  {t.emailAddress}
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 text-gray-400 w-5 h-5" />
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={staffFormData.email}
-                    onChange={handleStaffChange}
-                    placeholder={t.enterEmail}
-                    className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#4A3AFF] focus:border-[#4A3AFF] outline-none text-gray-700"
-                  />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-[#2a2a2a] mb-1">
-                  {t.password}
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3.5 text-gray-400 w-5 h-5" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    required
-                    value={staffFormData.password}
-                    onChange={handleStaffChange}
-                    placeholder={t.enterPassword}
-                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#4A3AFF] focus:border-[#4A3AFF] outline-none text-gray-700"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 transition"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                <div className="flex justify-end mt-1">
-                  <Link
-                    href="/forgot-password"
-                    className="text-sm text-[#4A3AFF] hover:underline"
-                  >
-                    {t.forgotPassword}
-                  </Link>
-                </div>
-              </div>
-
-              {/* Error */}
-              {error && (
-                <p className="text-center text-red-500 text-sm bg-red-50 py-2 rounded-md border border-red-200">
-                  {error}
-                </p>
-              )}
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full cursor-pointer py-3 bg-[#41398B] hover:bg-[#41398be1] text-white font-semibold rounded-4xl shadow-md transition-all flex justify-center items-center"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="animate-spin mr-2" size={18} /> {t.loggingIn}
-                  </>
-                ) : (
-                  t.loginButton
-                )}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
