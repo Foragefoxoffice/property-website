@@ -26,7 +26,7 @@ export function formatNumber(num: unknown): string {
   if (num === null || num === undefined || num === '') return ''
   const n = Number(String(num).replace(/,/g, ''))
   if (Number.isNaN(n)) return String(num)
-  return n.toLocaleString()
+  return n.toLocaleString('en-US')
 }
 
 export function parseNumber(str: unknown): string {

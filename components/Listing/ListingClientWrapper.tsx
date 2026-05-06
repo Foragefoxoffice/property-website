@@ -15,7 +15,7 @@ import {
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
-import { stripHtml } from '@/utils/display'
+import { formatNumber, stripHtml } from '@/utils/display'
 import { getAssetBaseURL } from '@/utils/baseURL'
 import Link from 'next/link'
 
@@ -104,7 +104,7 @@ function PropertyCard({
   else if (typeLower === 'lease' && visFin.leasePrice) isPriceHidden = true
   else if (typeLower === 'home stay' && visFin.pricePerNight) isPriceHidden = true
 
-  const fmtP = (p: number) => `${Number(p).toLocaleString()} ${dispCurrency}`.trim()
+  const fmtP = (p: number) => `${formatNumber(p)} ${dispCurrency}`.trim()
   let displayPrice = t.contactForPrice || 'Contact for price'
   let displaySuffix = ''
   if (!isPriceHidden) {
@@ -128,7 +128,7 @@ function PropertyCard({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="card-house style-default hover-image group bg-white rounded-2xl shadow-sm overflow-hidden transition-all duration-500 cursor-pointer flex flex-col h-full"
+      className="card-house style-default hover-image group bg-white rounded-2xl shadow-sm overflow-hidden transition-all duration-500 cursor-pointer flex flex-col h-full border border-gray-100"
     >
       {/* Image */}
       <div className="relative img-style article-thumb h-56 overflow-hidden rounded-2xl flex-shrink-0">
@@ -213,7 +213,7 @@ function PropertyCard({
                 <svg className="w-6 h-6 text-[#41398B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.4 4.6a2 2 0 0 1 0 2.8l-12 12a2 2 0 0 1-2.8 0l-2-2a2 2 0 0 1 0-2.8l12-12a2 2 0 0 1 2.8 0zM12 7l2 2M10 9l2 2M8 11l2 2" />
                 </svg>
-                <span className="font-medium text-[14px]">{sqft.toLocaleString()} Sqft</span>
+                <span className="font-medium text-[14px]">{formatNumber(sqft)} Sqft</span>
               </div>
             )}
           </div>
@@ -394,7 +394,7 @@ function ListingInner() {
     }`
 
   return (
-    <div className="max-w-9xl md:px-28 px-4 mx-auto py-5">
+    <div className="max-w-7xl md:px-0 px-4 mx-auto py-5">
       {/* Breadcrumb */}
       <div className="flex items-center gap-3 text-sm mb-5">
         <Link href="/" className="text-gray-500 hover:text-[#41398B] font-medium transition-colors">{t.home || 'Home'}</Link>

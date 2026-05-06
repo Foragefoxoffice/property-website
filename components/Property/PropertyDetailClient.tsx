@@ -15,7 +15,7 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
 import { getImageUrl } from '@/utils/baseURL'
 import { createEnquiry, getAgent, getListingProperties, addFavorite as apiAddFavorite } from '@/lib/api'
-import { stripHtml } from '@/utils/display'
+import { formatNumber, stripHtml } from '@/utils/display'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { Skeleton } from 'antd'
@@ -102,12 +102,12 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
   const typeLower = txType.toLowerCase()
 
   if (typeLower === 'sale' && priceSale) {
-    displayPrice = `${Number(priceSale).toLocaleString()} VND`
+    displayPrice = `${formatNumber(priceSale)} VND`
   } else if (typeLower === 'lease' && priceLease) {
-    displayPrice = `${Number(priceLease).toLocaleString()} VND`
+    displayPrice = `${formatNumber(priceLease)} VND`
     displaySuffix = language === 'vi' ? '/ tháng' : '/ month'
   } else if (typeLower === 'home stay' && priceNight) {
-    displayPrice = `${Number(priceNight).toLocaleString()} VND`
+    displayPrice = `${formatNumber(priceNight)} VND`
     displaySuffix = language === 'vi' ? '/ đêm' : '/ night'
   }
 
@@ -153,7 +153,7 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
           </div>
           <div className="flex items-center gap-1.5">
             <Ruler size={18} className="text-[#41398B]" />
-            <span className="text-[13px] font-bold text-gray-700">{sqft.toLocaleString()} {getLoc(listing.listingInformationUnit) || 'Sqft'}</span>
+            <span className="text-[13px] font-bold text-gray-700">{formatNumber(sqft)} {getLoc(listing.listingInformationUnit) || 'Sqft'}</span>
           </div>
         </div>
       </div>
@@ -334,7 +334,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
     const dispCurrency = visFin.currency ? "" : currencyCode
     const formatPrice = (val: any) => {
       const num = Number(getLoc(val))
-      return isNaN(num) ? getLoc(val) : `${num.toLocaleString()} ${dispCurrency}`.trim()
+      return isNaN(num) ? getLoc(val) : `${formatNumber(num)} ${dispCurrency}`.trim()
     }
 
     if (trType === "Sale" && pSale) {

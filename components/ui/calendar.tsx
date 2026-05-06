@@ -49,7 +49,7 @@ function Calendar({
       endMonth={new Date(2100, 11)}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString("default", { month: "short" }),
+          date.toLocaleString("en-US", { month: "short" }),
         ...formatters,
       }}
       classNames={{
@@ -195,7 +195,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }: DayButtonPro
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString()}
+      data-day={day.date.toLocaleDateString("en-US")}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&
