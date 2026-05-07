@@ -114,20 +114,20 @@ export default function ProjectProduct({ projectData }: any) {
                 }
                 
                 .project-product-item-rich-text ul {
-                    list-style-type: none;
-                    padding-left: 0;
+                    list-style-type: disc !important;
+                    padding-left: 1.5rem !important;
+                    margin: 1rem 0 !important;
+                    list-style-position: outside !important;
+                }
+                .project-product-item-rich-text ol {
+                    list-style-type: decimal !important;
+                    padding-left: 1.5rem !important;
+                    margin: 1rem 0 !important;
+                    list-style-position: outside !important;
                 }
                 .project-product-item-rich-text li {
-                    position: relative;
-                    padding-left: 1.5rem;
-                    margin-bottom: 0.75rem;
-                }
-                .project-product-item-rich-text li::before {
-                    content: "→";
-                    position: absolute;
-                    left: 0;
-                    color: #111827;
-                    font-weight: bold;
+                    margin-bottom: 0.5rem !important;
+                    display: list-item !important;
                 }
                 .project-product-item-rich-text strong {
                     color: #111827;

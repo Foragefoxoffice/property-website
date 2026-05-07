@@ -33,21 +33,20 @@ export default function ProjectMainDescription({ projectData }: any) {
                     font-weight: 800;
                 }
                 .main-description-rich-text ul {
-                    list-style-type: none;
-                    padding-left: 0;
-                    margin-bottom: 1.5rem;
+                    list-style-type: disc !important;
+                    padding-left: 1.5rem !important;
+                    margin: 1rem 0 !important;
+                    list-style-position: outside !important;
+                }
+                .main-description-rich-text ol {
+                    list-style-type: decimal !important;
+                    padding-left: 1.5rem !important;
+                    margin: 1rem 0 !important;
+                    list-style-position: outside !important;
                 }
                 .main-description-rich-text li {
-                    position: relative;
-                    padding-left: 1.5rem;
-                    margin-bottom: 0.75rem;
-                }
-                .main-description-rich-text li::before {
-                    content: "•";
-                    position: absolute;
-                    left: 0;
-                    color: #41398B;
-                    font-weight: bold;
+                    margin-bottom: 0.5rem !important;
+                    display: list-item !important;
                 }
             `}</style>
         </section>

@@ -116,10 +116,10 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
   const descHtml = nearbyDesc || zoneDesc || ''
 
   return (
-    <Link 
-      href={url} 
-      target="_blank" 
-      rel="noopener noreferrer" 
+    <Link
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-all duration-300"
     >
       <div className="relative h-56 overflow-hidden">
@@ -441,21 +441,32 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
 
           {/* Mobile Slider */}
           <div className="md:hidden relative h-[300px] bg-black">
-            <AnimatePresence initial={false} custom={direction}>
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
               <motion.img
                 key={current}
                 src={images[current]}
                 className="absolute inset-0 w-full h-full object-cover"
                 custom={direction}
                 variants={{
-                  enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%' }),
-                  center: { x: 0 },
-                  exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%' }),
+                  enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+                  center: { x: 0, opacity: 1 },
+                  exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
                 }}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ x: { type: "spring", stiffness: 300, damping: 30 } }}
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 }
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500
+                  if (swipe && offset.x > 0) handlePrev()
+                  else if (swipe && offset.x < 0) handleNext()
+                }}
               />
             </AnimatePresence>
             <div className="absolute inset-0 flex items-center justify-between px-4 z-10 pointer-events-none">
@@ -737,21 +748,37 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
             </div>
 
             <div className="flex-1 relative flex items-center justify-center overflow-hidden px-4">
-              <AnimatePresence initial={false} custom={popupDirection}>
+              <AnimatePresence initial={false} custom={popupDirection} mode="popLayout">
                 <motion.img
                   key={popupIndex}
                   src={images[popupIndex]}
-                  className="max-w-full max-h-[80vh] object-contain shadow-2xl"
+                  className="max-w-full max-h-[80vh] object-contain shadow-2xl absolute inset-0 m-auto"
                   custom={popupDirection}
                   variants={{
-                    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+                    enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
                     center: { x: 0, opacity: 1 },
-                    exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+                    exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
                   }}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 }
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500
+                    if (swipe && offset.x > 0) {
+                      setPopupDirection(-1);
+                      setPopupIndex(i => (i - 1 + images.length) % images.length);
+                    } else if (swipe && offset.x < 0) {
+                      setPopupDirection(1);
+                      setPopupIndex(i => (i + 1) % images.length);
+                    }
+                  }}
                 />
               </AnimatePresence>
 
@@ -759,7 +786,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
               <button onClick={() => { setPopupDirection(1); setPopupIndex(i => (i + 1) % images.length) }} className="absolute right-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"><ChevronRight size={40} /></button>
             </div>
 
-            <div className="p-10 bg-black flex gap-3 overflow-x-auto justify-center scrollbar-hide">
+            <div className="p-10 bg-black flex gap-3 overflow-x-auto justify-start md:justify-center scrollbar-hide">
               {images.map((img, i) => (
                 <button key={i} onClick={() => { setPopupDirection(i > popupIndex ? 1 : -1); setPopupIndex(i) }} className={`w-20 h-14 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${popupIndex === i ? 'ring-4 ring-white scale-110' : 'opacity-40 hover:opacity-100'}`}>
                   <img src={img} className="w-full h-full object-cover" alt="" />
@@ -784,25 +811,22 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
 
       <style jsx global>{`
         .property-description-summary ul {
-          list-style-type: none;
-          padding-left: 0;
-          margin: 1.5rem 0;
+          list-style-type: disc !important;
+          padding-left: 1.5rem !important;
+          margin: 1rem 0 !important;
+          list-style-position: outside !important;
+        }
+        .property-description-summary ol {
+          list-style-type: decimal !important;
+          padding-left: 1.5rem !important;
+          margin: 1rem 0 !important;
+          list-style-position: outside !important;
         }
         .property-description-summary li {
-          position: relative;
-          padding-left: 2rem;
-          margin-bottom: 1rem;
-          font-weight: 700;
-          color: #374151;
-        }
-        .property-description-summary li::before {
-          content: "→";
-          position: absolute;
-          left: 0;
-          color: #41398B;
-          font-weight: 900;
-          font-size: 1.2rem;
-          line-height: 1;
+          margin-bottom: 0.5rem !important;
+          color: #374151 !important;
+          font-weight: 500 !important;
+          display: list-item !important;
         }
         .property-description-summary strong {
           color: #111827;

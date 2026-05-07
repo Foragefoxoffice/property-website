@@ -100,25 +100,20 @@ export default function ProjectLocation({ projectData }: any) {
 
             <style>{`
                 .project-location-rich-text ul {
-                    list-style-type: none;
-                    padding-left: 0;
-                    margin-top: 1.5rem;
+                    list-style-type: disc !important;
+                    padding-left: 1.5rem !important;
+                    margin: 1rem 0 !important;
+                    list-style-position: outside !important;
+                }
+                .project-location-rich-text ol {
+                    list-style-type: decimal !important;
+                    padding-left: 1.5rem !important;
+                    margin: 1rem 0 !important;
+                    list-style-position: outside !important;
                 }
                 .project-location-rich-text li {
-                    position: relative;
-                    padding-left: 1.75rem;
-                    margin-bottom: 1rem;
-                    color: #4b5563;
-                }
-                .project-location-rich-text li::before {
-                    content: "•";
-                    position: absolute;
-                    left: 0;
-                    color: #41398B;
-                    font-weight: 900;
-                    font-size: 1.5rem;
-                    line-height: 1;
-                    top: -4px;
+                    margin-bottom: 0.5rem !important;
+                    display: list-item !important;
                 }
                 .project-location-rich-text p {
                     margin-bottom: 1.5rem;
