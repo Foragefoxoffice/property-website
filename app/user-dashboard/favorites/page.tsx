@@ -7,6 +7,7 @@ import { Skeleton } from 'antd'
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import { formatNumber, normalizeFancyText, stripHtml } from '@/utils/display'
+import { getImageUrl } from '@/utils/baseURL'
 
 export default function FavoritesPage() {
   const { language } = useLanguage()
@@ -218,7 +219,7 @@ export default function FavoritesPage() {
                       >
                         <div className="w-24 h-24 sm:w-32 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 relative">
                           <img
-                            src={propertyImages[0] || '/images/property/dummy-img.avif'}
+                            src={getImageUrl(propertyImages[0]) || '/images/property/dummy-img.avif'}
                             alt="Property"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
