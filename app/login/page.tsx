@@ -11,6 +11,7 @@ import { usePermissions } from '@/context/PermissionContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import { useLanguage } from '@/context/LanguageContext'
 import { translations } from '@/language/translations'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 function LoginForm() {
   const router = useRouter()
@@ -72,6 +73,7 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#f6f4ff] to-[#e5defc] relative overflow-hidden pt-5">
+      <LanguageSwitcher />
       {/* Subtle skyline background */}
       <div
         className="absolute bottom-0 left-0 w-full bg-contain bg-bottom bg-no-repeat h-120"
