@@ -191,7 +191,7 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={() => {
-                  window.location.href = 'https://admin.183housingsolutions.com/login'
+                  window.location.href = 'https://admin.183housingsolutions.com'
                 }}
                 className="text-gray-500 hover:text-[#41398B] font-medium transition cursor-pointer underline hover:no-underline"
               >
