@@ -446,7 +446,7 @@ function HomeAbout({ d, lang }: { d: Record<string, unknown>; lang: string }) {
     <section ref={ref} className="px-4 md:px-6 bg-white overflow-hidden mt-[-60px] pt-[130px] pb-[60px]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-16 gap-8 items-start">
-          <div className={`space-y-6 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className={`space-y-6 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>
             <p className="text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider">{subtitle}</p>
             <h2 className="text-2xl md:text-3xl font-semibold text-black leading-tight">{title}</h2>
             <p className="text-md text-gray-600 leading-relaxed">{desc}</p>
@@ -454,7 +454,7 @@ function HomeAbout({ d, lang }: { d: Record<string, unknown>; lang: string }) {
           </div>
           <div className="space-y-8">
             {steps.map((s, i) => (
-              <div key={s.num} className={`flex gap-6 transition-all duration-1000 ease-out hover:translate-x-2 ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}
+              <div key={s.num} className={`flex gap-6 transition-all duration-1000 ease-out hover:translate-x-2 ${visible ? 'opacity-100 translate-x-0' : 'opacity-1 translate-x-12'}`}
                 style={{ transitionDelay: `${150 * (i + 1)}ms` }}>
                 <span className="flex-shrink-0 text-xl md:text-2xl font-semibold text-black">{s.num}.</span>
                 <div className="space-y-2">
@@ -500,8 +500,8 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
     <section ref={ref} className="py-6 md:px-6 px-4 md:py-10 bg-gradient-to-br from-[#f8f7ff] via-white to-[#f0eeff] mx-auto border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-16">
-          <p className={`text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>{title}</p>
-          {desc && <h2 className={`text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>{desc}</h2>}
+          <p className={`text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
+          {desc && <h2 className={`text-2xl md:text-4xl  font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
         {properties.length === 0 ? (
@@ -509,7 +509,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
             <p className="text-gray-500">{t.noPropertiesFound || 'No properties found'}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9 mt-3">
             {(properties as Record<string, any>[]).map((property, index) => {
               const info = property.listingInformation || {}
               const financial = property.financialDetails || {}
@@ -560,7 +560,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                   href={`/property-showcase/${id}${slug ? `/${slug}` : ''}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                  className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}
                   style={{ transitionDelay: `${200 + index * 100}ms` }}>
                   <div className="relative h-56 overflow-hidden">
                     <img src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
@@ -656,7 +656,7 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
     <section ref={ref} className="py-10 md:py-20 px-4 md:px-6 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-24">
         {/* Left Side: Contact Card */}
-        <div className={`relative rounded-3xl overflow-hidden min-h-[500px] flex flex-col bg-cover bg-center transition-all duration-1000 ease-out transform ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+        <div className={`relative rounded-3xl overflow-hidden min-h-[500px] flex flex-col bg-cover bg-center transition-all duration-1000 ease-out transform ${visible ? 'opacity-100 translate-x-0' : 'opacity-1 -translate-x-12'}`}
           style={{ backgroundImage: `url(${cardBg})` }}>
           <div className="absolute inset-0 bg-black/20 z-0" />
           <div className="relative z-10 p-6 md:p-12 flex flex-col h-full items-start">
@@ -669,16 +669,16 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
 
         {/* Right Side: FAQ Accordion */}
         <div className="flex flex-col justify-start pt-4">
-          <span className={`text-sm font-semibold tracking-[0.2em] text-gray-400 uppercase mb-3 transition-all duration-700 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <span className={`text-sm font-semibold tracking-[0.2em] text-gray-400 uppercase mb-3 transition-all duration-700 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
             {faqSub}
           </span>
-          <h2 className={`text-2xl md:text-3xl font-semibold text-[#1a1a1a] mb-3 md:mb-5 leading-tight transition-all duration-700 delay-500 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className={`text-2xl md:text-3xl font-semibold text-[#1a1a1a] mb-3 md:mb-5 leading-tight transition-all duration-700 delay-500 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
             {faqTitle}
           </h2>
 
           <div className="space-y-0">
             {faqs.map((faq, i) => (
-              <div key={i} className={`border-b border-gray-200 transition-all duration-700 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              <div key={i} className={`border-b border-gray-200 transition-all duration-700 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}
                 style={{ transitionDelay: `${700 + i * 100}ms` }}>
                 <button className="w-full py-4 flex items-center justify-between text-left group cursor-pointer"
                   onClick={() => setOpen(open === i ? -1 : i)}>
@@ -691,7 +691,7 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
                     </svg>
                   </span>
                 </button>
-                <div className={`overflow-hidden transition-all duration-500 ease-in-out ${open === i ? 'max-h-96 opacity-100 mb-8' : 'max-h-0 opacity-0'}`}>
+                <div className={`overflow-hidden transition-all duration-500 ease-in-out ${open === i ? 'max-h-96 opacity-100 mb-8' : 'max-h-0 opacity-1'}`}>
                   <p className="text-gray-500 leading-relaxed text-[16px]">
                     {lang === 'en' ? (faq.content_en || (faq as any).content) : (faq.content_vn || faq.content_en || (faq as any).content)}
                   </p>
@@ -810,10 +810,10 @@ function HomeFindProperty({ d, lang }: { d: Record<string, unknown>; lang: strin
       <div className="absolute inset-0 bg-black/70 z-0" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
         <div className="max-w-4xl">
-          <h2 className={`text-3xl md:text-4xl lg:text-4xl font-semibold text-white leading-tight mb-4 transition-all duration-1000 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+          <h2 className={`text-3xl md:text-4xl lg:text-4xl font-semibold text-white leading-tight mb-4 transition-all duration-1000 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}
             style={{ whiteSpace: 'pre-line' }}>{title}</h2>
           {description && (
-            <p className={`text-md md:text-lg text-white/90 transition-all duration-1000 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <p className={`text-md md:text-lg text-white/90 transition-all duration-1000 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>
               {description}
             </p>
           )}
@@ -857,9 +857,9 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
   return (
     <section ref={ref} className="py-6 md:px-6 px-4 md:py-10 bg-gradient-to-br from-[#f8f7ff] via-white to-[#f0eeff] mx-auto border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 md:mb-16">
-          <p className={`text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>{title}</p>
-          {desc && <h2 className={`text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>{desc}</h2>}
+        <div className="text-center mb-8 md:mb-28">
+          <p className={`text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
+          {desc && <h2 className={`text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9">
@@ -875,25 +875,46 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
               slug = String(blog._id)
             }
             const imgs = (blog.images as { url: string }[]) || []
-            const cover = imgs[0]?.url || ''
-            const excerpt = loc(blog.excerpt, lang) || ''
+            const cover = (blog.mainImage as string) || imgs[0]?.url || ''
+            
+            let excerpt = loc(blog.excerpt, lang) || ''
+            if (!excerpt && blog.content) {
+                const content = loc(blog.content, lang) || ''
+                const plainText = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
+                excerpt = plainText.length > 150 ? plainText.slice(0, 150) + '...' : plainText
+            }
+
+            const categoryName = (blog.category as any)?.name?.[lang] || (blog.category as any)?.name?.en || (lang === 'en' ? 'News' : 'Tin tức')
 
             return (
-              <Link key={String(blog._id)} href={`/blogs/${slug}`}
-                className={`card-house bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 flex flex-col cursor-pointer ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                style={{ transitionDelay: `${200 + i * 100}ms` }}>
-                <div className="relative h-56 overflow-hidden">
+              <Link key={String(blog._id)} href={`/blogs/${slug}`} className="group">
+                <div 
+                  className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-1'}`}
+                  style={{ transitionDelay: `${200 + i * 100}ms` }}
+                >
                   {cover ? (
-                    <img src={getImageUrl(cover)} alt={btitle} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                    <div className="overflow-hidden">
+                      <img src={getImageUrl(cover)} alt={btitle} className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                    </div>
                   ) : (
-                    <div className="w-full h-full bg-[#E8E8FF] flex items-center justify-center">
+                    <div className="h-48 bg-[#E8E8FF] flex items-center justify-center">
                       <span className="text-[#41398B] text-4xl font-bold opacity-30">183</span>
                     </div>
                   )}
-                </div>
-                <div className="p-5 flex-1 flex flex-col">
-                  <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 hover:text-[#41398B] transition-colors">{btitle}</h3>
-                  {excerpt && <p className="text-sm text-gray-500 line-clamp-2 mt-auto">{excerpt}</p>}
+                  <div className="p-4 flex-1 flex flex-col">
+                    <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                      <span className="bg-purple-50 text-[#41398B] px-3 py-1 rounded-full font-semibold text-xs">
+                        {categoryName}
+                      </span>
+                      {blog.createdAt ? <span>{new Date(String(blog.createdAt)).toLocaleDateString()}</span> : null}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#41398B] transition-colors">{btitle}</h3>
+                    {excerpt && <p className="text-gray-600 mb-4 text-sm flex-1 line-clamp-3">{excerpt}</p>}
+                    <div className="text-[#41398B] font-semibold flex items-center gap-2 mt-auto">
+                      {lang === 'en' ? 'Read More' : 'Đọc thêm'}
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </div>
                 </div>
               </Link>
             )

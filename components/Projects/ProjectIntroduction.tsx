@@ -3,6 +3,7 @@
 'use client'
 
 import { useLanguage } from '@/context/LanguageContext'
+import { getImageUrl } from '@/utils/baseURL'
 
 export default function ProjectIntroduction({ data }: { data: Record<string, unknown> }) {
   const { language } = useLanguage()
@@ -60,7 +61,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
             ) : mediaType === 'image' && videoUrl ? (
               <div className="w-full rounded-2xl overflow-hidden shadow-2xl bg-gray-50">
                 <img
-                  src={videoUrl}
+                  src={getImageUrl(videoUrl)}
                   alt="Project Overview"
                   className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
                 />
