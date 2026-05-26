@@ -429,7 +429,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
           <div className="flex items-center">
             <Link href="/">
               <img
-                className="hidden lg:block object-contain cursor-pointer h-8 md:h-10"
+                className="hidden lg:block object-contain cursor-pointer h-8 md:h-9"
                 src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                 alt="Logo"
               />

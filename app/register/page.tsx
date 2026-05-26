@@ -78,7 +78,7 @@ export default function RegisterPage() {
 
       {/* Logo */}
       <div className="mb-5 text-center z-10">
-        <img className="h-16" src="/images/login/logo.png" alt="" />
+        <img className="h-12" src="/images/login/logo.png" alt="" />
       </div>
 
       {/* Register Card */}

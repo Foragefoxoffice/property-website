@@ -232,8 +232,18 @@ function ListingInner() {
 
   const [selectedCategory, setSelectedCategory] = useState(() => {
     const type = searchParams.get('type') || ''
-    return ['Lease', 'Sale', 'Home Stay'].includes(type) ? type : 'All'
+   return ['Lease', 'Sale', 'Home Stay'].includes(type) ? type : 'All'
   })
+
+  useEffect(() => {
+  const type = searchParams.get('type') || ''
+
+  if (['Lease', 'Sale', 'Home Stay'].includes(type)) {
+    setSelectedCategory(type)
+  } else {
+    setSelectedCategory('All')
+  }
+}, [searchParams])
 
   const [properties, setProperties] = useState<Prop[]>([])
   const [loading, setLoading] = useState(true)
