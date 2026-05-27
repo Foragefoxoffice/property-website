@@ -18,7 +18,6 @@ import { createEnquiry, getAgent, getListingProperties, addFavorite as apiAddFav
 import { formatNumber, stripHtml } from '@/utils/display'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
-import { Skeleton } from 'antd'
 
 /* -------------------------------------------------------
    HELPERS
@@ -74,6 +73,9 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
   const propInfo = property.propertyInformation || {}
   const seo = property.seoInformation || {}
 
+  const visListing = property.listingInformationVisibility || {}
+  const visFin = property.financialVisibility || {}
+
   const getLoc = (val: any) => {
     if (!val) return ''
     if (typeof val === 'string') return val
@@ -86,7 +88,9 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
 
   const txType = getLoc(listing.listingInformationTransactionType)
   const propType = getLoc(listing.listingInformationPropertyType)
-  const title = getLoc(listing.listingInformationPropertyTitle) || property.title || t.untitledProperty
+  const title = !property.titleVisibility
+    ? (getLoc(listing.listingInformationPropertyTitle) || property.title || t.untitledProperty)
+    : ''
 
   const beds = Number(propInfo.informationBedrooms || 0)
   const baths = Number(propInfo.informationBathrooms || 0)
@@ -101,18 +105,24 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
   let displaySuffix = ''
   const typeLower = txType.toLowerCase()
 
-  if (typeLower === 'sale' && priceSale) {
+  if (typeLower === 'sale' && priceSale && !visFin.price) {
     displayPrice = `${formatNumber(priceSale)} VND`
-  } else if (typeLower === 'lease' && priceLease) {
+  } else if (typeLower === 'lease' && priceLease && !visFin.leasePrice) {
     displayPrice = `${formatNumber(priceLease)} VND`
     displaySuffix = language === 'vi' ? '/ tháng' : '/ month'
-  } else if (typeLower === 'home stay' && priceNight) {
+  } else if (typeLower === 'home stay' && priceNight && !visFin.pricePerNight) {
     displayPrice = `${formatNumber(priceNight)} VND`
     displaySuffix = language === 'vi' ? '/ đêm' : '/ night'
   }
 
-  const nearbyDesc = getLoc(property.whatNearby?.whatNearbyDescription)
-  const zoneDesc = !property.listingInformationVisibility?.areaZone ? getLoc(listing.listingInformationZoneSubArea) : ''
+  const nearbyDesc = !property.descriptionVisibility
+    ? getLoc(property.whatNearby?.whatNearbyDescription)
+    : ''
+
+  const zoneDesc = !visListing.areaZone
+    ? getLoc(listing.listingInformationZoneSubArea)
+    : ''
+
   const descHtml = nearbyDesc || zoneDesc || ''
 
   return (
@@ -125,8 +135,17 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
       <div className="relative h-56 overflow-hidden">
         <img src={getImageUrl(img)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
         <div className="absolute top-3 left-3 flex gap-2">
-          {txType && <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${txBadgeColor(txType)}`}>{txType}</span>}
-          {propType && <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-md">{propType}</span>}
+          {txType && !visListing.transactionType && (
+            <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${txBadgeColor(txType)}`}>
+              {txType}
+            </span>
+          )}
+
+          {propType && !visListing.transactionType && (
+            <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-md">
+              {propType}
+            </span>
+          )}
         </div>
       </div>
       <div className="p-5 flex flex-col flex-1">
@@ -134,7 +153,11 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
           <span className="text-[20px] font-bold text-[#2a2a2a]">{displayPrice}</span>
           {displaySuffix && <span className="text-sm text-gray-500 font-medium">{displaySuffix}</span>}
         </div>
-        <h3 className="text-[17px] font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#41398B] transition-colors">{title}</h3>
+        {title && (
+          <h3 className="text-[17px] font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#41398B] transition-colors">
+            {title}
+          </h3>
+        )}
 
         {descHtml && (
           <p className="text-[14px] text-gray-500 mb-4 line-clamp-2">
@@ -521,7 +544,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                   {show(visList.projectCommunity) && <EcoparkItem label={`${t.projectCommunity}:`} value={getLoc(list?.listingInformationProjectCommunity)} />}
                   {show(visList.areaZone) && <EcoparkItem label={`${t.areaZone}:`} value={getLoc(list?.listingInformationZoneSubArea)} />}
                   {show(visList.blockName) && <EcoparkItem label={`${t.block}:`} value={getLoc(list?.listingInformationBlockName)} />}
-                  {show(visList.availableFrom) && <EcoparkItem label={`${t.availableFrom}:`} value={formatDate(list?.listingInformationAvailableFrom)} />}
+                  {/* {show(visList.availableFrom) && <EcoparkItem label={`${t.availableFrom}:`} value={formatDate(list?.listingInformationAvailableFrom)} />} */}
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {show(visList.propertyId) && <OverviewCard icon={<House />} label={`${t.propertyId}:`} value={safeVal(list?.listingInformationPropertyId)} />}
@@ -588,17 +611,36 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
               <section id="Video" ref={sectionRefs.Video} className="scroll-mt-32">
                 <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
                   <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.video}</h2>
+
                   <div className="grid gap-6">
                     {videos.map((url, i) => (
-                      <div key={i} onClick={() => setPreviewVideoUrl(url)} className="relative group rounded-3xl overflow-hidden cursor-pointer h-[400px] bg-slate-900 flex items-center justify-center">
-                        <div className="absolute inset-0 opacity-40 bg-gradient-to-t from-black to-transparent" />
-                        <div className="relative z-10 flex flex-col items-center gap-4">
+                      <div
+                        key={i}
+                        onClick={() => setPreviewVideoUrl(url)}
+                        className="relative group rounded-3xl overflow-hidden cursor-pointer h-[400px] bg-black"
+                      >
+                        {/* Video Thumbnail */}
+                        <video
+                          src={url}
+                          className="w-full h-full object-cover"
+                          preload="metadata"
+                          muted
+                        />
+
+                        {/* Overlay */}
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-300" />
+
+                        {/* Play Button */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
                           <div className="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-2xl">
                             <div className="w-14 h-14 bg-[#41398B] rounded-full flex items-center justify-center">
                               <PlayIcon className="text-white fill-white ml-1" size={24} />
                             </div>
                           </div>
-                          <span className="text-white font-extrabold tracking-widest text-xs uppercase">{language === 'vi' ? 'Xem Video' : 'Play Video'}</span>
+
+                          <span className="mt-4 text-white font-extrabold tracking-widest text-xs uppercase">
+                            {language === 'vi' ? 'Xem Video' : 'Play Video'}
+                          </span>
                         </div>
                       </div>
                     ))}

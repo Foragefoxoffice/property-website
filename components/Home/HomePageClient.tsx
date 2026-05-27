@@ -876,19 +876,19 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
             }
             const imgs = (blog.images as { url: string }[]) || []
             const cover = (blog.mainImage as string) || imgs[0]?.url || ''
-            
+
             let excerpt = loc(blog.excerpt, lang) || ''
             if (!excerpt && blog.content) {
-                const content = loc(blog.content, lang) || ''
-                const plainText = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
-                excerpt = plainText.length > 150 ? plainText.slice(0, 150) + '...' : plainText
+              const content = loc(blog.content, lang) || ''
+              const plainText = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
+              excerpt = plainText.length > 150 ? plainText.slice(0, 150) + '...' : plainText
             }
 
             const categoryName = (blog.category as any)?.name?.[lang] || (blog.category as any)?.name?.en || (lang === 'en' ? 'News' : 'Tin tức')
 
             return (
               <Link key={String(blog._id)} href={`/blogs/${slug}`} className="group">
-                <div 
+                <div
                   className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-1'}`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
