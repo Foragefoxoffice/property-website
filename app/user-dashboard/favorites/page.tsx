@@ -182,22 +182,42 @@ export default function FavoritesPage() {
                 const currencyCode = (typeof currencyData === 'object' && currencyData ? (currencyData as Record<string, string>).code : currencyData as string) || ''
                 const dispCurrency = financialVisibility.currency ? '' : currencyCode
                 const listingInfo = (prop.listingInformation as Record<string, unknown>) || {}
-                const type = getLocalizedValue(listingInfo.listingInformationTransactionType)
+                const rawType = getLocalizedValue(
+                  listingInfo.listingInformationTransactionType
+                )
+
+                const type =
+                  language === 'vi'
+                    ? rawType === 'Lease'
+                      ? 'Cho thuê'
+                      : rawType === 'Sale'
+                        ? 'Bán'
+                        : rawType === 'Home Stay'
+                          ? 'Homestay'
+                          : rawType
+                    : rawType
 
                 let displayPrice = t.contactForPrice
                 let isPriceHidden = false
 
-                if (type === 'Sale' && financialVisibility.price) isPriceHidden = true
-                else if (type === 'Lease' && financialVisibility.leasePrice) isPriceHidden = true
-                else if (type === 'Home Stay' && financialVisibility.pricePerNight) isPriceHidden = true
+                if (rawType === 'Sale' && financialVisibility.price) isPriceHidden = true
+                else if (rawType === 'Lease' && financialVisibility.leasePrice) isPriceHidden = true
+                else if (rawType === 'Home Stay' && financialVisibility.pricePerNight) isPriceHidden = true
 
                 const formatP = (p: number) => `${formatNumber(p)} ${dispCurrency}`.trim()
 
                 if (!isPriceHidden) {
-                  if (type === 'Sale' && priceSale) displayPrice = formatP(priceSale)
-                  else if (type === 'Lease' && priceLease) displayPrice = `${formatP(priceLease)} / month`
-                  else if (type === 'Home Stay' && priceNight) displayPrice = `${formatP(priceNight)} / night`
-                  else if (genericPrice) displayPrice = formatP(genericPrice)
+                  if (rawType === 'Sale' && priceSale) {
+                    displayPrice = formatP(priceSale)
+                  } else if (rawType === 'Lease' && priceLease) {
+                    displayPrice = `${formatP(priceLease)} ${language === 'vi' ? '/ tháng' : '/ month'
+                      }`
+                  } else if (rawType === 'Home Stay' && priceNight) {
+                    displayPrice = `${formatP(priceNight)} ${language === 'vi' ? '/ đêm' : '/ night'
+                      }`
+                  } else if (genericPrice) {
+                    displayPrice = formatP(genericPrice)
+                  }
                 }
 
                 const imagesVideos = (prop.imagesVideos as Record<string, unknown[]>) || {}
@@ -224,7 +244,7 @@ export default function FavoritesPage() {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute top-2 left-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded backdrop-blur-sm">
-                            {getLocalizedValue(listingInfo.listingInformationTransactionType) || 'Property'}
+                            {type || 'Property'}
                           </div>
                         </div>
                         <div className="flex-grow min-w-0">
@@ -234,8 +254,8 @@ export default function FavoritesPage() {
                           <p className="text-xs sm:text-sm text-gray-500 mb-1 line-clamp-2">
                             {stripHtml(
                               getLocalizedValue(whatNearby.whatNearbyDescription) ||
-                                getLocalizedValue(listingInfo.listingInformationZoneSubArea) ||
-                                t.locationNA
+                              getLocalizedValue(listingInfo.listingInformationZoneSubArea) ||
+                              t.locationNA
                             )}
                           </p>
                           <p className="text-[#41398B] font-bold text-base sm:text-lg">{displayPrice}</p>

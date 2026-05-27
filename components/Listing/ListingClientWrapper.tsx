@@ -36,8 +36,33 @@ function loc(val: unknown, lang: string): string {
 
 function txBadgeColor(cat: string) {
   const c = cat.toLowerCase()
-  if (c.includes('lease') || c.includes('rent')) return 'bg-[#058135]'
-  if (c.includes('sale') || c.includes('sell')) return 'bg-[#eb4d4d]'
+
+  // Lease / Cho thuê
+  if (
+    c.includes('lease') ||
+    c.includes('rent') ||
+    c.includes('cho thuê')
+  ) {
+    return 'bg-[#058135]'
+  }
+
+  // Sale / Bán
+  if (
+    c.includes('sale') ||
+    c.includes('sell') ||
+    c.includes('bán')
+  ) {
+    return 'bg-[#eb4d4d]'
+  }
+
+  // Homestay
+  if (
+    c.includes('home stay') ||
+    c.includes('homestay')
+  ) {
+    return 'bg-[#055381]'
+  }
+
   return 'bg-[#055381]'
 }
 
@@ -69,7 +94,21 @@ function PropertyCard({
   const slug = loc(seo.slugUrl, language)
   const url = `/property-showcase/${propDisplayId}${slug ? `/${slug}` : ''}`
 
-  const txType = loc(listing.listingInformationTransactionType, language)
+  const rawTxType = loc(
+    listing.listingInformationTransactionType,
+    'en'
+  )
+
+  const txType =
+    language === 'vi'
+      ? rawTxType === 'Lease'
+        ? 'Cho thuê'
+        : rawTxType === 'Sale'
+          ? 'Bán'
+          : rawTxType === 'Home Stay'
+            ? 'Homestay'
+            : rawTxType
+      : rawTxType
   const propType = loc(listing.listingInformationPropertyType, language)
   const title =
     (!property.titleVisibility
@@ -197,7 +236,9 @@ function PropertyCard({
                 <svg className="w-6 h-6 text-[#41398B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7h18M5 7v10M19 7v10M3 17h18M7 10h4a2 2 0 012 2v5M7 10a2 2 0 00-2 2v5" />
                 </svg>
-                <span className="font-medium text-[14px]">{beds} Bed</span>
+                <span className="font-medium text-[14px]">
+                  {beds} {language === 'vi' ? 'Phòng ngủ' : 'Bed'}
+                </span>
               </div>
             )}
             {baths > 0 && (
@@ -205,7 +246,9 @@ function PropertyCard({
                 <svg className="w-6 h-6 text-[#41398B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 14h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2zM6 14V9a3 3 0 0 1 6 0" />
                 </svg>
-                <span className="font-medium text-[14px]">{baths} Bath</span>
+                <span className="font-medium text-[14px]">
+                  {baths} {language === 'vi' ? 'Phòng tắm' : 'Bath'}
+                </span>
               </div>
             )}
             {sqft > 0 && (
@@ -213,7 +256,9 @@ function PropertyCard({
                 <svg className="w-6 h-6 text-[#41398B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.4 4.6a2 2 0 0 1 0 2.8l-12 12a2 2 0 0 1-2.8 0l-2-2a2 2 0 0 1 0-2.8l12-12a2 2 0 0 1 2.8 0zM12 7l2 2M10 9l2 2M8 11l2 2" />
                 </svg>
-                <span className="font-medium text-[14px]">{formatNumber(sqft)} Sqft</span>
+                <span className="font-medium text-[14px]">
+                  {formatNumber(sqft)} m2
+                </span>
               </div>
             )}
           </div>

@@ -491,9 +491,34 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
 
   const badgeClass = (cat: string) => {
     const c = cat.toLowerCase()
-    if (c.includes('lease') || c.includes('rent')) return 'bg-[#058135]'
-    if (c.includes('sale')) return 'bg-[#eb4d4d]'
-    return 'bg-[#055381]'
+
+    // Lease / Rent / Cho thuê
+    if (
+      c.includes('lease') ||
+      c.includes('rent') ||
+      c.includes('cho thuê')
+    ) {
+      return 'bg-[#058135]'
+    }
+
+    // Sale / Bán
+    if (
+      c.includes('sale') ||
+      c.includes('bán')
+    ) {
+      return 'bg-[#eb4d4d]'
+    }
+
+    // Homestay
+    if (
+      c.includes('home stay') ||
+      c.includes('homestay')
+    ) {
+      return 'bg-[#055381]'
+    }
+
+    // Default
+    return 'bg-[#41398B]'
   }
 
   return (
@@ -522,7 +547,18 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
               const id = String(info.listingInformationPropertyId || property._id)
               const slug = loc(seo.slugUrl, lang)
               const title = !property.titleVisibility ? loc(info.listingInformationPropertyTitle, lang) || 'Untitled Property' : ''
-              const txType = loc(info.listingInformationTransactionType, lang)
+              const rawTxType = loc(info.listingInformationTransactionType, 'en')
+
+              const txType =
+                lang === 'vi'
+                  ? rawTxType === 'Lease'
+                    ? 'Cho thuê'
+                    : rawTxType === 'Sale'
+                      ? 'Bán'
+                      : rawTxType === 'Home Stay'
+                        ? 'Homestay'
+                        : rawTxType
+                  : rawTxType
               const propType = loc(info.listingInformationPropertyType, lang)
               const propId = String(property._id)
               const favorited = isFavorite(propId)
@@ -591,15 +627,21 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                     <div className="flex items-center pt-3 border-t border-gray-100 justify-between mt-auto">
                       <div className="flex items-center gap-1.5">
                         <Bed size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">{beds} {t.rooms}</span>
+                        <span className="text-[13px] font-bold text-gray-700">
+                          {beds} {lang === 'vi' ? 'Phòng ngủ' : 'Bed'}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Bath size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">{baths} {t.rooms}</span>
+                        <span className="text-[13px] font-bold text-gray-700">
+                          {baths} {lang === 'vi' ? 'Phòng tắm' : 'Bath'}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Ruler size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">{formatNumber(sqft)} {loc(info.listingInformationUnit, lang) || 'Sqft'}</span>
+                        <span className="text-[13px] font-bold text-gray-700">
+                          {formatNumber(sqft)} m2
+                        </span>
                       </div>
                     </div>
                   </div>

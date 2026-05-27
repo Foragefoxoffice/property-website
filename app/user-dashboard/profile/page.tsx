@@ -14,6 +14,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
+import { getImageUrl } from '@/utils/baseURL'
 
 // ---------------------------------------------------------------------------
 // CustomDatePicker
@@ -267,7 +268,7 @@ export default function ProfilePage() {
           })
         }
 
-        toast.error(t?.profilePictureUpdated || 'Profile picture updated and saved!')
+        toast.success(t?.profilePictureUpdated || 'Profile picture updated and saved!')
         fetchUserData()
       }
     } catch (error) {
@@ -290,7 +291,7 @@ export default function ProfilePage() {
         profileImage: userForm.profileImage,
       }
       if (userId) await updateUser(userId, payload)
-      toast.error(t?.profileUpdatedSuccess || 'Profile updated successfully!')
+      toast.success(t?.profileUpdatedSuccess || 'Profile updated successfully!')
       fetchUserData()
     } catch (error: unknown) {
       console.error('Error updating profile:', error)
@@ -335,7 +336,7 @@ export default function ProfilePage() {
 
     try {
       await updateStaff(staffData._id, payload)
-      toast.error(t?.staffProfileUpdatedSuccess || 'Staff profile updated successfully!')
+      toast.success(t?.staffProfileUpdatedSuccess || 'Staff profile updated successfully!')
       fetchUserData()
     } catch (error: unknown) {
       console.error('Error updating staff profile:', error)
@@ -366,7 +367,7 @@ export default function ProfilePage() {
     setPasswordSaving(true)
     try {
       await updatePassword({ currentPassword, newPassword })
-      toast.error(t?.passwordUpdatedSuccess || 'Password updated successfully!')
+      toast.success(t?.passwordUpdatedSuccess || 'Password updated successfully!')
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
     } catch (error: unknown) {
       console.error('Change password error:', error)
@@ -447,9 +448,13 @@ export default function ProfilePage() {
                 className="relative group cursor-pointer"
                 onClick={() => document.getElementById('userPhoto')?.click()}
               >
-                <div className="w-28 h-28 rounded-full border-4 border-gray-50 shadow-sm overflow-hidden bg-gray-100 flex items-center justify-center transition-all group-hover:ring-4 group-hover:ring-[#41398B]/20">
+                <div className="w-28 h-28 rounded-full border-4 border-gray-50 shadow-sm overflow-hidden bg-white relative flex items-center justify-center transition-all group-hover:ring-4 group-hover:ring-[#41398B]/20">
                   {userForm.profileImage ? (
-                    <img src={userForm.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    <img
+                      src={getImageUrl(userForm.profileImage)}
+                      alt="Profile"
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
                   ) : (
                     <User className="w-12 h-12 text-gray-300" />
                   )}
@@ -569,9 +574,13 @@ export default function ProfilePage() {
                 className="relative group cursor-pointer"
                 onClick={() => document.getElementById('staffPhoto')?.click()}
               >
-                <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-100 flex items-center justify-center transition-all group-hover:ring-4 group-hover:ring-[#41398B]/20">
+                <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white relative flex items-center justify-center transition-all group-hover:ring-4 group-hover:ring-[#41398B]/20">
                   {staffForm.profileImage ? (
-                    <img src={staffForm.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    <img
+                      src={getImageUrl(staffForm.profileImage)}
+                      alt="Profile"
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
                   ) : (
                     <span className="text-4xl font-bold text-gray-300 select-none">
                       {staffForm.firstName?.en ? staffForm.firstName.en.charAt(0).toUpperCase() : ''}

@@ -62,8 +62,33 @@ const InfoItem = ({ label, value }: { label: string, value: string }) => (
 
 const txBadgeColor = (cat: string) => {
   const c = String(cat || '').toLowerCase()
-  if (c.includes('lease') || c.includes('rent')) return 'bg-[#058135]'
-  if (c.includes('sale') || c.includes('sell')) return 'bg-[#eb4d4d]'
+
+  // Lease / Cho thuê
+  if (
+    c.includes('lease') ||
+    c.includes('rent') ||
+    c.includes('cho thuê')
+  ) {
+    return 'bg-[#058135]'
+  }
+
+  // Sale / Bán
+  if (
+    c.includes('sale') ||
+    c.includes('sell') ||
+    c.includes('bán')
+  ) {
+    return 'bg-[#eb4d4d]'
+  }
+
+  // Homestay
+  if (
+    c.includes('home stay') ||
+    c.includes('homestay')
+  ) {
+    return 'bg-[#055381]'
+  }
+
   return 'bg-[#055381]'
 }
 
@@ -86,7 +111,20 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
   const slug = getLoc(seo.slugUrl)
   const url = `/property-showcase/${propDisplayId}${slug ? `/${slug}` : ''}`
 
-  const txType = getLoc(listing.listingInformationTransactionType)
+  const rawTxType = getLoc(
+    listing.listingInformationTransactionType
+  )
+
+  const txType =
+    language === 'vi'
+      ? rawTxType === 'Lease'
+        ? 'Cho thuê'
+        : rawTxType === 'Sale'
+          ? 'Bán'
+          : rawTxType === 'Home Stay'
+            ? 'Homestay'
+            : rawTxType
+      : rawTxType
   const propType = getLoc(listing.listingInformationPropertyType)
   const title = !property.titleVisibility
     ? (getLoc(listing.listingInformationPropertyTitle) || property.title || t.untitledProperty)
@@ -176,7 +214,9 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
           </div>
           <div className="flex items-center gap-1.5">
             <Ruler size={18} className="text-[#41398B]" />
-            <span className="text-[13px] font-bold text-gray-700">{formatNumber(sqft)} {getLoc(listing.listingInformationUnit) || 'Sqft'}</span>
+            <span className="text-[13px] font-bold text-gray-700">
+              {formatNumber(sqft)} m2
+            </span>
           </div>
         </div>
       </div>
