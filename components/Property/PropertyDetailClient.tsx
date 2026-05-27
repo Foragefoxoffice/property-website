@@ -537,15 +537,16 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
             </section>
 
             {/* Description Section */}
-            {show(property.descriptionVisibility) && (
-              <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
-                <div
-                  className="text-gray-700 leading-6 rich-text-display property-description-summary"
-                  dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
-                />
-              </section>
-            )}
+            {(property.descriptionVisibility === false ||
+              property.descriptionVisibility === undefined) && (
+                <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                  <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
+                  <div
+                    className="text-gray-700 leading-6 rich-text-display property-description-summary"
+                    dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
+                  />
+                </section>
+              )}
 
             {/* Utility Section */}
             {utilities.length > 0 && show(property.propertyUtilityVisibility) && (

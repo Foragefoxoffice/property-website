@@ -144,7 +144,7 @@ function PropertyCard({
               {txType}
             </span>
           )}
-          {propType && (
+          {propType && !visListing.transactionType && (
             <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-lg">
               {propType}
             </span>
@@ -232,18 +232,18 @@ function ListingInner() {
 
   const [selectedCategory, setSelectedCategory] = useState(() => {
     const type = searchParams.get('type') || ''
-   return ['Lease', 'Sale', 'Home Stay'].includes(type) ? type : 'All'
+    return ['Lease', 'Sale', 'Home Stay'].includes(type) ? type : 'All'
   })
 
   useEffect(() => {
-  const type = searchParams.get('type') || ''
+    const type = searchParams.get('type') || ''
 
-  if (['Lease', 'Sale', 'Home Stay'].includes(type)) {
-    setSelectedCategory(type)
-  } else {
-    setSelectedCategory('All')
-  }
-}, [searchParams])
+    if (['Lease', 'Sale', 'Home Stay'].includes(type)) {
+      setSelectedCategory(type)
+    } else {
+      setSelectedCategory('All')
+    }
+  }, [searchParams])
 
   const [properties, setProperties] = useState<Prop[]>([])
   const [loading, setLoading] = useState(true)
