@@ -382,20 +382,22 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8">
           <div>
             <div className="flex gap-2 mb-4">
-              {transactionType && (
+              {transactionType && show(visList.transactionType) && (
                 <span className={`px-3 py-1.5 text-white text-xs font-bold uppercase tracking-wide rounded ${transactionType === 'Sale' ? 'bg-[#eb4d4d]' : 'bg-[#058135]'}`}>
                   {transactionType}
                 </span>
               )}
-              {propertyType && (
+              {propertyType && show(visList.transactionType) && (
                 <span className="px-3 py-1.5 text-white text-xs font-bold uppercase tracking-wide bg-[#6B46C1] rounded">
                   {propertyType}
                 </span>
               )}
             </div>
-            <h1 className="text-2xl md:text-[32px] font-bold text-[#222222] leading-tight mb-3">
-              {title}
-            </h1>
+            {show(property.titleVisibility) && (
+              <h1 className="text-2xl md:text-[32px] font-bold text-[#222222] leading-tight mb-3">
+                {title}
+              </h1>
+            )}
             {location && (
               <div className="flex items-center gap-2 text-gray-600">
                 <MapPin size={16} className="text-[#41398B]" />
@@ -535,16 +537,18 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
             </section>
 
             {/* Description Section */}
-            <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
-              <div
-                className="text-gray-700 leading-6 rich-text-display property-description-summary"
-                dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
-              />
-            </section>
+            {show(property.descriptionVisibility) && (
+              <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
+                <div
+                  className="text-gray-700 leading-6 rich-text-display property-description-summary"
+                  dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
+                />
+              </section>
+            )}
 
             {/* Utility Section */}
-            {utilities.length > 0 && (
+            {utilities.length > 0 && show(property.propertyUtilityVisibility) && (
               <section id="Utility" ref={sectionRefs.Utility} className="scroll-mt-32">
                 <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
                   <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.propertyUtility}</h2>
@@ -579,7 +583,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
             </section>
 
             {/* Video Section */}
-            {videos.length > 0 && (
+            {videos.length > 0 && show(property.videoVisibility) && (
               <section id="Video" ref={sectionRefs.Video} className="scroll-mt-32">
                 <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
                   <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.video}</h2>

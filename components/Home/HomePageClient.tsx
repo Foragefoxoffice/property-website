@@ -209,7 +209,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
             <div className="order-1">
               <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Looking For' : 'Tìm Kiếm'}</label>
               <input
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all"
                 placeholder={lang === 'en' ? 'Search keyword' : 'Từ khóa tìm kiếm'}
                 value={filters.keyword}
                 onChange={e => handleFilterChange('keyword', e.target.value)}
@@ -392,7 +392,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
                 <div className="order-9 lg:order-10">
                   <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Min Price' : 'Giá Tối Thiểu'}</label>
                   <input
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all"
                     placeholder={lang === 'en' ? 'Min' : 'Tối Thiểu'}
                     value={filters.minPrice}
                     onChange={e => handleFilterChange('minPrice', e.target.value.replace(/,/g, ''))}
@@ -403,7 +403,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
                 <div className="order-10 lg:order-11">
                   <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Max Price' : 'Giá Tối Đa'}</label>
                   <input
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all"
                     placeholder={lang === 'en' ? 'Max' : 'Tối Đa'}
                     value={filters.maxPrice}
                     onChange={e => handleFilterChange('maxPrice', e.target.value.replace(/,/g, ''))}
@@ -521,7 +521,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
 
               const id = String(info.listingInformationPropertyId || property._id)
               const slug = loc(seo.slugUrl, lang)
-              const title = loc(info.listingInformationPropertyTitle, lang) || 'Untitled Property'
+              const title = !property.titleVisibility ? loc(info.listingInformationPropertyTitle, lang) || 'Untitled Property' : ''
               const txType = loc(info.listingInformationTransactionType, lang)
               const propType = loc(info.listingInformationPropertyType, lang)
               const propId = String(property._id)
@@ -566,8 +566,8 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                     <img src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
 
                     <div className="absolute top-3 left-3 flex gap-2">
-                      {txType && <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${badgeClass(txType)}`}>{txType}</span>}
-                      {propType && <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-md">{propType}</span>}
+                      {txType && !visListing.transactionType && <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${badgeClass(txType)}`}>{txType}</span>}
+                      {propType && !visListing.transactionType && <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-md">{propType}</span>}
                     </div>
 
                     <button onClick={e => { e.preventDefault(); e.stopPropagation(); if (favorited) { removeFavorite(propId) } else { addFavorite(property) } }}
@@ -580,9 +580,9 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                       <span className="text-[20px] font-bold text-[#2a2a2a]">{displayPrice}</span>
                       {displaySuffix && <span className="text-sm text-gray-500 font-medium">{displaySuffix}</span>}
                     </div>
-                    <h3 className="text-[17px] font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#41398B] transition-colors">{title}</h3>
+                    {title && <h3 className="text-[17px] font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#41398B] transition-colors">{title}</h3>}
 
-                    {descHtml && (
+                    {descHtml && !property.descriptionVisibility && (
                       <p className="text-[14px] text-gray-500 mb-4 line-clamp-2">
                         {stripHtml(descHtml)}
                       </p>

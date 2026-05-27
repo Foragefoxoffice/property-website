@@ -183,7 +183,7 @@ function PropertyCard({
         </h3>
 
         {/* Description */}
-        {descHtml && (
+        {descHtml && !property.descriptionVisibility && (
           <p className="md:text-[14px] text-[14px] text-gray-500 mb-4 line-clamp-2">
             {stripHtml(descHtml)}
           </p>
@@ -444,7 +444,7 @@ function ListingInner() {
                 <label className="block text-[15px] font-bold text-black mb-3">{t.lookingFor || 'Looking For'}</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
+                  className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
                   placeholder={language === 'en' ? 'Search keyword' : 'Từ khóa tìm kiếm'}
                   value={filters.keyword}
                   onChange={e => setFilter('keyword', e.target.value)}
@@ -540,12 +540,12 @@ function ListingInner() {
                   <div className="xl:col-span-1 grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[15px] font-bold text-black mb-3">{t.minPrice || 'Min Price'}</label>
-                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
+                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
                         placeholder="Min" value={filters.minPrice} onChange={e => setFilter('minPrice', e.target.value.replace(/,/g, ''))} />
                     </div>
                     <div>
                       <label className="block text-[15px] font-bold text-black mb-3">{t.maxPrice || 'Max Price'}</label>
-                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
+                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
                         placeholder="Max" value={filters.maxPrice} onChange={e => setFilter('maxPrice', e.target.value.replace(/,/g, ''))} />
                     </div>
                   </div>
