@@ -428,23 +428,15 @@ function ListingInner() {
 
           {/* Filter card */}
           <div className="bg-white rounded-2xl shadow-sm md:p-8 p-4 border border-gray-100">
-            <div className="flex justify-end mb-2">
-              <Select className="custom-selects" dropdownClassName="custom-dropdown" value={sortBy} onChange={v => setSortBy(v)} style={{ width: 180 }} size="large">
-                <Select.Option value="default">{t.defaultSort || 'Default'}</Select.Option>
-                <Select.Option value="price-low">{t.priceLowHigh || 'Price: Low → High'}</Select.Option>
-                <Select.Option value="price-high">{t.priceHighLow || 'Price: High → Low'}</Select.Option>
-                <Select.Option value="newest">{t.newest || 'Newest'}</Select.Option>
-                <Select.Option value="oldest">{t.oldest || 'Oldest'}</Select.Option>
-              </Select>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 items-end gap-4 pt-2">
+
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
               {/* Keyword */}
               <div>
                 <label className="block text-[15px] font-bold text-black mb-3">{t.lookingFor || 'Looking For'}</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
+                  className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
                   placeholder={language === 'en' ? 'Search keyword' : 'Từ khóa tìm kiếm'}
                   value={filters.keyword}
                   onChange={e => setFilter('keyword', e.target.value)}
@@ -482,26 +474,26 @@ function ListingInner() {
               </div>
 
               {/* Sliders + Search */}
-              <div className={`${showFilters ? 'hidden md:flex' : 'flex'} items-center gap-3 xl:col-span-2 mt-auto`}>
+              <div className="flex items-end gap-3 h-full">
                 <button
                   className={`flex items-center justify-center p-[11px] border cursor-pointer border-[#d1d5dc] rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all ${showFilters ? 'bg-purple-50 border-[#41398B] text-[#41398B]' : ''}`}
                   onClick={() => setShowFilters(s => !s)} style={{ minWidth: '50px' }}>
                   <SlidersHorizontal size={22} />
                 </button>
                 <button
-                  className="flex-1 px-10 py-[12px] bg-[#41398B] hover:bg-[#352e7a] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all text-base"
+                  className="w-full px-10 py-[12px] whitespace-nowrap bg-[#41398B] hover:bg-[#352e7a] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all text-base"
                   onClick={handleSearch}>
                   {t.search || 'Search...'}
                 </button>
               </div>
             </div>
 
-            {/* Expandable advanced filters */}
-            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${showFilters ? 'max-h-[1000px] opacity-100 mt-8' : 'max-h-0 opacity-0'}`}>
-              <div className={`transform transition-all duration-500 ${showFilters ? 'translate-y-0' : '-translate-y-4'}`}>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {/* Advanced Filters */}
+            {showFilters && (
+              <div className="lg:contents grid gap-4 md:block">
+                <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mt-4">
                   {/* Property Type */}
-                  <div>
+                  <div className="w-full">
                     <label className="block text-[15px] font-bold text-black mb-3">{t.propertyType || 'Property Type'}</label>
                     <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.propertyType || undefined} onChange={v => setFilter('propertyType', v || '')}
                       placeholder={t.propertyType || 'Property Type'} style={{ width: '100%' }} size="large" allowClear>
@@ -509,7 +501,7 @@ function ListingInner() {
                     </Select>
                   </div>
                   {/* Bedrooms */}
-                  <div>
+                  <div className="w-full">
                     <label className="block text-[15px] font-bold text-black mb-3">{t.bedrooms || 'Bedrooms'}</label>
                     <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.bedrooms || undefined} onChange={v => setFilter('bedrooms', v || '')}
                       placeholder="Any" style={{ width: '100%' }} size="large" allowClear>
@@ -517,7 +509,7 @@ function ListingInner() {
                     </Select>
                   </div>
                   {/* Bathrooms */}
-                  <div>
+                  <div className="w-full">
                     <label className="block text-[15px] font-bold text-black mb-3">{t.bathrooms || 'Bathrooms'}</label>
                     <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.bathrooms || undefined} onChange={v => setFilter('bathrooms', v || '')}
                       placeholder="Any" style={{ width: '100%' }} size="large" allowClear>
@@ -525,7 +517,7 @@ function ListingInner() {
                     </Select>
                   </div>
                   {/* Currency */}
-                  <div>
+                  <div className="w-full">
                     <label className="block text-[15px] font-bold text-black mb-3">{t.currency || 'Currency'}</label>
                     <Select className="custom-selectss w-full" dropdownClassName="custom-dropdown" value={filters.currency || undefined} onChange={v => setFilter('currency', v || '')}
                       placeholder={t.currency || 'Currency'} style={{ width: '100%' }} size="large" allowClear>
@@ -537,16 +529,24 @@ function ListingInner() {
                     </Select>
                   </div>
                   {/* Min/Max Price */}
-                  <div className="xl:col-span-1 grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3 lg:col-span-2">
                     <div>
                       <label className="block text-[15px] font-bold text-black mb-3">{t.minPrice || 'Min Price'}</label>
-                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
-                        placeholder="Min" value={filters.minPrice} onChange={e => setFilter('minPrice', e.target.value.replace(/,/g, ''))} />
+                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
+                        placeholder="Min" value={filters.minPrice} onChange={e => {
+                          const raw = e.target.value.replace(/,/g, '').replace(/\D/g, '')
+                          const formatted = raw.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          setFilter('minPrice', formatted)
+                        }} />
                     </div>
                     <div>
                       <label className="block text-[15px] font-bold text-black mb-3">{t.maxPrice || 'Max Price'}</label>
-                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white text-black placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
-                        placeholder="Max" value={filters.maxPrice} onChange={e => setFilter('maxPrice', e.target.value.replace(/,/g, ''))} />
+                      <input type="text" className="w-full px-4 py-[11px] border border-[#d1d5dc] rounded-lg text-[15px] bg-white placeholder-gray-400 hover:border-[#41398B] focus:outline-none focus:border-[#41398B] focus:ring-2 focus:ring-[#41398B]/20 transition-all font-medium"
+                        placeholder="Max" value={filters.maxPrice} onChange={e => {
+                          const raw = e.target.value.replace(/,/g, '').replace(/\D/g, '')
+                          const formatted = raw.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          setFilter('maxPrice', formatted)
+                        }} />
                     </div>
                   </div>
                 </div>
@@ -557,7 +557,7 @@ function ListingInner() {
                     onClick={() => setShowFilters(s => !s)} style={{ minWidth: '50px' }}>
                     <SlidersHorizontal size={22} />
                   </button>
-                  <button className="flex-1 px-10 py-[12px] bg-[#41398B] hover:bg-[#352e7a] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer transition-all text-base" onClick={handleSearch}>
+                  <button className="w-full px-10 py-[12px] bg-[#41398B] whitespace-nowrap hover:bg-[#352e7a] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer transition-all text-base" onClick={handleSearch}>
                     {t.search || 'Search...'}
                   </button>
                 </div>
@@ -568,7 +568,7 @@ function ListingInner() {
                   </button>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </aside>
 
@@ -630,8 +630,8 @@ function ListingInner() {
             </>
           )}
         </main>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }
 

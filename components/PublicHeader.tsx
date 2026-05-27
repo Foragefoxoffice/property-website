@@ -74,7 +74,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
   const [showProjectsMobile, setShowProjectsMobile] = useState(false)
   const [activeProjectMobile, setActiveProjectMobile] = useState<string | null>(null)
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false)
-  const [headerLogo, setHeaderLogo] = useState('/images/login/logo.png')
+  const [headerLogo, setHeaderLogo] = useState('')
+  const [headerLoading, setHeaderLoading] = useState(true)
   const { language: langRaw, toggleLanguage } = useLanguage()
   const language = langRaw as 'en' | 'vi'
   const { favorites, clearFavorites } = useFavorites()
@@ -145,13 +146,17 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
       try {
         const response = await getHeader()
         const logo = response.data.data?.headerLogo
+
         if (logo) {
           setHeaderLogo(logo)
         }
       } catch (error) {
         console.error('Error fetching header logo:', error)
+      } finally {
+        setHeaderLoading(false)
       }
     }
+
     fetchHeaderData()
   }, [])
 
@@ -248,9 +253,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 onClick={() => toggleLanguage('vi')}
                 aria-pressed={language === 'vi'}
                 title="Tiếng Việt"
-                className={`h-8 w-8 rounded-full flex items-center justify-center transition cursor-pointer ${
-                  language === 'vi' ? 'bg-white shadow scale-105' : 'hover:bg-white/20'
-                }`}
+                className={`h-8 w-8 rounded-full flex items-center justify-center transition cursor-pointer ${language === 'vi' ? 'bg-white shadow scale-105' : 'hover:bg-white/20'
+                  }`}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                   <defs>
@@ -271,9 +275,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 onClick={() => toggleLanguage('en')}
                 aria-pressed={language === 'en'}
                 title="English"
-                className={`h-8 w-8 rounded-full flex items-center justify-center transition cursor-pointer ${
-                  language === 'en' ? 'bg-white shadow scale-105' : 'hover:bg-white/20'
-                }`}
+                className={`h-8 w-8 rounded-full flex items-center justify-center transition cursor-pointer ${language === 'en' ? 'bg-white shadow scale-105' : 'hover:bg-white/20'
+                  }`}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                   <defs>
@@ -363,9 +366,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
   // User/Public Header (Light Theme)
   return (
     <header
-      className={`w-full sticky z-50 shadow-sm transition-[top] duration-300 ease-in-out ${
-        isScrolled ? 'md:-top-10 top-0' : 'top-0'
-      }`}
+      className={`w-full sticky z-50 shadow-sm transition-[top] duration-300 ease-in-out ${isScrolled ? 'md:-top-10 top-0' : 'top-0'
+        }`}
     >
       {/* Top Navigation Bar */}
       <div className="bg-[#000] text-white py-2 h-10 hidden md:block">
@@ -428,19 +430,27 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
           {/* Logo Section */}
           <div className="flex items-center">
             <Link href="/">
-              <img
-                className="hidden lg:block object-contain cursor-pointer h-8 md:h-9"
-                src={getImageUrl(headerLogo) || '/images/login/logo.png'}
-                alt="Logo"
-              />
-            </Link>
-            <div className="lg:hidden absolute left-15 flex items-center justify-center">
-              <Link href="/">
+              {headerLoading ? (
+                <div className="h-9 w-[180px] bg-gray-200 animate-pulse rounded-md" />
+              ) : (
                 <img
-                  className="h-6 object-contain cursor-pointer"
+                  className="hidden lg:block object-contain cursor-pointer h-8 md:h-9"
                   src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                   alt="Logo"
                 />
+              )}
+            </Link>
+            <div className="lg:hidden absolute left-15 flex items-center justify-center">
+              <Link href="/">
+                {headerLoading ? (
+                  <div className="h-9 w-[180px] bg-gray-200 animate-pulse rounded-md" />
+                ) : (
+                  <img
+                    className="h-6 object-contain cursor-pointer"
+                    src={getImageUrl(headerLogo) || '/images/login/logo.png'}
+                    alt="Logo"
+                  />
+                )}
               </Link>
             </div>
           </div>
@@ -500,9 +510,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.5, delay: item.delay, ease: [0.5, 0, 0, 1] }}
                             whileHover={{ backgroundColor: '#f8f7ff' }}
-                            className={`w-full cursor-pointer text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] font-semibold transition-colors ${
-                              index < 3 ? 'border-b border-gray-100' : ''
-                            }`}
+                            className={`w-full cursor-pointer text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] font-semibold transition-colors ${index < 3 ? 'border-b border-gray-100' : ''
+                              }`}
                           >
                             {item.label}
                           </motion.button>
@@ -569,11 +578,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                   router.push(`/projects?category=${category._id}`)
                                   setShowProjectDropdown(false)
                                 }}
-                                className={`w-full cursor-pointer text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-semibold transition-colors flex items-center justify-between ${
-                                  index < projectCategories.length - 1
-                                    ? 'border-b border-gray-100'
-                                    : ''
-                                }`}
+                                className={`w-full cursor-pointer text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-semibold transition-colors flex items-center justify-between ${index < projectCategories.length - 1
+                                  ? 'border-b border-gray-100'
+                                  : ''
+                                  }`}
                               >
                                 <span>{getLocalizedValue(category.name)}</span>
                                 {projectsInCategory.length > 0 && (
@@ -609,9 +617,9 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                           typeof project.slug === 'string'
                                             ? project.slug
                                             : project.slug?.[language as 'en' | 'vi'] ||
-                                              project.slug?.en ||
-                                              project.slug?.vi ||
-                                              project._id
+                                            project.slug?.en ||
+                                            project.slug?.vi ||
+                                            project._id
                                         return (
                                           <button
                                             key={project._id}
@@ -620,11 +628,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                               router.push(`/projects/${slug}`)
                                               setShowProjectDropdown(false)
                                             }}
-                                            className={`w-full cursor-pointer text-left px-5 py-3 text-[14px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-medium transition-colors ${
-                                              pIdx < projectsInCategory.length - 1
-                                                ? 'border-b border-gray-100'
-                                                : ''
-                                            }`}
+                                            className={`w-full cursor-pointer text-left px-5 py-3 text-[14px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-medium transition-colors ${pIdx < projectsInCategory.length - 1
+                                              ? 'border-b border-gray-100'
+                                              : ''
+                                              }`}
                                           >
                                             {getLocalizedValue(project.title)}
                                           </button>
@@ -703,9 +710,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 onClick={() => toggleLanguage('vi')}
                 aria-pressed={language === 'vi'}
                 title="Tiếng Việt"
-                className={`md:h-8 md:w-8 h-6 w-6 rounded-full flex items-center justify-center transition ring-1 ring-black/5 cursor-pointer ${
-                  language === 'vi' ? 'bg-white shadow scale-105' : 'hover:bg-white/70'
-                }`}
+                className={`md:h-8 md:w-8 h-6 w-6 rounded-full flex items-center justify-center transition ring-1 ring-black/5 cursor-pointer ${language === 'vi' ? 'bg-white shadow scale-105' : 'hover:bg-white/70'
+                  }`}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                   <defs>
@@ -726,9 +732,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 onClick={() => toggleLanguage('en')}
                 aria-pressed={language === 'en'}
                 title="English"
-                className={`md:h-8 md:w-8 h-6 w-6 rounded-full flex items-center justify-center transition ring-1 ring-black/5 cursor-pointer ${
-                  language === 'en' ? 'bg-white shadow scale-105' : 'hover:bg-white/70'
-                }`}
+                className={`md:h-8 md:w-8 h-6 w-6 rounded-full flex items-center justify-center transition ring-1 ring-black/5 cursor-pointer ${language === 'en' ? 'bg-white shadow scale-105' : 'hover:bg-white/70'
+                  }`}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                   <defs>
@@ -1016,9 +1021,9 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                           typeof project.slug === 'string'
                                             ? project.slug
                                             : project.slug?.[language as 'en' | 'vi'] ||
-                                              project.slug?.en ||
-                                              project.slug?.vi ||
-                                              project._id
+                                            project.slug?.en ||
+                                            project.slug?.vi ||
+                                            project._id
                                         return (
                                           <button
                                             key={project._id}

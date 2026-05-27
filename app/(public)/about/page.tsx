@@ -13,29 +13,40 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const res = await fetchAboutCms()
     const data = (res.data as any) || {}
+
     return {
       title: data.aboutSeoMetaTitle_en || 'About Us | 183 Housing Solutions',
-      description: data.aboutSeoMetaDescription_en || 'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      description:
+        data.aboutSeoMetaDescription_en ||
+        'Learn about 183 Housing Solutions and our mission in Vietnam.',
       openGraph: {
         title: data.aboutSeoOgTitle_en || data.aboutSeoMetaTitle_en,
-        description: data.aboutSeoOgDescription_en || data.aboutSeoMetaDescription_en,
+        description:
+          data.aboutSeoOgDescription_en ||
+          data.aboutSeoMetaDescription_en,
         images: data.aboutSeoOgImage ? [data.aboutSeoOgImage] : [],
-      }
+      },
     }
   } catch {
     return {
       title: 'About Us | 183 Housing Solutions',
-      description: 'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      description:
+        'Learn about 183 Housing Solutions and our mission in Vietnam.',
     }
   }
 }
 
 export default async function AboutPage() {
   let data: Record<string, unknown> = {}
+
   try {
+    // 👇 Add delay for loader visibility
+    await new Promise(resolve => setTimeout(resolve, 1500))
+
     const res = await fetchAboutCms()
+
     data = (res.data as Record<string, unknown>) || {}
-  } catch {}
+  } catch { }
 
   return (
     <div className="min-h-screen bg-white">
