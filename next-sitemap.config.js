@@ -45,69 +45,105 @@ module.exports = {
             }
 
             // Properties
-            const propertyRes = await fetch(
-                `${API_URL}/properties`
-            )
+            const propertyRes = await fetch(`${API_URL}/property`)
 
-            const propertyData = await propertyRes.json()
+            const propertyType =
+                propertyRes.headers.get('content-type')
 
-            const properties =
-                propertyData?.data || propertyData || []
+            if (
+                propertyRes.ok &&
+                propertyType?.includes('application/json')
+            ) {
 
-            for (const property of properties) {
+                const propertyData = await propertyRes.json()
 
-                if (!property?.slug || !property?.propertyId) continue
+                const properties =
+                    propertyData?.data || propertyData || []
 
-                paths.push(
-                    await config.transform(
-                        config,
-                        `/property-showcase/${property.propertyId}/${property.slug}`
+                for (const property of properties) {
+
+                    if (!property?.slug || !property?.propertyId) continue
+
+                    paths.push(
+                        await config.transform(
+                            config,
+                            `/property-showcase/${property.propertyId}/${property.slug}`
+                        )
                     )
-                )
+                }
+
+            } else {
+
+                console.log('Invalid Property API Response')
+
             }
 
             // Projects
-            const projectRes = await fetch(
-                `${API_URL}/projects`
-            )
+            const projectRes = await fetch(`${API_URL}/project`)
 
-            const projectData = await projectRes.json()
+            const projectType =
+                projectRes.headers.get('content-type')
 
-            const projects =
-                projectData?.data || projectData || []
+            if (
+                projectRes.ok &&
+                projectType?.includes('application/json')
+            ) {
 
-            for (const project of projects) {
+                const projectData = await projectRes.json()
 
-                if (!project?.slug) continue
+                const projects =
+                    projectData?.data || projectData || []
 
-                paths.push(
-                    await config.transform(
-                        config,
-                        `/projects/${project.slug}`
+                for (const project of projects) {
+
+                    if (!project?.slug) continue
+
+                    paths.push(
+                        await config.transform(
+                            config,
+                            `/projects/${project.slug}`
+                        )
                     )
-                )
+                }
+
+            } else {
+
+                console.log('Invalid Project API Response')
+
             }
 
             // Blogs
-            const blogRes = await fetch(
-                `${API_URL}/blogs`
-            )
+            const blogRes = await fetch(`${API_URL}/blog`)
 
-            const blogData = await blogRes.json()
+            const blogType =
+                blogRes.headers.get('content-type')
 
-            const blogs =
-                blogData?.data || blogData || []
+            if (
+                blogRes.ok &&
+                blogType?.includes('application/json')
+            ) {
 
-            for (const blog of blogs) {
+                const blogData = await blogRes.json()
 
-                if (!blog?.slug) continue
+                const blogs =
+                    blogData?.data || blogData || []
 
-                paths.push(
-                    await config.transform(
-                        config,
-                        `/blogs/${blog.slug}`
+                for (const blog of blogs) {
+
+                    if (!blog?.slug) continue
+
+                    paths.push(
+                        await config.transform(
+                            config,
+                            `/blogs/${blog.slug}`
+                        )
                     )
-                )
+                }
+
+            } else {
+
+                console.log('Invalid Blog API Response')
+
             }
 
             return paths
