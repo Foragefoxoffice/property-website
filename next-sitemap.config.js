@@ -46,7 +46,12 @@ module.exports = {
 
             // Properties
             const propertyRes = await fetch(
-                `${API_URL}/listing`
+                `${API_URL}/create-property/listing`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }
             )
 
             const propertyType =
@@ -87,7 +92,14 @@ module.exports = {
             }
 
             // Projects
-            const projectRes = await fetch(`${API_URL}/project`)
+            const projectRes = await fetch(
+                `${API_URL}/projects`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }
+            )
 
             const projectType =
                 projectRes.headers.get('content-type')
@@ -104,12 +116,14 @@ module.exports = {
 
                 for (const project of projects) {
 
-                    if (!project?.slug) continue
+                    const slug = project?.slug?.en
+
+                    if (!slug) continue
 
                     paths.push(
                         await config.transform(
                             config,
-                            `/projects/${project.slug}`
+                            `/projects/${slug}`
                         )
                     )
                 }
@@ -121,7 +135,14 @@ module.exports = {
             }
 
             // Blogs
-            const blogRes = await fetch(`${API_URL}/blog`)
+            const blogRes = await fetch(
+                `${API_URL}/blogs`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }
+            )
 
             const blogType =
                 blogRes.headers.get('content-type')
@@ -138,12 +159,14 @@ module.exports = {
 
                 for (const blog of blogs) {
 
-                    if (!blog?.slug) continue
+                    const slug = blog?.slug?.en
+
+                    if (!slug) continue
 
                     paths.push(
                         await config.transform(
                             config,
-                            `/blogs/${blog.slug}`
+                            `/blogs/${slug}`
                         )
                     )
                 }

@@ -1,4 +1,9 @@
+# *
 User-agent: *
 Allow: /
 
+# Host
+Host: https://183housingsolutions.com
+
+# Sitemaps
 Sitemap: https://183housingsolutions.com/sitemap.xml
