@@ -179,7 +179,7 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
             </span>
           )}
 
-          {propType && !visListing.transactionType && (
+          {propType && !visListing.propertyType && (
             <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-md">
               {propType}
             </span>
@@ -588,7 +588,14 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {show(visList.propertyId) && <OverviewCard icon={<House />} label={`${t.propertyId}:`} value={safeVal(list?.listingInformationPropertyId)} />}
-                  {show(visList.transactionType) && <OverviewCard icon={<SlidersHorizontal />} label={`${t.propertyType}:`} value={getLoc(list?.listingInformationPropertyType)} />}
+                  {show(visList.propertyType) &&
+                    getLoc(list?.listingInformationPropertyType) && (
+                      <OverviewCard
+                        icon={<SlidersHorizontal />}
+                        label={`${t.propertyType}:`}
+                        value={getLoc(list?.listingInformationPropertyType)}
+                      />
+                    )}
                   {show(visProp.bedrooms) && <OverviewCard icon={<Bed />} label={`${t.bedrooms}:`} value={`${safeVal(info?.informationBedrooms)} ${t.rooms}`} />}
                   {show(visProp.bathrooms) && <OverviewCard icon={<Bath />} label={`${t.bathrooms}:`} value={`${safeVal(info?.informationBathrooms)} ${t.rooms}`} />}
                   {show(visProp.furnishing) && <OverviewCard icon={<Armchair />} label={`${t.furnishing}:`} value={getLoc(info?.informationFurnishing)} />}
