@@ -33,15 +33,15 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, s-maxage=60, stale-while-revalidate=300',
-          },
-        ],
-      },
+      // {
+      //   source: '/:path*',
+      //   headers: [
+      //     {
+      //       key: 'Cache-Control',
+      //       value: 'public, s-maxage=5, stale-while-revalidate=10',
+      //     },
+      //   ],
+      // },
     ]
   },
 
