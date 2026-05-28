@@ -33,15 +33,21 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
   const youtubeId = videoUrl ? getYoutubeId(videoUrl) : null
 
   return (
-    <section className="py-16 md:py-18 bg-white  overflow-hidden">
+    <section className="py-16 md:py-18 bg-white overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex flex-col gap-10 md:gap-14 items-center">
-          <div className="w-full max-w-4xl px-4 flex flex-col items-center mx-auto">
+          <div className="w-full max-w-4xl px-4 mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-[#111827] mb-6 uppercase tracking-tight text-center">
               {title}
             </h2>
             <div
-              className="text-[15px] md:text-[16px] leading-[1.8] text-gray-600 prose prose-p:text-center prose-p:mb-1.5"
+              className="
+    text-[15px] md:text-[16px]
+    leading-[1.8]
+    text-gray-600
+    max-w-none
+    project-intro-content
+  "
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
@@ -70,13 +76,29 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+  .project-intro-content ul {
+    list-style-type: disc !important;
+    padding-left: 24px !important;
+    margin: 16px 0 !important;
+  }
+
+  .project-intro-content ol {
+    list-style-type: decimal !important;
+    padding-left: 24px !important;
+    margin: 16px 0 !important;
+  }
+
+  .project-intro-content li {
+    display: list-item !important;
+    margin-bottom: 8px !important;
+  }
+
+  .project-intro-content p {
+    margin-bottom: 10px !important;
+  }
+`}</style>
     </section>
   )
 }
-
-
-
-
-
-
-
