@@ -45,7 +45,9 @@ module.exports = {
             }
 
             // Properties
-            const propertyRes = await fetch(`${API_URL}/property`)
+            const propertyRes = await fetch(
+                `${API_URL}/listing`
+            )
 
             const propertyType =
                 propertyRes.headers.get('content-type')
@@ -58,16 +60,22 @@ module.exports = {
                 const propertyData = await propertyRes.json()
 
                 const properties =
-                    propertyData?.data || propertyData || []
+                    propertyData?.data || []
 
                 for (const property of properties) {
 
-                    if (!property?.slug || !property?.propertyId) continue
+                    const propertyId =
+                        property?.listingInformation?.listingInformationPropertyId
+
+                    const slug =
+                        property?.seoInformation?.isSlugUrl?.en
+
+                    if (!propertyId || !slug) continue
 
                     paths.push(
                         await config.transform(
                             config,
-                            `/property-showcase/${property.propertyId}/${property.slug}`
+                            `/property-showcase/${propertyId}/${slug}`
                         )
                     )
                 }
