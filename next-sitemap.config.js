@@ -1,7 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
 
-const SITE_URL = process.env.VITE_SITE_URL
-const API_URL = process.env.VITE_API_URL
+const SITE_URL = 'https://183housingsolutions.com'
+const API_URL = 'https://api.183housingsolutions.com/api/v1'
 
 module.exports = {
     siteUrl: SITE_URL,
@@ -31,16 +31,12 @@ module.exports = {
 
             const paths = []
 
-            // ========================
-            // STATIC PAGES
-            // ========================
-
             const staticPages = [
                 '/',
                 '/about',
-                '/properties',
                 '/projects',
-                '/news',
+                '/blogs',
+                '/listing',
                 '/contact',
             ]
 
@@ -48,10 +44,7 @@ module.exports = {
                 paths.push(await config.transform(config, page))
             }
 
-            // ========================
-            // PROPERTY PAGES
-            // ========================
-
+            // Properties
             const propertyRes = await fetch(
                 `${API_URL}/properties`
             )
@@ -73,10 +66,7 @@ module.exports = {
                 )
             }
 
-            // ========================
-            // PROJECT PAGES
-            // ========================
-
+            // Projects
             const projectRes = await fetch(
                 `${API_URL}/projects`
             )
@@ -98,10 +88,7 @@ module.exports = {
                 )
             }
 
-            // ========================
-            // BLOG PAGES
-            // ========================
-
+            // Blogs
             const blogRes = await fetch(
                 `${API_URL}/blogs`
             )
