@@ -436,7 +436,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 <img
                   className="hidden lg:block object-contain cursor-pointer h-8 md:h-9"
                   src={getImageUrl(headerLogo) || '/images/login/logo.png'}
-                  alt="Logo"
+                  alt="183 Housing Solutions"
                 />
               )}
             </Link>
@@ -448,7 +448,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                   <img
                     className="h-6 object-contain cursor-pointer"
                     src={getImageUrl(headerLogo) || '/images/login/logo.png'}
-                    alt="Logo"
+                    alt="183 Housing Solutions"
                   />
                 )}
               </Link>

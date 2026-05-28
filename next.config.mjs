@@ -2,6 +2,8 @@
 const nextConfig = {
   transpilePackages: ['antd'],
 
+  compress: true,
+
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '183housingsolutions.com' },
@@ -10,8 +12,39 @@ const nextConfig = {
     ],
   },
 
+  // ✅ CACHE HEADERS
+  async headers() {
+    return [
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/:all*(svg|jpg|jpeg|png|gif|webp|avif|ico|css|js)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=60, stale-while-revalidate=300',
+          },
+        ],
+      },
+    ]
+  },
 
-  // ✅ ADD THIS BLOCK
   eslint: {
     ignoreDuringBuilds: true,
   },
