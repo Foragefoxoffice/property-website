@@ -62,8 +62,58 @@ export default async function AboutPage() {
     data = (res.data as Record<string, unknown>) || {}
   } catch { }
 
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateAgent',
+    name: '183 Housing Solutions',
+    image: 'https://183housingsolutions.com/images/property/dummy-img.avif',
+    '@id': 'https://183housingsolutions.com',
+    url: 'https://183housingsolutions.com/about',
+    telephone: '+84398740430',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Ecopark',
+      addressLocality: 'Hung Yen',
+      addressRegion: 'Hung Yen',
+      addressCountry: 'VN'
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '08:00',
+      closes: '18:00'
+    }
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Homepage',
+        item: 'https://183housingsolutions.com'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'About Us',
+        item: 'https://183housingsolutions.com/about'
+      }
+    ]
+  }
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <AboutBanner data={data} />
       <AboutOverview data={data} />
       <AboutMissionVission data={data} />

@@ -66,10 +66,63 @@ export default async function HomePage() {
     // render empty state
   }
 
+  const rawFaqs = (cmsData?.faqs as any[]) || []
+  const faqs = rawFaqs.length > 0 ? rawFaqs : [
+    { header_en: 'How do I start the home buying process?', content_en: 'Starting the home buying process involves getting pre-approved for a mortgage to understand your budget, finding a real estate agent to guide you, and identifying your needs and preferences for your new home.' },
+    { header_en: 'What costs are involved in buying a home?', content_en: 'Our approach combines personalized strategies, data-driven insights, and dedicated support to help you reach your financial goals. Each step is crafted to maximize growth, reduce risk, and build lasting financial confidence.' },
+    { header_en: 'How long does it take to buy a home?', content_en: 'The timeline varies but typically takes 30-45 days from contract to closing. Finding the right home can take weeks or months depending on the market and your specific criteria.' },
+  ]
+
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateAgent',
+    name: '183 Housing Solutions',
+    image: 'https://183housingsolutions.com/images/property/dummy-img.avif',
+    '@id': 'https://183housingsolutions.com',
+    url: 'https://183housingsolutions.com',
+    telephone: '+84398740430',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Ecopark',
+      addressLocality: 'Hung Yen',
+      addressRegion: 'Hung Yen',
+      addressCountry: 'VN'
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '08:00',
+      closes: '18:00'
+    }
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.header_en || f.header,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.content_en || f.content
+      }
+    }))
+  }
+
   return (
-    <HomePageClient
-      cmsData={cmsData}
-      featuredProperties={featuredProperties}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <HomePageClient
+        cmsData={cmsData}
+        featuredProperties={featuredProperties}
+      />
+    </>
   )
 }

@@ -13,15 +13,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import { translations } from '@/language/translations'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 
-import { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Login | 183 Housing Solutions',
-  robots: {
-    index: false,
-    follow: false,
-  },
-}
 
 function LoginForm() {
   const router = useRouter()

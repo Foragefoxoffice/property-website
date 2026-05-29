@@ -45,6 +45,24 @@ const nextConfig = {
     ]
   },
 
+  // ✅ REDIRECTS: Old property-showcase → new /listing format
+  async redirects() {
+    return [
+      // /property-showcase/LSE-0047/my-slug → /listing/my-slug-LSE-0047
+      {
+        source: '/property-showcase/:id/:slug',
+        destination: '/listing/:slug-:id',
+        permanent: true,
+      },
+      // /property-showcase/LSE-0047 (no slug) → /listing/LSE-0047
+      {
+        source: '/property-showcase/:id',
+        destination: '/listing/:id',
+        permanent: true,
+      },
+    ]
+  },
+
   eslint: {
     ignoreDuringBuilds: true,
   },

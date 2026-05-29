@@ -109,7 +109,7 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
 
   const propDisplayId = listing.listingInformationPropertyId || property._id
   const slug = getLoc(seo.slugUrl)
-  const url = `/property-showcase/${propDisplayId}${slug ? `/${slug}` : ''}`
+  const url = `/listing/${slug ? slug + '-' : ''}${propDisplayId}`
 
   const rawTxType = getLoc(
     listing.listingInformationTransactionType

@@ -593,7 +593,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
 
               return (
                 <Link key={propId}
-                  href={`/property-showcase/${id}${slug ? `/${slug}` : ''}`}
+                  href={`/listing/${slug ? slug + '-' : ''}${id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}

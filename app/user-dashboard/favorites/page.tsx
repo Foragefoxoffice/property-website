@@ -234,7 +234,7 @@ export default function FavoritesPage() {
                         onClick={() => {
                           const id = listingInfo.listingInformationPropertyId || prop._id
                           const slug = getLocalizedValue(seoInfo.slugUrl)
-                          window.open(`/property-showcase/${id}${slug ? `/${slug}` : ''}`, '_blank')
+                          window.open(`/listing/${slug ? slug + '-' : ''}${id}`, '_blank')
                         }}
                       >
                         <div className="w-24 h-24 sm:w-32 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 relative">

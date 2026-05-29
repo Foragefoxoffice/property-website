@@ -9,15 +9,6 @@ import { useLanguage } from '@/context/LanguageContext'
 import { translations } from '@/language/translations'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Forgot Password | 183 Housing Solutions',
-  robots: {
-    index: false,
-    follow: false,
-  },
-}
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
