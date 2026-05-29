@@ -24,6 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: `${title} | 183 Housing Solutions`,
       description,
+      alternates: {
+        canonical: String(safeVal(b.canonicalUrl) || `https://183housingsolutions.com/blogs/${params.slug}`),
+      },
+      robots: {
+        index: b.allowIndexing !== false,
+        follow: b.allowIndexing !== false,
+      },
       openGraph: {
         title,
         description,
@@ -40,7 +47,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   } catch (error) {
     console.error('Blog metadata error:', error)
-    return { title: 'Blog | 183 Housing Solutions' }
+    return { 
+      title: 'Blog | 183 Housing Solutions',
+      alternates: { canonical: `https://183housingsolutions.com/blogs/${params.slug}` },
+      robots: { index: true, follow: true }
+    }
   }
 }
 

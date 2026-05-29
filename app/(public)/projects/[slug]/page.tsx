@@ -26,6 +26,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: `${title} | 183 Housing Solutions`,
       description,
+      alternates: {
+        canonical: String(safeVal(p.projectSeoCanonicalUrl) || `https://183housingsolutions.com/projects/${params.slug}`),
+      },
+      robots: {
+        index: p.projectSeoAllowIndexing !== false,
+        follow: p.projectSeoAllowIndexing !== false,
+      },
       openGraph: {
         title,
         description,
@@ -42,7 +49,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   } catch (error) {
     console.error('Project metadata error:', error)
-    return { title: 'Project | 183 Housing Solutions' }
+    return { 
+      title: 'Project | 183 Housing Solutions',
+      alternates: { canonical: `https://183housingsolutions.com/projects/${params.slug}` },
+      robots: { index: true, follow: true }
+    }
   }
 }
 

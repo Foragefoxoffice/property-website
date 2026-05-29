@@ -11,6 +11,15 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { useLanguage } from '@/context/LanguageContext'
 import { translations } from '@/language/translations'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Register | 183 Housing Solutions',
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default function RegisterPage() {
   const router = useRouter()

@@ -10,6 +10,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: data.termsConditionSeoMetaTitle_en || 'Terms & Conditions | 183 Housing Solutions',
       description: data.termsConditionSeoMetaDescription_en || 'Terms and conditions for using 183 Housing Solutions services.',
+      alternates: {
+        canonical: data.termsConditionSeoCanonicalUrl_en || 'https://183housingsolutions.com/terms-conditions',
+      },
+      robots: {
+        index: data.termsConditionSeoAllowIndexing !== false,
+        follow: data.termsConditionSeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.termsConditionSeoOgTitle_en || data.termsConditionSeoMetaTitle_en,
         description: data.termsConditionSeoOgDescription_en || data.termsConditionSeoMetaDescription_en,
@@ -20,6 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'Terms & Conditions | 183 Housing Solutions',
       description: 'Terms and conditions for using 183 Housing Solutions services.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com/terms-conditions',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }

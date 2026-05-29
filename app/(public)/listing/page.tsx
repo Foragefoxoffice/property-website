@@ -4,6 +4,13 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Property Listings | 183 Housing Solutions',
   description: 'Browse all available properties for lease, sale, and home stay in Vietnam.',
+  alternates: {
+    canonical: 'https://183housingsolutions.com/listing',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function ListingPage() {

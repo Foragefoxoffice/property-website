@@ -12,6 +12,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         data.blogSeoMetaDescription_en ||
         'Read the latest news, tips, and guides from 183 Housing Solutions.',
+      alternates: {
+        canonical: data.blogSeoCanonicalUrl_en || 'https://183housingsolutions.com/blogs',
+      },
+      robots: {
+        index: data.blogSeoAllowIndexing !== false,
+        follow: data.blogSeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.blogSeoOgTitle_en || data.blogSeoMetaTitle_en,
         description:
@@ -25,6 +32,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Blog | 183 Housing Solutions',
       description:
         'Read the latest news, tips, and guides from 183 Housing Solutions.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com/blogs',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }

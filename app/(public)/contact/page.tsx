@@ -14,6 +14,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         data.contactSeoMetaDescription_en ||
         'Get in touch with the 183 Housing Solutions team.',
+      alternates: {
+        canonical: data.contactSeoCanonicalUrl_en || 'https://183housingsolutions.com/contact',
+      },
+      robots: {
+        index: data.contactSeoAllowIndexing !== false,
+        follow: data.contactSeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.contactSeoOgTitle_en || data.contactSeoMetaTitle_en,
         description:
@@ -27,6 +34,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Contact Us | 183 Housing Solutions',
       description:
         'Get in touch with the 183 Housing Solutions team.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com/contact',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }

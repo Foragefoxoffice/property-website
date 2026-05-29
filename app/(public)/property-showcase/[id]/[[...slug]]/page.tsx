@@ -36,6 +36,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: `${title} | 183 Housing Solutions`,
       description,
+      alternates: {
+        canonical: String(safeVal(seo.canonicalUrl) || url),
+      },
+      robots: {
+        index: seo.allowIndexing !== false,
+        follow: seo.allowIndexing !== false,
+      },
       openGraph: {
         title,
         description,
@@ -53,9 +60,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   } catch (error) {
     console.error('Metadata generation error:', error)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
+    const fbUrl = `${siteUrl}/property-showcase/${params.id}${params.slug?.[0] ? `/${params.slug[0]}` : ''}`
     return {
       title: 'Property | 183 Housing Solutions',
       description: 'Real estate listings in Vietnam',
+      alternates: { canonical: fbUrl },
+      robots: { index: true, follow: true }
     }
   }
 }

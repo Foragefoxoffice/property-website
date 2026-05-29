@@ -19,6 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         data.aboutSeoMetaDescription_en ||
         'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      alternates: {
+        canonical: data.aboutSeoCanonicalUrl_en || 'https://183housingsolutions.com/about',
+      },
+      robots: {
+        index: data.aboutSeoAllowIndexing !== false,
+        follow: data.aboutSeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.aboutSeoOgTitle_en || data.aboutSeoMetaTitle_en,
         description:
@@ -32,6 +39,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'About Us | 183 Housing Solutions',
       description:
         'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com/about',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }

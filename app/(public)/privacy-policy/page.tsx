@@ -10,6 +10,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: data.privacyPolicySeoMetaTitle_en || 'Privacy Policy | 183 Housing Solutions',
       description: data.privacyPolicySeoMetaDescription_en || 'Privacy policy for 183 Housing Solutions — how we handle your data.',
+      alternates: {
+        canonical: data.privacyPolicySeoCanonicalUrl_en || 'https://183housingsolutions.com/privacy-policy',
+      },
+      robots: {
+        index: data.privacyPolicySeoAllowIndexing !== false,
+        follow: data.privacyPolicySeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.privacyPolicySeoOgTitle_en || data.privacyPolicySeoMetaTitle_en,
         description: data.privacyPolicySeoOgDescription_en || data.privacyPolicySeoMetaDescription_en,
@@ -20,6 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'Privacy Policy | 183 Housing Solutions',
       description: 'Privacy policy for 183 Housing Solutions — how we handle your data.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com/privacy-policy',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }

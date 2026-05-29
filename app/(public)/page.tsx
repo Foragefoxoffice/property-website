@@ -12,6 +12,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         data.homeSeoMetaDescription_en ||
         'Browse properties for lease, sale, and home stay in Vietnam.',
+      alternates: {
+        canonical: data.homeSeoCanonicalUrl_en || 'https://183housingsolutions.com',
+      },
+      robots: {
+        index: data.homeSeoAllowIndexing !== false,
+        follow: data.homeSeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.homeSeoOgTitle_en || data.homeSeoMetaTitle_en,
         description:
@@ -25,6 +32,13 @@ export async function generateMetadata(): Promise<Metadata> {
       title: '183 Housing Solutions — Find Your Home in Vietnam',
       description:
         'Browse properties for lease, sale, and home stay in Vietnam.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }

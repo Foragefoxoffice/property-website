@@ -9,6 +9,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: data.projectSeoMetaTitle_en || 'Projects | 183 Housing Solutions',
       description: data.projectSeoMetaDescription_en || 'Explore real estate development projects by 183 Housing Solutions in Vietnam.',
+      alternates: {
+        canonical: data.projectSeoCanonicalUrl_en || 'https://183housingsolutions.com/projects',
+      },
+      robots: {
+        index: data.projectSeoAllowIndexing !== false,
+        follow: data.projectSeoAllowIndexing !== false,
+      },
       openGraph: {
         title: data.projectSeoOgTitle_en || data.projectSeoMetaTitle_en,
         description: data.projectSeoOgDescription_en || data.projectSeoMetaDescription_en,
@@ -19,6 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'Projects | 183 Housing Solutions',
       description: 'Explore real estate development projects by 183 Housing Solutions in Vietnam.',
+      alternates: {
+        canonical: 'https://183housingsolutions.com/projects',
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
     }
   }
 }
