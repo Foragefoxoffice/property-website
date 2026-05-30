@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
 import { getAssetBaseURL } from '@/utils/baseURL'
 
 interface SocketContextValue {
@@ -32,37 +32,39 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       
       // Only connect if user is logged in and not Lighthouse audit
       if (currentUserId && !socketInstance && !isLighthouse) {
-        const socketTarget = getAssetBaseURL()
-        socketInstance = io(socketTarget, {
-          transports: ['websocket', 'polling'],
-          reconnection: true,
-          reconnectionDelay: 1000,
-          reconnectionAttempts: 5,
-        })
+        import('socket.io-client').then(({ io }) => {
+          const socketTarget = getAssetBaseURL()
+          socketInstance = io(socketTarget, {
+            transports: ['websocket', 'polling'],
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionAttempts: 5,
+          })
 
-        socketInstance.on('connect', () => {
-          setIsConnected(true)
-        })
+          socketInstance.on('connect', () => {
+            setIsConnected(true)
+          })
 
-        socketInstance.on('disconnect', () => {
-          setIsConnected(false)
-        })
+          socketInstance.on('disconnect', () => {
+            setIsConnected(false)
+          })
 
-        // Listen for account deactivation
-        socketInstance.on('accountDeactivated', ({ userId }: { userId: string }) => {
-          const activeUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
-          if (userId === activeUserId) {
-            if (typeof window !== 'undefined') {
-              localStorage.removeItem('token')
-              localStorage.removeItem('userId')
-              localStorage.removeItem('userName')
-              localStorage.removeItem('userRole')
+          // Listen for account deactivation
+          socketInstance.on('accountDeactivated', ({ userId }: { userId: string }) => {
+            const activeUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
+            if (userId === activeUserId) {
+              if (typeof window !== 'undefined') {
+                localStorage.removeItem('token')
+                localStorage.removeItem('userId')
+                localStorage.removeItem('userName')
+                localStorage.removeItem('userRole')
+              }
+              window.location.href = '/login?error=inactive'
             }
-            window.location.href = '/login?error=inactive'
-          }
-        })
+          })
 
-        setSocket(socketInstance)
+          setSocket(socketInstance)
+        }).catch(err => console.error('Failed to load socket.io-client', err))
       } else if (!currentUserId && socketInstance) {
         // Disconnect if user logged out
         socketInstance.disconnect()

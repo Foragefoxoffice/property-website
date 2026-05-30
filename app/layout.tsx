@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { Manrope } from 'next/font/google'
 import './globals.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Providers from '@/components/Providers'
 import PublicHeader from '@/components/PublicHeader'

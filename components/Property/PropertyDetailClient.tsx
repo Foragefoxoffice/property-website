@@ -507,7 +507,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
 
           {/* Mobile Slider */}
           <div className="md:hidden relative h-[300px] bg-black">
-            <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <AnimatePresence initial={false} custom={direction}>
               <motion.img
                 key={current}
                 src={images[current]}
@@ -846,7 +846,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
             </div>
 
             <div className="flex-1 relative flex items-center justify-center overflow-hidden px-4">
-              <AnimatePresence initial={false} custom={popupDirection} mode="popLayout">
+              <AnimatePresence initial={false} custom={popupDirection}>
                 <motion.img
                   key={popupIndex}
                   src={images[popupIndex]}

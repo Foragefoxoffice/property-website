@@ -178,7 +178,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
   return (
     <>
       <div className="relative min-h-[70vh] md:min-h-[85vh] place-content-center overflow-hidden">
-        <Image src={bg} alt={heroTitle} fill priority style={{ objectFit: 'cover', objectPosition: 'center' }} />
+        <Image src={bg} alt={heroTitle} fill priority quality={60} sizes="100vw" style={{ objectFit: 'cover', objectPosition: 'center' }} />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-0">
           <div className="text-center mb-6">

@@ -5,7 +5,6 @@ import { PermissionProvider } from '@/context/PermissionContext'
 import { FavoritesProvider } from '@/context/FavoritesContext'
 import { SocketProvider } from '@/context/SocketContext'
 import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 
 import { useEffect } from 'react'
 
