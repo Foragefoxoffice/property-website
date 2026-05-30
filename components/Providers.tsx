@@ -10,6 +10,12 @@ import { useEffect } from 'react'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Load Toastify CSS lazily to avoid render-blocking
+    // @ts-ignore - CSS module import
+    import('react-toastify/dist/ReactToastify.css')
+  }, [])
+
+  useEffect(() => {
     const handleError = (event: ErrorEvent | PromiseRejectionEvent) => {
       let message = ''
       if ('message' in event) {

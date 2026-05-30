@@ -891,8 +891,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
             >
               {/* Menu Header */}
               <div className="p-5 flex items-center justify-between border-b border-gray-100">
-                <img
-                  className="h-8 object-contain"
+                <Image
+                  width={120}
+                  height={32}
+                  className="h-8 object-contain w-auto"
                   src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                   alt="Logo"
                 />

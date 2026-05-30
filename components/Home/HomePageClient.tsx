@@ -601,7 +601,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                   className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}
                   style={{ transitionDelay: `${200 + index * 100}ms` }}>
                   <div className="relative h-56 overflow-hidden">
-                    <Image priority={index < 3} src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-110 transition duration-700" />
+                    <Image priority={index < 3} src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} fill quality={75} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-110 transition duration-700" />
 
                     <div className="absolute top-3 left-3 flex gap-2">
                       {txType && !visListing.transactionType && <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${badgeClass(txType)}`}>{txType}</span>}
