@@ -24,57 +24,65 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    // Initialize socket connection - Ensure we use the base URL, not the /api path
-    const socketTarget = getAssetBaseURL()
+    let socketInstance: Socket | null = null
 
-    const socketInstance = io(socketTarget, {
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionAttempts: 5,
-    })
+    const checkAndConnect = () => {
+      const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
+      
+      // Only connect if user is logged in
+      if (currentUserId && !socketInstance) {
+        const socketTarget = getAssetBaseURL()
+        socketInstance = io(socketTarget, {
+          transports: ['websocket', 'polling'],
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionAttempts: 5,
+        })
 
-    socketInstance.on('connect', () => {
-      console.log('Socket.IO connected:', socketInstance.id)
-      setIsConnected(true)
-    })
+        socketInstance.on('connect', () => {
+          setIsConnected(true)
+        })
 
-    socketInstance.on('disconnect', () => {
-      console.log('Socket.IO disconnected')
-      setIsConnected(false)
-    })
+        socketInstance.on('disconnect', () => {
+          setIsConnected(false)
+        })
 
-    socketInstance.on('connect_error', (error: Error) => {
-      console.error('Socket.IO connection error:', error)
-    })
+        // Listen for account deactivation
+        socketInstance.on('accountDeactivated', ({ userId }: { userId: string }) => {
+          const activeUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
+          if (userId === activeUserId) {
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('token')
+              localStorage.removeItem('userId')
+              localStorage.removeItem('userName')
+              localStorage.removeItem('userRole')
+            }
+            window.location.href = '/login?error=inactive'
+          }
+        })
 
-    // Listen for account deactivation
-    socketInstance.on('accountDeactivated', ({ userId }: { userId: string }) => {
-      const currentUserId =
-        typeof window !== 'undefined' ? localStorage.getItem('userId') : null
-      console.log(`Deactivation event received for: ${userId}. Current: ${currentUserId}`)
-
-      if (userId === currentUserId) {
-        console.error('Your account has been deactivated. Logging out...')
-
-        // Clear all auth data
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('token')
-          localStorage.removeItem('userId')
-          localStorage.removeItem('userName')
-          localStorage.removeItem('userRole')
-        }
-
-        // Redirect to login with a message
-        window.location.href = '/login?error=inactive'
+        setSocket(socketInstance)
+      } else if (!currentUserId && socketInstance) {
+        // Disconnect if user logged out
+        socketInstance.disconnect()
+        socketInstance = null
+        setSocket(null)
+        setIsConnected(false)
       }
-    })
+    }
 
-    setSocket(socketInstance)
+    // Check on mount
+    checkAndConnect()
+
+    // Periodically check auth status since login/logout uses router.push without full reload
+    const intervalId = setInterval(checkAndConnect, 2000)
 
     // Cleanup on unmount
     return () => {
-      socketInstance.disconnect()
+      clearInterval(intervalId)
+      if (socketInstance) {
+        socketInstance.disconnect()
+      }
     }
   }, [])
 

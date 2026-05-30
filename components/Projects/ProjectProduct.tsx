@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { getProjectPage } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
+import Image from 'next/image';
 const cleanHTML = (html: string) => html ? html.replace(/&nbsp;/g, ' ') : '';
 
 export default function ProjectProduct({ projectData }: any) {
@@ -68,11 +69,13 @@ export default function ProjectProduct({ projectData }: any) {
                             <div key={idx} className="flex flex-col">
                                 {/* Product Image/Floorplan */}
                                 {productImage ? (
-                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 overflow-hidden group">
-                                        <img
+                                    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 overflow-hidden group relative min-h-[300px]">
+                                        <Image
                                             src={getImageUrl(productImage)}
                                             alt={productTitle}
-                                            className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                                         />
                                     </div>
                                 ) : (

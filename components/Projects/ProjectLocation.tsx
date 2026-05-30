@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { getProjectPage } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
+import Image from 'next/image';
 const cleanHTML = (html: string) => html ? html.replace(/&nbsp;/g, ' ') : '';
 
 export default function ProjectLocation({ projectData }: any) {
@@ -69,10 +70,13 @@ export default function ProjectLocation({ projectData }: any) {
                         {/* Main Image */}
                         {mainLocationImage ? (
                             <div className="relative overflow-hidden shadow-sm">
-                                <img
+                                <Image
                                     src={getImageUrl(mainLocationImage)}
                                     alt={`${projectTitle} - Location Map`}
-                                    className="w-full h-auto object-cover"
+                                    width={800}
+                                    height={500}
+                                    style={{ width: '100%', height: 'auto' }}
+                                    className="object-cover"
                                 />
                             </div>
                         ) : (
@@ -86,10 +90,13 @@ export default function ProjectLocation({ projectData }: any) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {subLocationImages.map((img, idx) => (
                                     <div key={idx} className="relative overflow-hidden shadow-sm">
-                                        <img
+                                        <Image
                                             src={getImageUrl(img)}
                                             alt={`${projectTitle} - Location Detail ${idx + 2}`}
-                                            className="w-full h-auto object-cover aspect-[4/3]"
+                                            width={600}
+                                            height={450}
+                                            style={{ width: '100%', height: 'auto' }}
+                                            className="object-cover aspect-[4/3]"
                                         />
                                     </div>
                                 ))}

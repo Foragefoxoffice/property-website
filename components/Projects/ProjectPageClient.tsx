@@ -4,6 +4,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useLanguage } from '@/context/LanguageContext'
 import ProjectBanner from './ProjectBanner'
@@ -126,7 +127,7 @@ function ProjectPageInner({
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                     {project.mainImage ? (
-                      <img src={getImageUrl(project.mainImage)} alt={title} className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                      <Image src={getImageUrl(project.mainImage)} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
                     ) : (
                       <div className="h-full w-full bg-[#E8E8FF] flex items-center justify-center">
                         <span className="text-[#41398B] text-4xl font-bold opacity-30">183</span>

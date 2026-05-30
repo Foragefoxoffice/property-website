@@ -6,6 +6,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
 import { Carousel, ConfigProvider } from 'antd';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ProjectOverview({ projectData }: any) {
     const { language } = useLanguage();
@@ -107,11 +108,13 @@ export default function ProjectOverview({ projectData }: any) {
                                         className="h-full"
                                     >
                                         {overviewImages.map((image, idx) => (
-                                            <div key={idx} className="h-full overflow-hidden">
-                                                <img
+                                            <div key={idx} className="h-full relative overflow-hidden">
+                                                <Image
                                                     src={getImageUrl(image.url)}
                                                     alt={`${projectTitle} - ${idx + 1}`}
-                                                    className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-105"
+                                                    fill
+                                                    sizes="100vw"
+                                                    className="object-cover transition-transform duration-[2000ms] hover:scale-105"
                                                     style={{ aspectRatio: '16/8' }}
                                                 />
                                             </div>

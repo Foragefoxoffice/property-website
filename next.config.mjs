@@ -68,6 +68,7 @@ const nextConfig = {
   },
 
   experimental: {
+    optimizeCss: true,
     staleTimes: {
       dynamic: 0,
     },

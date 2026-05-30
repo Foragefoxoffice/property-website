@@ -6,6 +6,7 @@ import { getProjectPage, getAllProjectsAdmin } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
 import ProjectSkeleton from './ProjectSkeleton';
+import Image from 'next/image';
 
 export default function RelatedProjects({ currentCategoryId, currentProjectId, currentProjectData = null }: any) {
     const { language } = useLanguage();
@@ -115,10 +116,12 @@ export default function RelatedProjects({ currentCategoryId, currentProjectId, c
                                 >
                                     {/* Image Wrapper */}
                                     <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
-                                        <img
+                                        <Image
                                             src={getImageUrl(project.mainImage)}
-                                            alt={project.title?.[language]}
-                                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            alt={project.title?.[language] || "Project"}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                     </div>
 

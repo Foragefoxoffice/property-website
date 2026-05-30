@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { getProjectPage } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
+import Image from 'next/image';
 
 export default function ProjectPhotos({ projectData }: any) {
     const { language } = useLanguage();
@@ -61,10 +62,12 @@ export default function ProjectPhotos({ projectData }: any) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500">
                     {sections[activeTab]?.images?.map((img, idx) => (
                         <div key={idx} className="relative group overflow-hidden rounded-lg shadow-sm aspect-[16/10]">
-                            <img
+                            <Image
                                 src={getImageUrl(img.url)}
                                 alt={img.description?.[language] || ""}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             {img.description?.[language] && (
                                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-12 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">

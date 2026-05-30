@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LogOut, ChevronDown, Heart, Lock, Menu, X, Phone, Mail } from 'lucide-react'
@@ -230,8 +231,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
         />
         <div className="w-full px-16 py-5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img
-              className="h-10 object-contain"
+            <Image
+              width={160}
+              height={40}
+              className="h-10 object-contain w-auto"
               src={getImageUrl(headerLogo) || '/images/login/logo.png'}
               alt="Logo"
             />
@@ -308,7 +311,13 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 <div className="flex items-center gap-2 md:cursor-pointer hover:bg-white/10 rounded-full px-3 py-1.5 transition-colors">
                   <div className="w-8 h-8 rounded-full bg-[#41398B] text-white flex items-center justify-center text-sm font-bold overflow-hidden border border-white/20">
                     {userImage ? (
-                      <img src={userImage} alt="Profile" className="w-full h-full object-cover" />
+                      <Image
+                        width={32}
+                        height={32}
+                        src={`https://api.183housingsolutions.com${userImage}`}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       initials
                     )}
@@ -401,7 +410,9 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 rel="noopener noreferrer"
                 className="w-5 h-5 flex items-center justify-center hover:scale-110 transition-all opacity-90 hover:opacity-100"
               >
-                <img
+                <Image
+                  width={20}
+                  height={20}
                   src={getImageUrl(item.icon)}
                   alt="social"
                   className="w-full h-full object-contain rounded-sm"
@@ -433,8 +444,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               {headerLoading ? (
                 <div className="h-9 w-[180px] bg-gray-200 animate-pulse rounded-md" />
               ) : (
-                <img
-                  className="hidden lg:block object-contain cursor-pointer h-8 md:h-9"
+                <Image
+                  width={180}
+                  height={36}
+                  className="hidden lg:block object-contain cursor-pointer h-8 md:h-9 w-auto"
                   src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                   alt="183 Housing Solutions"
                 />
@@ -445,8 +458,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                 {headerLoading ? (
                   <div className="h-9 w-[180px] bg-gray-200 animate-pulse rounded-md" />
                 ) : (
-                  <img
-                    className="h-6 object-contain cursor-pointer"
+                  <Image
+                    width={120}
+                    height={24}
+                    className="h-6 object-contain cursor-pointer w-auto"
                     src={getImageUrl(headerLogo) || '/images/login/logo.png'}
                     alt="183 Housing Solutions"
                   />
@@ -778,7 +793,13 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                   }}
                 >
                   {userImage ? (
-                    <img src={userImage} alt="Profile" className="w-full h-full object-cover" />
+                    <Image
+                      width={36}
+                      height={36}
+                      src={`https://api.183housingsolutions.com${userImage}`}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     initials
                   )}

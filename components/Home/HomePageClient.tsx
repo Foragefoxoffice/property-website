@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Select } from 'antd'
@@ -447,7 +448,7 @@ function HomeAbout({ d, lang }: { d: Record<string, unknown>; lang: string }) {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-16 gap-8 items-start">
           <div className={`space-y-6 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>
-            <p className="text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider">{subtitle}</p>
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">{subtitle}</p>
             <h2 className="text-2xl md:text-3xl font-semibold text-black leading-tight">{title}</h2>
             <p className="text-md text-gray-600 leading-relaxed">{desc}</p>
             <Link href={btnLink} className="inline-block mt-4 px-6 py-3 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition-all hover:shadow-xl hover:-translate-y-1">{btnText}</Link>
@@ -525,7 +526,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
     <section ref={ref} className="py-6 md:px-6 px-4 md:py-10 bg-gradient-to-br from-[#f8f7ff] via-white to-[#f0eeff] mx-auto border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-16">
-          <p className={`text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
+          <p className={`text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
           {desc && <h2 className={`text-2xl md:text-4xl  font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
@@ -599,14 +600,14 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                   className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}
                   style={{ transitionDelay: `${200 + index * 100}ms` }}>
                   <div className="relative h-56 overflow-hidden">
-                    <img src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
+                    <Image src={getImageUrl(imgs[0]) || '/images/property/dummy-img.avif'} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-110 transition duration-700" />
 
                     <div className="absolute top-3 left-3 flex gap-2">
                       {txType && !visListing.transactionType && <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${badgeClass(txType)}`}>{txType}</span>}
                       {propType && !visListing.transactionType && <span className="px-2 py-1.5 text-[11px] bg-[#41398B]/90 text-white font-bold uppercase tracking-wider rounded-sm shadow-md">{propType}</span>}
                     </div>
 
-                    <button onClick={e => { e.preventDefault(); e.stopPropagation(); if (favorited) { removeFavorite(propId) } else { addFavorite(property) } }}
+                    <button aria-label="Toggle Favorite" onClick={e => { e.preventDefault(); e.stopPropagation(); if (favorited) { removeFavorite(propId) } else { addFavorite(property) } }}
                       className="absolute top-3 right-3 p-2 bg-white rounded-md shadow-md hover:scale-110 transition-transform z-20">
                       <Heart size={16} className={favorited ? 'fill-[#eb4d4d] text-[#eb4d4d]' : 'text-[#2a2a2a]'} />
                     </button>
@@ -711,7 +712,7 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
 
         {/* Right Side: FAQ Accordion */}
         <div className="flex flex-col justify-start pt-4">
-          <span className={`text-sm font-semibold tracking-[0.2em] text-gray-400 uppercase mb-3 transition-all duration-700 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
+          <span className={`text-sm font-semibold tracking-[0.2em] text-gray-500 uppercase mb-3 transition-all duration-700 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
             {faqSub}
           </span>
           <h2 className={`text-2xl md:text-3xl font-semibold text-[#1a1a1a] mb-3 md:mb-5 leading-tight transition-all duration-700 delay-500 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
@@ -762,7 +763,11 @@ function HomeTestimonials({ d, lang }: { d: Record<string, unknown>; lang: strin
   }, [])
 
   useEffect(() => {
-    const onResize = () => setItemsToShow(window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3)
+    const onResize = () => {
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+      const isTablet = window.matchMedia('(max-width: 1023px)').matches
+      setItemsToShow(isMobile ? 1 : isTablet ? 2 : 3)
+    }
     onResize()
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
@@ -788,7 +793,7 @@ function HomeTestimonials({ d, lang }: { d: Record<string, unknown>; lang: strin
     <section className="py-10 md:py-20 px-4 md:px-6 bg-[#f8f7ff]">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <p className="text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3">{sub}</p>
+          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">{sub}</p>
           <h2 className="text-2xl md:text-4xl font-bold text-gray-900">{title}</h2>
         </div>
 
@@ -806,7 +811,7 @@ function HomeTestimonials({ d, lang }: { d: Record<string, unknown>; lang: strin
                       <Quote size={24} className="text-[#41398B] opacity-30 mb-4" />
                       <p className="text-gray-600 text-sm leading-relaxed flex-1">{review}</p>
                       <div className="flex items-center gap-3 mt-6">
-                        {avatar ? <img src={avatar} alt={name} className="w-10 h-10 rounded-full object-cover" /> : <div className="w-10 h-10 rounded-full bg-[#41398B] flex items-center justify-center text-white font-bold text-sm">{name[0]}</div>}
+                        {avatar ? <Image src={avatar} alt={name} width={40} height={40} className="w-10 h-10 rounded-full object-cover" /> : <div className="w-10 h-10 rounded-full bg-[#41398B] flex items-center justify-center text-white font-bold text-sm">{name[0]}</div>}
                         <div>
                           <p className="font-semibold text-gray-900 text-sm">{name}</p>
                           <div className="flex gap-0.5">{Array.from({ length: rating }).map((_, j) => <Star key={j} size={12} className="fill-amber-400 text-amber-400" />)}</div>
@@ -900,7 +905,7 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
     <section ref={ref} className="py-6 md:px-6 px-4 md:py-10 bg-gradient-to-br from-[#f8f7ff] via-white to-[#f0eeff] mx-auto border-t border-gray-100">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-28">
-          <p className={`text-sm font-semibold text-[#a4aeb5] uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
+          <p className={`text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
           {desc && <h2 className={`text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
@@ -935,8 +940,8 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
                   {cover ? (
-                    <div className="overflow-hidden">
-                      <img src={getImageUrl(cover)} alt={btitle} className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <Image src={getImageUrl(cover)} alt={btitle} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transform group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   ) : (
                     <div className="h-48 bg-[#E8E8FF] flex items-center justify-center">

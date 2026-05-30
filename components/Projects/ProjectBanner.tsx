@@ -7,6 +7,7 @@ import { motion, useInView } from 'framer-motion'
 import { Carousel, ConfigProvider } from 'antd'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
+import Image from 'next/image'
 
 import { getAssetBaseURL } from '@/utils/baseURL'
 const BASE = getAssetBaseURL()
@@ -62,10 +63,13 @@ export default function ProjectBanner({ data }: { data: Record<string, unknown> 
         >
           {bannerImages.map((img, index) => (
             <div key={index} className="relative h-[60vh] md:h-[85vh] w-full">
-              <img
+              <Image
                 src={imgUrl(img)}
                 alt={`${title} Banner ${index + 1}`}
-                className="w-full h-full object-cover"
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             </div>

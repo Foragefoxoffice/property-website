@@ -18,6 +18,7 @@ import { createEnquiry, getAgent, getListingProperties, addFavorite as apiAddFav
 import { formatNumber, stripHtml } from '@/utils/display'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
+import Image from 'next/image'
 
 /* -------------------------------------------------------
    HELPERS
@@ -171,7 +172,7 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
       className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-all duration-300"
     >
       <div className="relative h-56 overflow-hidden">
-        <img src={getImageUrl(img)} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
+        <Image src={getImageUrl(img) || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
         <div className="absolute top-3 left-3 flex gap-2">
           {txType && !visListing.transactionType && (
             <span className={`px-2 py-1.5 text-[11px] text-white font-bold uppercase tracking-wider rounded-sm shadow-md ${txBadgeColor(txType)}`}>
@@ -489,12 +490,12 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
         {/* 2. Photo Gallery Grid */}
         <div className="relative rounded-xl overflow-hidden group mb-0 shadow-sm">
           <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[350px] lg:h-[480px]">
-            <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden" onClick={() => openPopup(0)}>
-              <img src={images[0]} className="w-full h-full object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt="Main" />
+            <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+              <Image src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt="Main" />
             </div>
             {images.slice(1, 5).map((img, i) => (
-              <div key={i} className="cursor-pointer overflow-hidden" onClick={() => openPopup(i + 1)}>
-                <img src={img} className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-90" alt={`Gallery ${i + 1}`} />
+              <div key={i} className="cursor-pointer overflow-hidden relative" onClick={() => openPopup(i + 1)}>
+                <Image src={img || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-110 hover:brightness-90" alt={`Gallery ${i + 1}`} />
               </div>
             ))}
             {[...Array(Math.max(0, 4 - (images.length - 1)))].map((_, i) => (
@@ -627,7 +628,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-12">
                     {utilities.map((item: any, idx: number) => (
                       <div key={idx} className="flex items-center gap-3 border-b py-3 last:border-b-0 group">
-                        <img src={item?.propertyUtilityIcon} className="w-6 h-6 object-contain" alt="" />
+                        {item?.propertyUtilityIcon ? <Image width={24} height={24} src={item.propertyUtilityIcon} className="object-contain" alt="" /> : null}
                         <span className="font-medium text-gray-700">{safeVal(item?.propertyUtilityUnitName)}</span>
                       </div>
                     ))}
@@ -731,9 +732,11 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                   ) : (
                     <>
                       <div className="mb-4">
-                        <img
+                        <Image
+                          width={250}
+                          height={250}
                           src={agentData?.agentImage ? getImageUrl(agentData.agentImage) : "/placeholder.jpg"}
-                          className="w-[250px] h-full object-cover"
+                          className="w-[250px] h-auto object-cover"
                           alt="Agent"
                         />
                       </div>
@@ -883,8 +886,8 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
 
             <div className="p-10 bg-black flex gap-3 overflow-x-auto justify-start md:justify-center scrollbar-hide">
               {images.map((img, i) => (
-                <button key={i} onClick={() => { setPopupDirection(i > popupIndex ? 1 : -1); setPopupIndex(i) }} className={`w-20 h-14 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${popupIndex === i ? 'ring-4 ring-white scale-110' : 'opacity-40 hover:opacity-100'}`}>
-                  <img src={img} className="w-full h-full object-cover" alt="" />
+                <button key={i} onClick={() => { setPopupDirection(i > popupIndex ? 1 : -1); setPopupIndex(i) }} className={`w-20 h-14 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 relative ${popupIndex === i ? 'ring-4 ring-white scale-110' : 'opacity-40 hover:opacity-100'}`}>
+                  <Image src={img} fill className="object-cover" alt="" />
                 </button>
               ))}
             </div>

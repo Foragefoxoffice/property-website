@@ -18,6 +18,7 @@ import { translations } from '@/language/translations'
 import { formatNumber, stripHtml } from '@/utils/display'
 import { getAssetBaseURL } from '@/utils/baseURL'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const BASE = getAssetBaseURL()
 
@@ -171,10 +172,12 @@ function PropertyCard({
     >
       {/* Image */}
       <div className="relative img-style article-thumb h-56 overflow-hidden rounded-2xl flex-shrink-0">
-        <img
+        <Image
           src={img ? imgUrl(img) : '/images/property/dummy-img.avif'}
           alt={title}
-          className="w-full h-full object-cover rounded-2xl"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover rounded-2xl"
         />
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-2">

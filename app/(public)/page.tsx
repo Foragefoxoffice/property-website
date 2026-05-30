@@ -48,9 +48,6 @@ export default async function HomePage() {
   let featuredProperties: unknown[] = []
 
   try {
-    // 👇 Add this delay to show loader on refresh
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
     const [cms, props] = await Promise.all([
       fetchHomeCms(),
       fetchListingProperties({

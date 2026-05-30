@@ -8,6 +8,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import { getFooter, createSubscription } from '@/lib/api'
 import { toast } from 'react-toastify'
 import { getImageUrl } from '@/utils/baseURL'
+import Image from 'next/image'
 
 const staticTranslations: Record<string, { en: string; vi: string }> = {
   propertyForSale: { en: 'Property For Sale', vi: 'Bất động sản bán' },
@@ -105,11 +106,13 @@ export default function PublicFooter() {
           {/* Left Column - Contact Info */}
           <div className="lg:col-span-4 space-y-8">
             {footerData?.footerLogo && (
-              <Link href="/" className="block mb-4">
-                <img
+              <Link href="/" className="block mb-4 relative h-20 md:h-24 w-48" aria-label="Home">
+                <Image
                   src={getImageUrl(footerData.footerLogo)}
                   alt="Logo"
-                  className="h-20 md:h-24 w-auto object-contain"
+                  fill
+                  sizes="(max-width: 768px) 192px, 240px"
+                  className="object-contain object-left"
                 />
               </Link>
             )}
@@ -251,6 +254,7 @@ export default function PublicFooter() {
               <button
                 onClick={handleSubscribe}
                 disabled={loading}
+                aria-label="Subscribe to newsletter"
                 className="absolute right-1 top-1 w-9 h-9 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors disabled:opacity-50"
               >
                 <ArrowUpRight size={18} />
@@ -293,9 +297,11 @@ export default function PublicFooter() {
                 rel="noopener noreferrer"
                 className="w-6 h-6 flex items-center justify-center text-white hover:text-[#7f75d5] hover:opacity-80 transition-all"
               >
-                <img
+                <Image
                   src={getImageUrl(item.icon)}
                   alt="social"
+                  width={24}
+                  height={24}
                   className="w-full h-full object-contain"
                 />
               </a>
