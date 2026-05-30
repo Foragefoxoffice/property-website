@@ -54,6 +54,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={manrope.variable} suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://api.183housingsolutions.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.183housingsolutions.com" />
+      </head>
       <body className={manrope.className}>
         <Providers>
           <RouteLoader>

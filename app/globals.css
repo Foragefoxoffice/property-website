@@ -116,7 +116,9 @@ body {
 
 .ant-select.ant-select-outlined:not(.ant-select-disabled):hover {
   border-color: #41398b !important;
-}/* Loader.css */
+}
+
+/* Loader.css */
 .loader-wrapper {
   display: flex;
   flex-direction: column;
@@ -227,6 +229,7 @@ body {
 }
 
 @keyframes placeRoof {
+
   0%,
   15% {
     transform: translateX(-50%) translateY(-20px) scale(0);
@@ -250,6 +253,7 @@ body {
 }
 
 @keyframes openDoor {
+
   0%,
   25% {
     transform: translateX(-50%) scaleY(0);
@@ -326,6 +330,7 @@ body {
 }
 
 @keyframes bounce {
+
   0%,
   80%,
   100% {

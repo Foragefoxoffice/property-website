@@ -111,7 +111,7 @@ function ProjectPageInner({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-            {filteredProjects.map(project => {
+            {filteredProjects.map((project, index) => {
               const title = project.title?.[lang] || project.title?.en || 'Untitled'
               const slugVal = project.slug?.[lang] || project.slug?.en || project._id
               const formattedDate = project.createdAt ? new Date(project.createdAt).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : ''
@@ -127,7 +127,7 @@ function ProjectPageInner({
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                     {project.mainImage ? (
-                      <Image src={getImageUrl(project.mainImage)} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
+                      <Image priority={index < 2} src={getImageUrl(project.mainImage)} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
                     ) : (
                       <div className="h-full w-full bg-[#E8E8FF] flex items-center justify-center">
                         <span className="text-[#41398B] text-4xl font-bold opacity-30">183</span>

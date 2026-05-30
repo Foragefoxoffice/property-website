@@ -11,6 +11,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'api.183housingsolutions.com' },
       { protocol: 'http', hostname: 'localhost' },
     ],
+    unoptimized: true,
   },
 
   // ✅ CACHE HEADERS
@@ -72,6 +73,7 @@ const nextConfig = {
     staleTimes: {
       dynamic: 0,
     },
+    optimizeCss: true,
   },
 }
 

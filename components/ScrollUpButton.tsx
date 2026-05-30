@@ -13,8 +13,17 @@ export default function ScrollUpButton() {
 
   useEffect(() => {
     if (shouldHide) return
-    const toggle = () => setVisible(window.scrollY > 300)
-    window.addEventListener('scroll', toggle)
+    let ticking = false;
+    const toggle = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setVisible(window.scrollY > 300)
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', toggle, { passive: true })
     return () => window.removeEventListener('scroll', toggle)
   }, [shouldHide])
 

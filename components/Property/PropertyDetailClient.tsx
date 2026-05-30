@@ -491,7 +491,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
         <div className="relative rounded-xl overflow-hidden group mb-0 shadow-sm">
           <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[350px] lg:h-[480px]">
             <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
-              <Image src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt="Main" />
+              <Image priority src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
             </div>
             {images.slice(1, 5).map((img, i) => (
               <div key={i} className="cursor-pointer overflow-hidden relative" onClick={() => openPopup(i + 1)}>
@@ -511,6 +511,8 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
               <motion.img
                 key={current}
                 src={images[current]}
+                alt={title || "Mobile View"}
+                fetchPriority={current === 0 ? "high" : "auto"}
                 className="absolute inset-0 w-full h-full object-cover"
                 custom={direction}
                 variants={{
