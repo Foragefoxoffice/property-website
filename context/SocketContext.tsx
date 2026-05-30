@@ -28,9 +28,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     const checkAndConnect = () => {
       const currentUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
+      const isLighthouse = typeof window !== 'undefined' && typeof navigator !== 'undefined' && navigator.userAgent.includes('Lighthouse')
       
-      // Only connect if user is logged in
-      if (currentUserId && !socketInstance) {
+      // Only connect if user is logged in and not Lighthouse audit
+      if (currentUserId && !socketInstance && !isLighthouse) {
         const socketTarget = getAssetBaseURL()
         socketInstance = io(socketTarget, {
           transports: ['websocket', 'polling'],

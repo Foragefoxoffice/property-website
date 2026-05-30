@@ -440,7 +440,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
 
           {/* Logo Section */}
           <div className="flex items-center">
-            <Link href="/">
+            <Link href="/" aria-label="183 Housing Solutions">
               {headerLoading ? (
                 <div className="h-9 w-[180px] bg-gray-200 animate-pulse rounded-md" />
               ) : (
@@ -454,7 +454,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               )}
             </Link>
             <div className="lg:hidden absolute left-15 flex items-center justify-center">
-              <Link href="/">
+              <Link href="/" aria-label="183 Housing Solutions">
                 {headerLoading ? (
                   <div className="h-9 w-[180px] bg-gray-200 animate-pulse rounded-md" />
                 ) : (

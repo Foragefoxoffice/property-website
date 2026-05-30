@@ -37,12 +37,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // 4. Get URL
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
     const url = `${siteUrl}/listing/${slugArray.join('/')}`
+    
+    // Determine the ideal canonical URL
+    const canonicalSlug = safeVal(seo.slugUrl) || 'property'
+    const idealCanonicalUrl = `${siteUrl}/listing/${canonicalSlug}-${propertyId}`
 
     return {
       title: `${title} | 183 Housing Solutions`,
       description,
       alternates: {
-        canonical: String(safeVal(seo.canonicalUrl) || url),
+        canonical: idealCanonicalUrl,
       },
       robots: {
         index: seo.allowIndexing !== false,

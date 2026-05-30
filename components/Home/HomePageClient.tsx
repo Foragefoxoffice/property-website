@@ -177,8 +177,8 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
 
   return (
     <>
-      <div className="relative min-h-[70vh] md:min-h-[85vh] bg-cover bg-center bg-no-repeat place-content-center"
-        style={{ backgroundImage: `url(${bg})` }}>
+      <div className="relative min-h-[70vh] md:min-h-[85vh] place-content-center overflow-hidden">
+        <Image src={bg} alt={heroTitle} fill priority style={{ objectFit: 'cover', objectPosition: 'center' }} />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-0">
           <div className="text-center mb-6">
@@ -289,6 +289,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
             {/* Buttons */}
             <div className="order-last lg:order-5 flex items-center gap-3">
               <button
+                aria-label={lang === 'en' ? 'Toggle Filters' : 'Bật/tắt bộ lọc'}
                 className="flex items-center gap-2 px-4 py-2.5 border cursor-pointer border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all"
                 onClick={() => setShowMore(s => !s)}
               >
@@ -699,8 +700,8 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
     <section ref={ref} className="py-10 md:py-20 px-4 md:px-6 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-24">
         {/* Left Side: Contact Card */}
-        <div className={`relative rounded-3xl overflow-hidden min-h-[500px] flex flex-col bg-cover bg-center transition-all duration-1000 ease-out transform ${visible ? 'opacity-100 translate-x-0' : 'opacity-1 -translate-x-12'}`}
-          style={{ backgroundImage: `url(${cardBg})` }}>
+        <div className={`relative rounded-3xl overflow-hidden min-h-[500px] flex flex-col transition-all duration-1000 ease-out transform ${visible ? 'opacity-100 translate-x-0' : 'opacity-1 -translate-x-12'}`}>
+          <Image src={cardBg} alt="Contact us" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
           <div className="absolute inset-0 bg-black/20 z-0" />
           <div className="relative z-10 p-6 md:p-12 flex flex-col h-full items-start">
             <h2 className="text-3xl md:text-4xl font-semibold text-white mb-2 md:mb-6 leading-tight">{cardTitle}</h2>
@@ -723,19 +724,22 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
             {faqs.map((faq, i) => (
               <div key={i} className={`border-b border-gray-200 transition-all duration-700 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}
                 style={{ transitionDelay: `${700 + i * 100}ms` }}>
-                <button className="w-full py-4 flex items-center justify-between text-left group cursor-pointer"
-                  onClick={() => setOpen(open === i ? -1 : i)}>
+                <button 
+                  className="w-full py-4 flex items-center justify-between text-left group cursor-pointer"
+                  onClick={() => setOpen(open === i ? -1 : i)}
+                  aria-expanded={open === i}
+                >
                   <span className="text-md md:text-lg font-medium text-[#1a1a1a] pr-8 group-hover:text-[#41398B] transition-colors duration-300">
                     {lang === 'en' ? (faq.header_en || (faq as any).header) : (faq.header_vn || faq.header_en || (faq as any).header)}
                   </span>
-                  <span className={`transform transition-transform duration-300 ${open === i ? 'rotate-180 text-[#41398B]' : 'rotate-0 text-gray-400 group-hover:text-[#41398B]'}`}>
+                  <span className={`transform transition-transform duration-300 ${open === i ? 'rotate-180 text-[#41398B]' : 'rotate-0 text-gray-500 group-hover:text-[#41398B]'}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                   </span>
                 </button>
                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${open === i ? 'max-h-96 opacity-100 mb-8' : 'max-h-0 opacity-1'}`}>
-                  <p className="text-gray-500 leading-relaxed text-[16px]">
+                  <p className="text-gray-600 leading-relaxed text-[16px]">
                     {lang === 'en' ? (faq.content_en || (faq as any).content) : (faq.content_vn || faq.content_en || (faq as any).content)}
                   </p>
                 </div>
@@ -852,8 +856,8 @@ function HomeFindProperty({ d, lang }: { d: Record<string, unknown>; lang: strin
   const bg = d?.homeFindBg ? getImageUrl(String(d.homeFindBg)) : '/images/property/home-banner.jpg'
 
   return (
-    <section ref={ref} className="relative w-full h-[350px] md:h-[350px] bg-cover bg-center overflow-hidden flex items-center"
-      style={{ backgroundImage: `url(${bg})`, backgroundAttachment: 'fixed' }}>
+    <section ref={ref} className="relative w-full h-[350px] md:h-[350px] overflow-hidden flex items-center">
+      <Image src={bg} alt={title} fill style={{ objectFit: 'cover', objectPosition: 'center', backgroundAttachment: 'fixed' }} />
       <div className="absolute inset-0 bg-black/70 z-0" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
         <div className="max-w-4xl">
