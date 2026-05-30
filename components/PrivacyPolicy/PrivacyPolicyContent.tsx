@@ -24,6 +24,7 @@ export default function PrivacyPolicyContent({ data }: { data: Record<string, un
 
       {contentBody ? (
         <div
+          suppressHydrationWarning
           className="prose prose-lg max-w-none text-gray-600 prose-headings:font-bold prose-headings:text-gray-800 prose-a:text-[#41398B] prose-a:no-underline hover:prose-a:underline"
           style={{
             wordBreak: 'initial',

@@ -14,10 +14,12 @@ const LanguageContext = createContext<LanguageContextValue>({
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [language, setLanguage] = useState<string>('vi')
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem('language')
     if (saved) setLanguage(saved)
+    setIsReady(true)
   }, [])
 
   const toggleLanguage = (lang: string) => {
@@ -26,6 +28,10 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       localStorage.setItem('language', lang)
     }
   }
+
+  // Don't render children until we've read localStorage
+  // This prevents the visible language flicker on refresh
+  if (!isReady) return null
 
   return (
     <LanguageContext.Provider value={{ language, toggleLanguage }}>

@@ -113,7 +113,7 @@ function ProjectPageInner({
             {filteredProjects.map(project => {
               const title = project.title?.[lang] || project.title?.en || 'Untitled'
               const slugVal = project.slug?.[lang] || project.slug?.en || project._id
-              const formattedDate = project.createdAt ? new Date(project.createdAt).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }) : ''
+              const formattedDate = project.createdAt ? new Date(project.createdAt).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : ''
               const descSource = project.projectMainDescription?.[lang] || project.projectMainDescription?.en || project.projectIntroContent?.[lang] || project.projectIntroContent?.en || ''
               const plain = stripHtml(descSource)
               const excerpt = plain.length > 150 ? plain.slice(0, 150) + '...' : plain

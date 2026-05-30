@@ -27,7 +27,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
   const content = blog.content?.[lang] || blog.content?.en || ''
   const mainImage = getImageUrl(blog.mainImage)
   const categoryName = blog.category?.name?.[lang] || blog.category?.name?.en || ''
-  const dateStr = blog.createdAt ? new Date(blog.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''
+  const dateStr = blog.createdAt ? new Date(blog.createdAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) : ''
   const tags = blog.tags?.[lang] || blog.tags?.en || []
 
   const handleShare = () => {
@@ -100,7 +100,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
                   prose-blockquote:border-l-4 prose-blockquote:border-[#41398B] prose-blockquote:bg-purple-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg
                   prose-strong:text-gray-900 prose-li:marker:text-[#41398B]"
               >
-                <div className="overflow-hidden" dangerouslySetInnerHTML={{ __html: content.replace(/&nbsp;/g, ' ') }} />
+                <div suppressHydrationWarning className="overflow-hidden" dangerouslySetInnerHTML={{ __html: content.replace(/&nbsp;/g, ' ') }} />
               </article>
 
               <div className="flex justify-between mt-8 pt-8 border-t border-gray-100 flex-wrap gap-6">

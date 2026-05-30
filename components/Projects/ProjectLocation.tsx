@@ -50,6 +50,7 @@ export default function ProjectLocation({ projectData }: any) {
                     {/* Left Column: Description Content */}
                     <div className="text-[#374151] text-[15px] md:text-[16px] leading-[1.8] project-location-rich-text pr-0 lg:pr-10 min-w-0">
                         <div
+                            suppressHydrationWarning
                             className="w-full max-w-full"
                             style={{ 
                                 wordBreak: 'initial', 

@@ -268,7 +268,13 @@ function PropertyCard({
   )
 }
 
-function ListingInner() {
+function ListingInner({
+  initialProperties,
+  initialTotalPages,
+}: {
+  initialProperties?: any[]
+  initialTotalPages?: number
+}) {
   const { language } = useLanguage()
   const t = (translations[language as keyof typeof translations] || translations.en) as Record<string, string>
   const { isFavorite, addFavorite, removeFavorite } = useFavorites()
@@ -290,11 +296,11 @@ function ListingInner() {
     }
   }, [searchParams])
 
-  const [properties, setProperties] = useState<Prop[]>([])
-  const [loading, setLoading] = useState(true)
+  const [properties, setProperties] = useState<Prop[]>(initialProperties || [])
+  const [loading, setLoading] = useState(!initialProperties)
   const [loadingMore, setLoadingMore] = useState(false)
   const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore, setHasMore] = useState(initialTotalPages ? 1 < initialTotalPages : true)
   const observer = useRef<IntersectionObserver | null>(null)
 
   const [projects, setProjects] = useState<Prop[]>([])
@@ -388,14 +394,24 @@ function ListingInner() {
     finally { setLoading(false); setLoadingMore(false) }
   }, [selectedCategory, filters, sortBy])
 
+  const isFirstMountCategory = useRef(true)
   // Reset + fetch on category change
   useEffect(() => {
+    if (isFirstMountCategory.current && initialProperties) {
+      isFirstMountCategory.current = false
+      return
+    }
     setProperties([]); setPage(1); setHasMore(true)
     fetchProperties(1, true)
   }, [selectedCategory]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const isFirstMountSort = useRef(true)
   // Reset + fetch on sort change
   useEffect(() => {
+    if (isFirstMountSort.current && initialProperties) {
+      isFirstMountSort.current = false
+      return
+    }
     setProperties([]); setPage(1); setHasMore(true)
     fetchProperties(1, true)
   }, [sortBy]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -680,10 +696,16 @@ function ListingInner() {
   )
 }
 
-export default function ListingClientWrapper() {
+export default function ListingClientWrapper({
+  initialProperties,
+  initialTotalPages,
+}: {
+  initialProperties?: any[]
+  initialTotalPages?: number
+}) {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">Loading properties...</div>}>
-      <ListingInner />
+      <ListingInner initialProperties={initialProperties} initialTotalPages={initialTotalPages} />
     </Suspense>
   )
 }

@@ -421,7 +421,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
     if (!dateStr) return ""
     const date = new Date(dateStr)
     if (isNaN(date.getTime())) return dateStr
-    return date.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, "-")
+    return date.toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).replace(/ /g, "-")
   }
 
   const show = (flag: any) => flag === false || flag === undefined
@@ -612,6 +612,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                 <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
                   <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
                   <div
+                    suppressHydrationWarning
                     className="text-gray-700 leading-6 rich-text-display property-description-summary"
                     dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
                   />
@@ -903,7 +904,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
         )}
       </AnimatePresence>
 
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .property-description-summary ul {
           list-style-type: disc !important;
           padding-left: 1.5rem !important;
@@ -933,7 +934,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
-      `}</style>
+      ` }} />
     </div>
   )
 }

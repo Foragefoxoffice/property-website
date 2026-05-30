@@ -48,7 +48,7 @@ export default function EnquiriesPage() {
                   'bg-gray-100 text-gray-600'
                 }`}>{enquiry.status || 'pending'}</span>
                 <span className="text-xs text-gray-400">
-                  {new Date(enquiry.createdAt).toLocaleDateString()}
+                  {new Date(enquiry.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
                 </span>
               </div>
               {enquiry.properties?.length > 0 && (

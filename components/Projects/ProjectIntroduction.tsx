@@ -41,6 +41,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
               {title}
             </h2>
             <div
+              suppressHydrationWarning
               className="
     text-[15px] md:text-[16px]
     leading-[1.8]
@@ -77,17 +78,19 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
         </div>
       </div>
 
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
   .project-intro-content ul {
     list-style-type: disc !important;
     padding-left: 24px !important;
     margin: 16px 0 !important;
+    list-style-position: outside !important;
   }
 
   .project-intro-content ol {
     list-style-type: decimal !important;
     padding-left: 24px !important;
     margin: 16px 0 !important;
+    list-style-position: outside !important;
   }
 
   .project-intro-content li {
@@ -98,7 +101,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
   .project-intro-content p {
     margin-bottom: 10px !important;
   }
-`}</style>
+` }} />
     </section>
   )
 }

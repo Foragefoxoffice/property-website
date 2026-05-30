@@ -948,7 +948,7 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
                       <span className="bg-purple-50 text-[#41398B] px-3 py-1 rounded-full font-semibold text-xs">
                         {categoryName}
                       </span>
-                      {blog.createdAt ? <span>{new Date(String(blog.createdAt)).toLocaleDateString()}</span> : null}
+                      {blog.createdAt ? <span>{new Date(String(blog.createdAt)).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span> : null}
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#41398B] transition-colors">{btitle}</h3>
                     {excerpt && <p className="text-gray-600 mb-4 text-sm flex-1 line-clamp-3">{excerpt}</p>}

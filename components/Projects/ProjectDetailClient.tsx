@@ -23,6 +23,9 @@ export default function ProjectDetailClient({ project }: { project: Record<strin
       {/* Project Introduction Section */}
       <ProjectIntroduction data={project} />
 
+      {/* Project Main Description Section (Table of Content) */}
+      <ProjectMainDescription projectData={project} />
+
       {/* Project Overview Section */}
       <ProjectOverview projectData={project} />
 
@@ -34,9 +37,6 @@ export default function ProjectDetailClient({ project }: { project: Record<strin
 
       {/* Project Products Section */}
       <ProjectProduct projectData={project} />
-
-      {/* Project Main Description Section */}
-      <ProjectMainDescription projectData={project} />
 
       {/* Project Video Section */}
       <ProjectVideo projectData={project} />

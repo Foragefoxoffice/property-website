@@ -103,7 +103,7 @@ function BlogPageInner({ pageData }: { pageData: PageData | null }) {
                             <span className="bg-purple-50 text-[#41398B] px-3 py-1 rounded-full font-semibold text-xs">
                               {blog.category?.name?.[lang] || blog.category?.name?.en || (language === 'en' ? 'News' : 'Tin tức')}
                             </span>
-                            {blog.createdAt && <span>{new Date(blog.createdAt).toLocaleDateString()}</span>}
+                            {blog.createdAt && <span>{new Date(blog.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>}
                           </div>
                           <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#41398B] transition-colors">{title}</h3>
                           {excerpt && <p className="text-gray-600 mb-4 text-sm flex-1 line-clamp-3">{excerpt}</p>}

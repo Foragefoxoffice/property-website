@@ -42,6 +42,7 @@ export default function ProjectProduct({ projectData }: any) {
                     </h2>
                     {sectionDes && (
                         <div
+                            suppressHydrationWarning
                             className="text-[#4b5563] text-[15px] md:text-[16px] leading-[1.8] project-product-rich-text"
                             style={{ 
                                 wordBreak: 'initial', 
@@ -86,6 +87,7 @@ export default function ProjectProduct({ projectData }: any) {
                                         {productTitle}
                                     </h3>
                                     <div
+                                        suppressHydrationWarning
                                         className="project-product-item-rich-text text-[#374151] text-[14.5px] md:text-[15.5px] leading-[1.7]"
                                         style={{ 
                                             wordBreak: 'initial', 

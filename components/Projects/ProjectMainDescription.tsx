@@ -9,22 +9,24 @@ export default function ProjectMainDescription({ projectData }: any) {
 
     if (!projectData) return null;
 
-    const mainDescription = projectData.projectMainDescription?.[language] || 
-                            projectData.projectMainDescription?.vi || 
-                            projectData.projectMainDescription?.en || "";
+    const mainDescription = projectData.projectMainDescription?.[language] ||
+        projectData.projectMainDescription?.vi ||
+        projectData.projectMainDescription?.en || "";
 
     if (!mainDescription) return null;
 
     return (
         <section className="py-12 bg-white ">
             <div className="max-w-4xl mx-auto px-6">
-                <div 
+                <div
+                    suppressHydrationWarning
                     className="main-description-rich-text text-[#374151] text-[16px] md:text-[17px] leading-[1.8] overflow-hidden"
                     dangerouslySetInnerHTML={{ __html: cleanHTML(mainDescription) }}
                 />
             </div>
 
-            <style>{`
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 .main-description-rich-text p {
                     margin-bottom: 1.5rem;
                 }
@@ -48,7 +50,7 @@ export default function ProjectMainDescription({ projectData }: any) {
                     margin-bottom: 0.5rem !important;
                     display: list-item !important;
                 }
-            `}</style>
+            ` }} />
         </section>
     );
 }

@@ -84,7 +84,7 @@ export default function BlogSidebar() {
                   <h4 className="font-bold text-gray-800 leading-snug mb-1 line-clamp-2 group-hover:text-[#41398B] transition-colors">
                     {post.title?.[language === 'en' ? 'en' : 'vi'] || post.title?.en}
                   </h4>
-                  {post.createdAt && <span className="text-xs text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</span>}
+                  {post.createdAt && <span className="text-xs text-gray-500">{new Date(post.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>}
                 </div>
               </Link>
             )})}
