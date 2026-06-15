@@ -35,7 +35,10 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     )
   }
 
-  const isActive = (path: string) => pathname.startsWith(path)
+  const isActive = (path: string) => {
+    const pathWithoutLang = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '')
+    return pathWithoutLang.startsWith(path)
+  }
 
   const navItems = [
     { href: '/user-dashboard/profile', icon: <User size={20} />, label: String((t as Record<string, string>).myProfile || 'My Profile') },
@@ -51,8 +54,8 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
             {navItems.map(({ href, icon, label }) => (
               <Link key={href} href={href}
                 className={`group flex items-center gap-3 px-2 py-2 rounded-full transition
-                  ${isActive(href) ? 'bg-[#41398B] text-white' : 'text-[#41398B] hover:bg-[#41398B] hover:text-white'}`}>
-                <span className="p-3 rounded-full bg-[#E8E8FF] text-[#41398B] group-hover:bg-white">{icon}</span>
+                  ${isActive(href) ? 'bg-[#41398B] text-white shadow-md' : 'text-[#41398B] hover:bg-[#41398B] hover:text-white'}`}>
+                <span className={`p-3 rounded-full text-[#41398B] transition ${isActive(href) ? 'bg-white' : 'bg-[#E8E8FF] group-hover:bg-white'}`}>{icon}</span>
                 <span className={`font-medium ${isActive(href) ? 'text-[#fff]' : 'hover:text-[#fff]'}`}>{label}</span>
               </Link>
             ))}

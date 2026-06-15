@@ -220,6 +220,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
     clearFavorites()
     toast.error(labels.loggedOut[language])
     setToken(null)
+    window.dispatchEvent(new Event('routeChangeStart'))
     router.push('/login')
   }
 
@@ -346,6 +347,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                     >
                       <button
                         onClick={() => {
+                          window.dispatchEvent(new Event('routeChangeStart'))
                           router.push('/dashboard/profile')
                           setShowLogout(false)
                         }}
@@ -703,7 +705,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
             {/* Favorites */}
             <Tooltip title={language === 'vi' ? 'Mục yêu thích' : 'Favorites'}>
               <button
-                onClick={() => router.push('/favorites')}
+                onClick={() => {
+                  window.dispatchEvent(new Event('routeChangeStart'))
+                  router.push('/favorites')
+                }}
                 className="relative p-2 rounded-full hover:bg-gray-100 transition-colors group"
                 title={language === 'vi' ? 'Mục yêu thích' : 'Favorites'}
               >
@@ -797,8 +802,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                         ? localStorage.getItem('userRole')
                         : null
                     if (role === 'user') {
+                      window.dispatchEvent(new Event('routeChangeStart'))
                       router.push('/user-dashboard')
                     } else {
+                      window.dispatchEvent(new Event('routeChangeStart'))
                       router.push('/dashboard/lease')
                     }
                   }}
@@ -831,8 +838,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                               ? localStorage.getItem('userRole')
                               : null
                           if (role === 'user') {
+                            window.dispatchEvent(new Event('routeChangeStart'))
                             router.push('/user-dashboard/profile')
                           } else {
+                            window.dispatchEvent(new Event('routeChangeStart'))
                             router.push('/dashboard/profile')
                           }
                           setShowLogout(false)
@@ -849,8 +858,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                               ? localStorage.getItem('userRole')
                               : null
                           if (role === 'user') {
+                            window.dispatchEvent(new Event('routeChangeStart'))
                             router.push('/user-dashboard')
                           } else {
+                            window.dispatchEvent(new Event('routeChangeStart'))
                             router.push('/favorites')
                           }
                           setShowLogout(false)
@@ -914,7 +925,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               <div className="flex-1 overflow-y-auto py-2 px-4 flex flex-col">
                 <div onClick={() => setIsMobileMenuOpen(false)} className="border-b border-gray-100">
                   <button
-                    onClick={() => router.push('/')}
+                    onClick={() => {
+                      window.dispatchEvent(new Event('routeChangeStart'))
+                      router.push('/')
+                    }}
                     className="flex items-center justify-between w-full py-4 text-[16px] font-medium text-gray-700 hover:text-[#41398B] transition-colors"
                   >
                     {labels.homepages[language]}
@@ -1009,6 +1023,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                       activeProjectMobile === category._id ? null : category._id
                                     )
                                   } else {
+                                    window.dispatchEvent(new Event('routeChangeStart'))
                                     router.push(`/projects?category=${category._id}`)
                                     setIsMobileMenuOpen(false)
                                   }
@@ -1042,6 +1057,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                       </div>
                                       <button
                                         onClick={() => {
+                                          window.dispatchEvent(new Event('routeChangeStart'))
                                           router.push(`/projects?category=${category._id}`)
                                           setIsMobileMenuOpen(false)
                                         }}
@@ -1062,6 +1078,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                           <button
                                             key={project._id}
                                             onClick={() => {
+                                              window.dispatchEvent(new Event('routeChangeStart'))
                                               router.push(`/projects/${slug}`)
                                               setIsMobileMenuOpen(false)
                                             }}
@@ -1124,6 +1141,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={() => {
+                        window.dispatchEvent(new Event('routeChangeStart'))
                         router.push('/login')
                         setIsMobileMenuOpen(false)
                       }}
