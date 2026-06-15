@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Select } from 'antd'
 import { SlidersHorizontal, Heart, Star, Quote, ChevronLeft, ChevronRight, Bed, Bath, Ruler, MapPin } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
@@ -160,6 +160,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
     if (filters.minPrice) params.set('minPrice', String(parseNumber(filters.minPrice)))
     if (filters.maxPrice) params.set('maxPrice', String(parseNumber(filters.maxPrice)))
 
+    window.dispatchEvent(new Event('routeChangeStart'))
     router.push(`/listing?${params.toString()}`)
   }
 
@@ -597,7 +598,14 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
                 <Link key={propId}
                   href={`/listing/${slug ? slug + '-' : ''}${id}`}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const targetHref = e.currentTarget.getAttribute('href');
+                    if (targetHref) {
+                      const langPrefix = window.location.pathname.split('/')[1] || 'vi';
+                      window.open(`/${langPrefix}/redirect?url=${encodeURIComponent(targetHref)}`, '_blank');
+                    }
+                  }}
                   className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 flex flex-col cursor-pointer border border-gray-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}
                   style={{ transitionDelay: `${200 + index * 100}ms` }}>
                   <div className="relative h-56 overflow-hidden">

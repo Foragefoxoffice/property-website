@@ -17,7 +17,7 @@ import { getImageUrl } from '@/utils/baseURL'
 import { createEnquiry, getAgent, getListingProperties, addFavorite as apiAddFavorite } from '@/lib/api'
 import { formatNumber, stripHtml } from '@/utils/display'
 import { toast } from 'react-toastify'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import Image from 'next/image'
 
 /* -------------------------------------------------------
@@ -168,7 +168,14 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
     <Link
       href={url}
       target="_blank"
-      rel="noopener noreferrer"
+      onClick={(e) => {
+        e.preventDefault();
+        const targetHref = e.currentTarget.getAttribute('href');
+        if (targetHref) {
+          const langPrefix = window.location.pathname.split('/')[1] || 'vi';
+          window.open(`/${langPrefix}/redirect?url=${encodeURIComponent(targetHref)}`, '_blank');
+        }
+      }}
       className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-all duration-300"
     >
       <div className="relative h-56 overflow-hidden">

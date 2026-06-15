@@ -1,5 +1,5 @@
 import { fetchProjectBySlug } from '@/lib/serverFetch'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProjectDetailClient from '@/components/Projects/ProjectDetailClient'

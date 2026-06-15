@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Heart, Trash2, Calendar, AlertTriangle } from 'lucide-react'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Skeleton } from 'antd'
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'

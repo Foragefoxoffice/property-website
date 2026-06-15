@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react'
 import { Calendar, Clock, Share2 } from 'lucide-react'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import BlogSidebar from './BlogSidebar'
 import { useLanguage } from '@/context/LanguageContext'
 

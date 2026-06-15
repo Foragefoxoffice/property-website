@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -65,9 +65,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
   const router = useRouter()
   const pathname = usePathname()
 
-  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
-    return null
-  }
+
   const [showLogout, setShowLogout] = useState(false)
   const [showPropertiesDropdown, setShowPropertiesDropdown] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -227,6 +225,10 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
 
   const initials = userName ? userName.slice(0, 2).toUpperCase() : 'US'
 
+
+  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
+    return null
+  }
 
   // Staff Header (no public navigation — showNavigation=false)
   if (!showNavigation) {
@@ -525,18 +527,20 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                           { label: labels.propertiesSale[language], path: '/listing?type=Sale', delay: 0.1 },
                           { label: labels.propertiesHomestay[language], path: '/listing?type=Home Stay', delay: 0.15 },
                         ].map((item, index) => (
-                          <motion.button
+                          <motion.div
                             key={index}
-                            onClick={() => router.push(item.path)}
                             initial={{ y: 11, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.5, delay: item.delay, ease: [0.5, 0, 0, 1] }}
-                            whileHover={{ backgroundColor: '#f8f7ff' }}
-                            className={`w-full cursor-pointer text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] font-semibold transition-colors ${index < 3 ? 'border-b border-gray-100' : ''
-                              }`}
+                            className={`w-full cursor-pointer ${index < 3 ? 'border-b border-gray-100' : ''}`}
                           >
-                            {item.label}
-                          </motion.button>
+                            <Link
+                              href={item.path}
+                              className="block w-full text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-semibold transition-colors"
+                            >
+                              {item.label}
+                            </Link>
+                          </motion.div>
                         ))}
                       </div>
                     </motion.div>
@@ -595,9 +599,9 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                               className="relative group/proj"
                               onMouseEnter={() => setActiveProject(category._id)}
                             >
-                              <button
+                              <Link
+                                href={`/projects?category=${category._id}`}
                                 onClick={() => {
-                                  router.push(`/projects?category=${category._id}`)
                                   setShowProjectDropdown(false)
                                 }}
                                 className={`w-full cursor-pointer text-left px-5 py-3 text-[15px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-semibold transition-colors flex items-center justify-between ${index < projectCategories.length - 1
@@ -609,7 +613,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                 {projectsInCategory.length > 0 && (
                                   <ChevronDown className="w-4 h-4 -rotate-90 text-gray-400 group-hover/proj:text-[#41398B]" />
                                 )}
-                              </button>
+                              </Link>
 
                               <AnimatePresence>
                                 {activeProject === category._id &&
@@ -623,17 +627,17 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                       <div className="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 bg-gray-50/30">
                                         {labels.generalInformation[language]}
                                       </div>
-                                      <button
+                                      <Link
+                                        href={`/projects?category=${category._id}`}
                                         onClick={(e) => {
                                           e.stopPropagation()
-                                          router.push(`/projects?category=${category._id}`)
                                           setShowProjectDropdown(false)
                                         }}
-                                        className="w-full cursor-pointer text-left px-5 py-3 text-[14px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-medium transition-colors border-b border-gray-100"
+                                        className="block w-full cursor-pointer text-left px-5 py-3 text-[14px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-medium transition-colors border-b border-gray-100"
                                       >
                                         {labels.viewAllIn[language]}{' '}
                                         {getLocalizedValue(category.name)}
-                                      </button>
+                                      </Link>
                                       {projectsInCategory.map((project, pIdx) => {
                                         const slug =
                                           typeof project.slug === 'string'
@@ -643,20 +647,20 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
                                             project.slug?.vi ||
                                             project._id
                                         return (
-                                          <button
+                                          <Link
                                             key={project._id}
+                                            href={`/projects/${slug}`}
                                             onClick={(e) => {
                                               e.stopPropagation()
-                                              router.push(`/projects/${slug}`)
                                               setShowProjectDropdown(false)
                                             }}
-                                            className={`w-full cursor-pointer text-left px-5 py-3 text-[14px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-medium transition-colors ${pIdx < projectsInCategory.length - 1
+                                            className={`block w-full cursor-pointer text-left px-5 py-3 text-[14px] text-[#2a2a2a] hover:text-[#41398B] hover:bg-[#f8f7ff] font-medium transition-colors ${pIdx < projectsInCategory.length - 1
                                               ? 'border-b border-gray-100'
                                               : ''
                                               }`}
                                           >
                                             {getLocalizedValue(project.title)}
-                                          </button>
+                                          </Link>
                                         )
                                       })}
                                     </motion.div>

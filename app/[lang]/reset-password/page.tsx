@@ -3,7 +3,7 @@
 import React, { useState, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Mail, Lock, Key, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { resetPassword } from '@/lib/api'
 import { useLanguage } from '@/context/LanguageContext'

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Mail, Loader2 } from 'lucide-react'
 import { forgotPassword } from '@/lib/api'
 import { useLanguage } from '@/context/LanguageContext'

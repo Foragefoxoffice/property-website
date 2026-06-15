@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { usePathname } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
@@ -34,9 +34,7 @@ interface FooterData {
 export default function PublicFooter() {
   const pathname = usePathname()
 
-  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
-    return null
-  }
+
 
   const { language: langRaw } = useLanguage()
   const language = langRaw as 'en' | 'vi'
@@ -98,6 +96,10 @@ export default function PublicFooter() {
     return staticTranslations[key]?.[language] || staticTranslations[key]?.en || ''
   }
 
+
+  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
+    return null
+  }
 
   return (
     <footer className="bg-[#161616] text-white pt-12 md:pt-16 pb-8">

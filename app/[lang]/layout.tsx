@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 export const dynamic = 'force-dynamic'
 
 import { Manrope } from 'next/font/google'
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 import './globals.css'
 
 import Providers from '@/components/Providers'
@@ -48,11 +49,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
+  params: { lang },
 }: {
   children: React.ReactNode
+  params: { lang: string }
 }) {
   return (
-    <html lang="en" className={manrope.variable} suppressHydrationWarning>
+    <html lang={lang} className={manrope.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://api.183housingsolutions.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.183housingsolutions.com" />
@@ -77,6 +80,8 @@ export default function RootLayout({
             </div>
           </RouteLoader>
         </Providers>
+        <GoogleAnalytics gaId="G-K0V8QGX8QL" />
+        <GoogleTagManager gtmId="GTM-5GZN5S6C" />
       </body>
     </html>
   )

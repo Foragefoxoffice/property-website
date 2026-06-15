@@ -3,7 +3,7 @@
 import React, { useState, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Mail, Lock, Eye, EyeOff, Loader2, X } from 'lucide-react'
 import { loginUser } from '@/lib/api'
 import { toast } from 'react-toastify'
@@ -54,7 +54,7 @@ function LoginForm() {
           await refreshPermissions()
           await fetchFavorites()
           toast.success(t.loginSuccess)
-          router.push('/')
+          router.push(`/${language}`)
         } else {
           setError(t.staffLoginError || 'Please login via the Staff Login button below.')
         }

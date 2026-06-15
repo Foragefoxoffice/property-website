@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Heart, User, MessageSquare } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useFavorites } from '@/context/FavoritesContext'

@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client'
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import Link from '@/components/LanguageLink';
 import { getProjectPage, getAllProjectsAdmin } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
@@ -110,7 +110,14 @@ export default function RelatedProjects({ currentCategoryId, currentProjectId, c
                                 <Link
                                     href={`/projects/${slugVal}`}
                                     target="_blank"
-                                    rel="noopener noreferrer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        const targetHref = e.currentTarget.getAttribute('href');
+                                        if (targetHref) {
+                                            const langPrefix = window.location.pathname.split('/')[1] || 'vi';
+                                            window.open(`/${langPrefix}/redirect?url=${encodeURIComponent(targetHref)}`, '_blank');
+                                        }
+                                    }}
                                     key={project._id}
                                     className="group flex flex-col h-full bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 overflow-hidden"
                                 >

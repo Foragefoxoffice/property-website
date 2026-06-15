@@ -30,7 +30,6 @@ function LoaderContent() {
 
     // 2. Handle anchor clicks (covers most navigations)
     const handleAnchorClick = (event: MouseEvent) => {
-      if (event.defaultPrevented) return
       const target = event.target as HTMLElement
       const anchor = target.closest('a')
 
@@ -45,13 +44,13 @@ function LoaderContent() {
       }
     }
 
-    document.addEventListener('click', handleAnchorClick)
+    document.addEventListener('click', handleAnchorClick, { capture: true })
 
     // Safety timeout: If navigation takes > 10 seconds, hide loader
     const timeout = setTimeout(() => setIsNavigating(false), 10000);
 
     return () => {
-      document.removeEventListener('click', handleAnchorClick)
+      document.removeEventListener('click', handleAnchorClick, { capture: true })
       window.removeEventListener('error', handleChunkError, true);
       window.removeEventListener('unhandledrejection', handleChunkError);
       clearTimeout(timeout);

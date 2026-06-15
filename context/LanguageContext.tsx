@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 
 interface LanguageContextValue {
   language: string
@@ -13,25 +14,32 @@ const LanguageContext = createContext<LanguageContextValue>({
 })
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [language, setLanguage] = useState<string>('vi')
-  const [isReady, setIsReady] = useState(false)
-
-  useEffect(() => {
-    const saved = localStorage.getItem('language')
-    if (saved) setLanguage(saved)
-    setIsReady(true)
-  }, [])
+  const router = useRouter()
+  const pathname = usePathname() || ''
+  
+  const urlLang = pathname.split('/')[1]
+  const isLocale = urlLang === 'en' || urlLang === 'vi'
+  const language = isLocale ? urlLang : 'vi'
 
   const toggleLanguage = (lang: string) => {
-    setLanguage(lang)
     if (typeof window !== 'undefined') {
       localStorage.setItem('language', lang)
+      document.cookie = `language=${lang}; path=/; max-age=31536000`
+    }
+    
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('routeChangeStart'));
+    }
+    
+    if (isLocale) {
+      const newPathname = pathname.replace(`/${urlLang}`, `/${lang}`)
+      router.push(newPathname)
+    } else {
+      router.push(`/${lang}${pathname}`)
     }
   }
 
-  // Don't render children until we've read localStorage
-  // This prevents the visible language flicker on refresh
-  if (!isReady) return null
+
 
   return (
     <LanguageContext.Provider value={{ language, toggleLanguage }}>

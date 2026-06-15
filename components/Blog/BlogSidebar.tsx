@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { useRouter, useSearchParams } from 'next/navigation'
 import axios from 'axios'
 import { useLanguage } from '@/context/LanguageContext'

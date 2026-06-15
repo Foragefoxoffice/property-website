@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import BlogBanner from './BlogBanner'
 import BlogSidebar from './BlogSidebar'
 import { useLanguage } from '@/context/LanguageContext'

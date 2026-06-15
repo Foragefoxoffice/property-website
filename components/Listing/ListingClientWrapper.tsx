@@ -17,7 +17,7 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { translations } from '@/language/translations'
 import { formatNumber, stripHtml } from '@/utils/display'
 import { getAssetBaseURL } from '@/utils/baseURL'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import Image from 'next/image'
 
 const BASE = getAssetBaseURL()
@@ -167,7 +167,14 @@ function PropertyCard({
     <Link
       href={url}
       target="_blank"
-      rel="noopener noreferrer"
+      onClick={(e) => {
+        e.preventDefault();
+        const targetHref = e.currentTarget.getAttribute('href');
+        if (targetHref) {
+          const langPrefix = window.location.pathname.split('/')[1] || 'vi';
+          window.open(`/${langPrefix}/redirect?url=${encodeURIComponent(targetHref)}`, '_blank');
+        }
+      }}
       className="card-house style-default hover-image group bg-white rounded-2xl shadow-sm overflow-hidden transition-all duration-500 cursor-pointer flex flex-col h-full border border-gray-100"
     >
       {/* Image */}

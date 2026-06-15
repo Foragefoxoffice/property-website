@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { useLanguage } from '@/context/LanguageContext'
 
 import { getAssetBaseURL } from '@/utils/baseURL'

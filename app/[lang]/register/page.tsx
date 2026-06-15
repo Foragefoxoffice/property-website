@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/LanguageLink'
 import { Mail, Lock, Eye, EyeOff, Loader2, User, Phone } from 'lucide-react'
 import { userRegisterApi } from '@/lib/api'
 import { toast } from 'react-toastify'
