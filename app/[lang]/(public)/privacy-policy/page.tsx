@@ -3,15 +3,28 @@ import PrivacyPolicyBanner from '@/components/PrivacyPolicy/PrivacyPolicyBanner'
 import PrivacyPolicyContent from '@/components/PrivacyPolicy/PrivacyPolicyContent'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/privacy-policy`
   try {
+
     const res = await fetchPrivacyPolicy()
     const data = (res.data as any) || {}
     return {
       title: data.privacyPolicySeoMetaTitle_en || 'Privacy Policy | 183 Housing Solutions',
       description: data.privacyPolicySeoMetaDescription_en || 'Privacy policy for 183 Housing Solutions — how we handle your data.',
       alternates: {
-        canonical: data.privacyPolicySeoCanonicalUrl_en || 'https://183housingsolutions.com/privacy-policy',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/privacy-policy`,
+          'vi': `${siteUrl}/vi/privacy-policy`,
+          'x-default': `${siteUrl}/vi/privacy-policy`,
+        },
       },
       robots: {
         index: data.privacyPolicySeoAllowIndexing !== false,
@@ -28,7 +41,12 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Privacy Policy | 183 Housing Solutions',
       description: 'Privacy policy for 183 Housing Solutions — how we handle your data.',
       alternates: {
-        canonical: 'https://183housingsolutions.com/privacy-policy',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/privacy-policy`,
+          'vi': `${siteUrl}/vi/privacy-policy`,
+          'x-default': `${siteUrl}/vi/privacy-policy`,
+        },
       },
       robots: {
         index: true,

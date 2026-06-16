@@ -45,7 +45,7 @@ export default function ProjectVideo({ projectData }: any) {
     };
 
     return (
-        <section className="py-16 bg-white ">
+        <section id="video" className="py-16 bg-white ">
             <div className="max-w-[1550px] mx-auto px-6 lg:px-24">
                 {/* Section Title */}
                 <h2 className="text-xl md:text-2xl font-bold text-[#111827] mb-12 text-center uppercase tracking-[0.05em]">

@@ -7,10 +7,14 @@ import { stripHtml, safeVal } from '@/utils/display'
 
 export const revalidate = 300
 
-interface Props { params: { slug: string } }
+interface Props { params: { lang: string, slug: string } }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/blogs/${params.slug}`
   try {
+
     const res = await fetchBlogBySlug(params.slug)
     const b = (res.data as Record<string, any>) || {}
     
@@ -25,7 +29,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} | 183 Housing Solutions`,
       description,
       alternates: {
-        canonical: String(safeVal(b.canonicalUrl) || `https://183housingsolutions.com/blogs/${params.slug}`),
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/blogs/${params.slug}`,
+          'vi': `${siteUrl}/vi/blogs/${params.slug}`,
+          'x-default': `${siteUrl}/vi/blogs/${params.slug}`,
+        },
       },
       robots: {
         index: b.allowIndexing !== false,
@@ -49,7 +58,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     console.error('Blog metadata error:', error)
     return { 
       title: 'Blog | 183 Housing Solutions',
-      alternates: { canonical: `https://183housingsolutions.com/blogs/${params.slug}` },
+      alternates: { 
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/blogs/${params.slug}`,
+          'vi': `${siteUrl}/vi/blogs/${params.slug}`,
+          'x-default': `${siteUrl}/vi/blogs/${params.slug}`,
+        }
+      },
       robots: { index: true, follow: true }
     }
   }

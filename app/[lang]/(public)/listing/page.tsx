@@ -2,16 +2,31 @@ import ListingClientWrapper from '@/components/Listing/ListingClientWrapper'
 import { fetchListingProperties } from '@/lib/serverFetch'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Property Listings | 183 Housing Solutions',
-  description: 'Browse all available properties for lease, sale, and home stay in Vietnam.',
-  alternates: {
-    canonical: 'https://183housingsolutions.com/listing',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const lang = params.lang || 'vi'
+  const siteUrl = 'https://183housingsolutions.com'
+  const currentCanonical = `${siteUrl}/${lang}/listing`
+
+  return {
+    title: 'Property Listings | 183 Housing Solutions',
+    description: 'Browse all available properties for lease, sale, and home stay in Vietnam.',
+    alternates: {
+      canonical: currentCanonical,
+      languages: {
+        'en': `${siteUrl}/en/listing`,
+        'vi': `${siteUrl}/vi/listing`,
+        'x-default': `${siteUrl}/vi/listing`,
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  }
 }
 
 export default async function ListingPage({

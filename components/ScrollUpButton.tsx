@@ -30,7 +30,7 @@ export default function ScrollUpButton() {
   if (shouldHide) return null
 
   return (
-    <div className="fixed bottom-24 md:bottom-8 right-6 md:right-5 z-50">
+    <div className="fixed bottom-24 md:bottom-4 right-6 md:right-5 z-50">
       <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         aria-label="Scroll to top"
         className={`p-3 rounded-full bg-[#41398B] cursor-pointer text-white shadow-lg transition-all duration-300 hover:bg-[#352e7a] hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#41398B] focus:ring-offset-2 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>

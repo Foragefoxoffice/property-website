@@ -9,10 +9,14 @@ import { stripHtml, safeVal } from '@/utils/display'
 
 export const revalidate = 300
 
-interface Props { params: { slug: string } }
+interface Props { params: { lang: string, slug: string } }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/projects/${params.slug}`
   try {
+
     const res = await fetchProjectBySlug(params.slug)
     const p = (res.data as Record<string, any>) || {}
     
@@ -27,7 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} | 183 Housing Solutions`,
       description,
       alternates: {
-        canonical: String(safeVal(p.projectSeoCanonicalUrl) || `https://183housingsolutions.com/projects/${params.slug}`),
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/projects/${params.slug}`,
+          'vi': `${siteUrl}/vi/projects/${params.slug}`,
+          'x-default': `${siteUrl}/vi/projects/${params.slug}`,
+        },
       },
       robots: {
         index: p.projectSeoAllowIndexing !== false,
@@ -51,7 +60,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     console.error('Project metadata error:', error)
     return { 
       title: 'Project | 183 Housing Solutions',
-      alternates: { canonical: `https://183housingsolutions.com/projects/${params.slug}` },
+      alternates: { 
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/projects/${params.slug}`,
+          'vi': `${siteUrl}/vi/projects/${params.slug}`,
+          'x-default': `${siteUrl}/vi/projects/${params.slug}`,
+        }
+      },
       robots: { index: true, follow: true }
     }
   }

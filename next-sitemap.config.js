@@ -31,6 +31,8 @@ module.exports = {
 
             const paths = []
 
+            const locales = ['en', 'vi']
+
             const staticPages = [
                 '/',
                 '/about',
@@ -38,10 +40,15 @@ module.exports = {
                 '/blogs',
                 '/listing',
                 '/contact',
+                '/privacy-policy',
+                '/terms-conditions',
             ]
 
             for (const page of staticPages) {
-                paths.push(await config.transform(config, page))
+                for (const locale of locales) {
+                    const path = page === '/' ? `/${locale}` : `/${locale}${page}`
+                    paths.push(await config.transform(config, path))
+                }
             }
 
             // Properties
@@ -77,12 +84,14 @@ module.exports = {
 
                     if (!propertyId || !slug) continue
 
-                    paths.push(
-                        await config.transform(
-                            config,
-                            `/property-showcase/${propertyId}/${slug}`
+                    for (const locale of locales) {
+                        paths.push(
+                            await config.transform(
+                                config,
+                                `/${locale}/listing/${slug}-${propertyId}`
+                            )
                         )
-                    )
+                    }
                 }
 
             } else {
@@ -120,12 +129,14 @@ module.exports = {
 
                     if (!slug) continue
 
-                    paths.push(
-                        await config.transform(
-                            config,
-                            `/projects/${slug}`
+                    for (const locale of locales) {
+                        paths.push(
+                            await config.transform(
+                                config,
+                                `/${locale}/projects/${slug}`
+                            )
                         )
-                    )
+                    }
                 }
 
             } else {
@@ -163,12 +174,14 @@ module.exports = {
 
                     if (!slug) continue
 
-                    paths.push(
-                        await config.transform(
-                            config,
-                            `/blogs/${slug}`
+                    for (const locale of locales) {
+                        paths.push(
+                            await config.transform(
+                                config,
+                                `/${locale}/blogs/${slug}`
+                            )
                         )
-                    )
+                    }
                 }
 
             } else {

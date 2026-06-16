@@ -8,43 +8,39 @@ import ProjectOverview from './ProjectOverview'
 import ProjectLocation from './ProjectLocation'
 import ProjectPhotos from './ProjectPhotos'
 import ProjectProduct from './ProjectProduct'
-import ProjectMainDescription from './ProjectMainDescription'
+// import ProjectMainDescription from './ProjectMainDescription'
 import ProjectVideo from './ProjectVideo'
 import RelatedProjects from './RelatedProjects'
+import ProjectTOC from './ProjectTOC'
 
 export default function ProjectDetailClient({ project }: { project: Record<string, unknown> }) {
   if (!project) return null
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Main Project Banner */}
+      {/* Project Banner needs to stay outside to span full width initially if it does */}
       <ProjectBanner data={project} />
 
-      {/* Project Introduction Section */}
-      <ProjectIntroduction data={project} />
+      <ProjectTOC project={project} />
 
-      {/* Project Main Description Section (Table of Content) */}
-      <ProjectMainDescription projectData={project} />
+      <div className="relative pt-8 pb-16">
 
-      {/* Project Overview Section */}
-      <ProjectOverview projectData={project} />
-
-      {/* Project Location Section */}
-      <ProjectLocation projectData={project} />
-
-      {/* Project Photos Gallery Section */}
-      <ProjectPhotos projectData={project} />
-
-      {/* Project Products Section */}
-      <ProjectProduct projectData={project} />
-
-      {/* Project Video Section */}
-      <ProjectVideo projectData={project} />
+        {/* Main Content */}
+        <div className="w-full">
+          <ProjectIntroduction data={project} />
+          {/* <ProjectMainDescription projectData={project} /> */}
+          <ProjectOverview projectData={project} />
+          <ProjectLocation projectData={project} />
+          <ProjectPhotos projectData={project} />
+          <ProjectProduct projectData={project} />
+          <ProjectVideo projectData={project} />
+        </div>
+      </div>
 
       {/* Related Projects Section */}
-      <RelatedProjects 
-        currentCategoryId={(project?.category as any)?._id || project?.category} 
-        currentProjectId={project?._id} 
+      <RelatedProjects
+        currentCategoryId={(project?.category as any)?._id || project?.category}
+        currentProjectId={project?._id}
         currentProjectData={project}
       />
     </div>

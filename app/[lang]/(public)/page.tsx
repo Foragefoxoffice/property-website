@@ -2,8 +2,16 @@ import { fetchHomeCms, fetchListingProperties } from '@/lib/serverFetch'
 import HomePageClient from '@/components/Home/HomePageClient'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}`
   try {
+    
     const res = await fetchHomeCms()
     const data = (res.data as any) || {}
 
@@ -13,7 +21,12 @@ export async function generateMetadata(): Promise<Metadata> {
         data.homeSeoMetaDescription_en ||
         'Browse properties for lease, sale, and home stay in Vietnam.',
       alternates: {
-        canonical: data.homeSeoCanonicalUrl_en || 'https://183housingsolutions.com',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en`,
+          'vi': `${siteUrl}/vi`,
+          'x-default': `${siteUrl}/vi`,
+        },
       },
       robots: {
         index: data.homeSeoAllowIndexing !== false,
@@ -33,7 +46,12 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Browse properties for lease, sale, and home stay in Vietnam.',
       alternates: {
-        canonical: 'https://183housingsolutions.com',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en`,
+          'vi': `${siteUrl}/vi`,
+          'x-default': `${siteUrl}/vi`,
+        },
       },
       robots: {
         index: true,

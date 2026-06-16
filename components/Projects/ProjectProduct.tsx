@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { getProjectPage } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
+import { processRichText } from '@/utils/display';
 import Image from 'next/image';
-const cleanHTML = (html: string) => html ? html.replace(/&nbsp;/g, ' ') : '';
 
 export default function ProjectProduct({ projectData }: any) {
     const { language } = useLanguage();
@@ -34,7 +34,7 @@ export default function ProjectProduct({ projectData }: any) {
     if (products.length === 0) return null;
 
     return (
-        <section className="py-16 bg-gray-50 ">
+        <section id="products" className="py-16 bg-gray-50 ">
             <div className="max-w-[1550px] mx-auto px-6 lg:px-24">
                 {/* Section Title & Intro */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
@@ -53,7 +53,7 @@ export default function ProjectProduct({ projectData }: any) {
                                 display: 'block',
                                 width: '100%'
                             }}
-                            dangerouslySetInnerHTML={{ __html: cleanHTML(sectionDes) }}
+                            dangerouslySetInnerHTML={{ __html: processRichText(sectionDes) }}
                         />
                     )}
                 </div>
@@ -100,7 +100,7 @@ export default function ProjectProduct({ projectData }: any) {
                                             display: 'block',
                                             width: '100%'
                                         }}
-                                        dangerouslySetInnerHTML={{ __html: cleanHTML(productDes) }}
+                                        dangerouslySetInnerHTML={{ __html: processRichText(productDes) }}
                                     />
                                 </div>
                             </div>
@@ -109,7 +109,8 @@ export default function ProjectProduct({ projectData }: any) {
                 </div>
             </div>
 
-            <style>{`
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 .project-product-rich-text p {
                     margin-bottom: 1rem;
                 }
@@ -147,7 +148,7 @@ export default function ProjectProduct({ projectData }: any) {
                     font-weight: bold;
                     font-style: normal;
                 }
-            `}</style>
+            `}} />
         </section>
     );
 }

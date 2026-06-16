@@ -4,8 +4,16 @@ import ContactForm from '@/components/Contact/ContactForm'
 import ContactMap from '@/components/Contact/ContactMap'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/contact`
   try {
+
     const res = await fetchContactCms()
     const data = (res.data as any) || {}
 
@@ -15,7 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
         data.contactSeoMetaDescription_en ||
         'Get in touch with the 183 Housing Solutions team.',
       alternates: {
-        canonical: data.contactSeoCanonicalUrl_en || 'https://183housingsolutions.com/contact',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/contact`,
+          'vi': `${siteUrl}/vi/contact`,
+          'x-default': `${siteUrl}/vi/contact`,
+        },
       },
       robots: {
         index: data.contactSeoAllowIndexing !== false,
@@ -35,7 +48,12 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Get in touch with the 183 Housing Solutions team.',
       alternates: {
-        canonical: 'https://183housingsolutions.com/contact',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/contact`,
+          'vi': `${siteUrl}/vi/contact`,
+          'x-default': `${siteUrl}/vi/contact`,
+        },
       },
       robots: {
         index: true,

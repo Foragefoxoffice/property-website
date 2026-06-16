@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { getProjectPage } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
+import { processRichText } from '@/utils/display';
 import { Carousel, ConfigProvider } from 'antd';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
@@ -71,16 +72,14 @@ export default function ProjectOverview({ projectData }: any) {
     const activeImage = overviewImages[activeImageIndex];
 
     return (
-        <section className="py-10 bg-white ">
+        <section id="overview" className="py-10 bg-white ">
             <div className="max-w-[1500px] mx-auto px-6">
-                <div className="flex flex-col gap-12 lg:gap-6 items-center">
+                <h2 className="text-2xl md:text-[28px] font-bold text-[#111827] mb-8 lg:mb-10 text-center uppercase tracking-tight leading-tight">
+                    {displayTitle}
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start items-center">
                     {/* Left: Featured Image Slider */}
-                    <div className="w-full lg:w-[85%] flex flex-col group">
-                        {/* Section Title */}
-                        <h2 className="text-2xl md:text-2xl font-bold text-[#111827] mb-7 text-center lg:text-center uppercase tracking-tight leading-tight">
-                            {displayTitle}
-                        </h2>
-
+                    <div className="lg:col-span-7 flex flex-col group">
                         {overviewImages.length > 0 ? (
                             <div className="relative flex-grow rounded-2xl overflow-hidden shadow-lg bg-gray-50 aspect-[16/8]">
                                 <ConfigProvider
@@ -108,7 +107,7 @@ export default function ProjectOverview({ projectData }: any) {
                                         className="h-full"
                                     >
                                         {overviewImages.map((image, idx) => (
-                                            <div key={idx} className="h-full relative overflow-hidden">
+                                            <div key={idx} className="relative overflow-hidden aspect-[16/8] w-full">
                                                 <Image
                                                     src={getImageUrl(image.url)}
                                                     alt={`${projectTitle} - ${idx + 1}`}
@@ -130,14 +129,14 @@ export default function ProjectOverview({ projectData }: any) {
                         )}
 
                         {activeImage?.description?.[language] && (
-                            <p className="mt-5 text-center lg:text-center text-[#41398B] font-bold text-base md:text-lg tracking-wide">
+                            <p className="mt-5 text-center text-[#41398B] font-bold text-base md:text-lg tracking-wide">
                                 {activeImage.description[language]}
                             </p>
                         )}
                     </div>
 
                     {/* Right: Overview Table/Specs */}
-                    <div className="w-full lg:w-[85%] flex flex-col pt-10 lg:pt-[30px]">
+                    <div className="lg:col-span-5 flex flex-col pt-10 lg:pt-0">
                         <div className="divide-y divide-gray-100 border-t border-gray-100 flex-grow">
                             {overviewTable.length > 0 ? (
                                 overviewTable.map((row, index) => {
@@ -161,7 +160,7 @@ export default function ProjectOverview({ projectData }: any) {
                                                 <div
                                                     suppressHydrationWarning
                                                     className={`text-[14px] md:text-[15.5px] leading-[1.6] font-semibold project-overview-rich-text overflow-hidden ${isEmphasized ? 'text-rose-500 underline decoration-rose-200 decoration-2 underline-offset-4' : 'text-slate-600'}`}
-                                                    dangerouslySetInnerHTML={{ __html: cleanHTML(des) }}
+                                                    dangerouslySetInnerHTML={{ __html: processRichText(cleanHTML(des)) }}
                                                 />
                                             </div>
                                         </div>

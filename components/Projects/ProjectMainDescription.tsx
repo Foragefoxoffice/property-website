@@ -2,7 +2,7 @@
 'use client'
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-const cleanHTML = (html: string) => html ? html.replace(/&nbsp;/g, ' ') : '';
+import { processRichText } from '@/utils/display';
 
 export default function ProjectMainDescription({ projectData }: any) {
     const { language } = useLanguage();
@@ -16,12 +16,12 @@ export default function ProjectMainDescription({ projectData }: any) {
     if (!mainDescription) return null;
 
     return (
-        <section className="py-12 bg-white ">
+        <section id="main-description" className="py-12 bg-white ">
             <div className="max-w-4xl mx-auto px-6">
                 <div
                     suppressHydrationWarning
                     className="main-description-rich-text text-[#374151] text-[16px] md:text-[17px] leading-[1.8] overflow-hidden"
-                    dangerouslySetInnerHTML={{ __html: cleanHTML(mainDescription) }}
+                    dangerouslySetInnerHTML={{ __html: processRichText(mainDescription) }}
                 />
             </div>
 

@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { getProjectPage } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
+import { processRichText } from '@/utils/display';
 import Image from 'next/image';
-const cleanHTML = (html: string) => html ? html.replace(/&nbsp;/g, ' ') : '';
 
 export default function ProjectLocation({ projectData }: any) {
     const { language } = useLanguage();
@@ -40,7 +40,7 @@ export default function ProjectLocation({ projectData }: any) {
     const subLocationImages = locationImages.slice(1);
 
     return (
-        <section className="py-20 bg-[#F5F5F5] ">
+        <section id="location" className="py-20 bg-[#F5F5F5] ">
             <div className="max-w-[1550px] mx-auto px-6 lg:px-24">
                 {/* Section Title */}
                 <h2 className="text-xl md:text-2xl font-bold text-[#111827] mb-16 text-center uppercase tracking-[0.05em]">
@@ -61,7 +61,7 @@ export default function ProjectLocation({ projectData }: any) {
                                 display: 'block',
                                 width: '100%'
                             }}
-                            dangerouslySetInnerHTML={{ __html: cleanHTML(locationDes) }}
+                            dangerouslySetInnerHTML={{ __html: processRichText(locationDes) }}
                         />
                     </div>
 

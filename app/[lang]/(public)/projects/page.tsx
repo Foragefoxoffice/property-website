@@ -2,15 +2,28 @@ import { fetchAllProjects, fetchProjectCategories, fetchProjectPage } from '@/li
 import ProjectPageClient from '@/components/Projects/ProjectPageClient'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/projects`
   try {
+
     const res = await fetchProjectPage()
     const data = (res.data as any) || {}
     return {
       title: data.projectSeoMetaTitle_en || 'Projects | 183 Housing Solutions',
       description: data.projectSeoMetaDescription_en || 'Explore real estate development projects by 183 Housing Solutions in Vietnam.',
       alternates: {
-        canonical: data.projectSeoCanonicalUrl_en || 'https://183housingsolutions.com/projects',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/projects`,
+          'vi': `${siteUrl}/vi/projects`,
+          'x-default': `${siteUrl}/vi/projects`,
+        },
       },
       robots: {
         index: data.projectSeoAllowIndexing !== false,
@@ -27,7 +40,12 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Projects | 183 Housing Solutions',
       description: 'Explore real estate development projects by 183 Housing Solutions in Vietnam.',
       alternates: {
-        canonical: 'https://183housingsolutions.com/projects',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/projects`,
+          'vi': `${siteUrl}/vi/projects`,
+          'x-default': `${siteUrl}/vi/projects`,
+        },
       },
       robots: {
         index: true,

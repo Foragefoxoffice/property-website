@@ -5,12 +5,13 @@ import { getImageUrl } from '@/utils/baseURL'
 import { stripHtml, safeVal } from '@/utils/display'
 
 interface PageProps {
-  params: { slug: string[] }
+  params: { lang: string, slug: string[] }
 }
 
 export const revalidate = 300
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
   try {
     const slugArray = params.slug || []
     const lastSegment = slugArray[slugArray.length - 1] || ''
@@ -40,13 +41,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     
     // Determine the ideal canonical URL
     const canonicalSlug = safeVal(seo.slugUrl) || 'property'
-    const idealCanonicalUrl = `${siteUrl}/listing/${canonicalSlug}-${propertyId}`
+    const idealCanonicalUrl = `${siteUrl}/${lang}/listing/${canonicalSlug}-${propertyId}`
+    
+    const enCanonicalUrl = `${siteUrl}/en/listing/${canonicalSlug}-${propertyId}`
+    const viCanonicalUrl = `${siteUrl}/vi/listing/${canonicalSlug}-${propertyId}`
 
     return {
       title: `${title} | 183 Housing Solutions`,
       description,
       alternates: {
         canonical: idealCanonicalUrl,
+        languages: {
+          'en': enCanonicalUrl,
+          'vi': viCanonicalUrl,
+          'x-default': viCanonicalUrl,
+        },
       },
       robots: {
         index: seo.allowIndexing !== false,
@@ -71,11 +80,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     console.error('Metadata generation error:', error)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
     const slugArray = params.slug || []
-    const fbUrl = `${siteUrl}/listing/${slugArray.join('/')}`
+    const fbUrl = `${siteUrl}/${lang}/listing/${slugArray.join('/')}`
+    const enFbUrl = `${siteUrl}/en/listing/${slugArray.join('/')}`
+    const viFbUrl = `${siteUrl}/vi/listing/${slugArray.join('/')}`
     return {
       title: 'Property | 183 Housing Solutions',
       description: 'Real estate listings in Vietnam',
-      alternates: { canonical: fbUrl },
+      alternates: { 
+        canonical: fbUrl,
+        languages: {
+          'en': enFbUrl,
+          'vi': viFbUrl,
+          'x-default': viFbUrl,
+        }
+      },
       robots: { index: true, follow: true }
     }
   }

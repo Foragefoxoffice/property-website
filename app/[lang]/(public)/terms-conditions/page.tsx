@@ -3,15 +3,28 @@ import TermsConditionBanner from '@/components/TermsConditions/TermsConditionBan
 import TermsConditionContent from '@/components/TermsConditions/TermsConditionContent'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/terms-conditions`
   try {
+
     const res = await fetchTermsConditions()
     const data = (res.data as any) || {}
     return {
       title: data.termsConditionSeoMetaTitle_en || 'Terms & Conditions | 183 Housing Solutions',
       description: data.termsConditionSeoMetaDescription_en || 'Terms and conditions for using 183 Housing Solutions services.',
       alternates: {
-        canonical: data.termsConditionSeoCanonicalUrl_en || 'https://183housingsolutions.com/terms-conditions',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/terms-conditions`,
+          'vi': `${siteUrl}/vi/terms-conditions`,
+          'x-default': `${siteUrl}/vi/terms-conditions`,
+        },
       },
       robots: {
         index: data.termsConditionSeoAllowIndexing !== false,
@@ -28,7 +41,12 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Terms & Conditions | 183 Housing Solutions',
       description: 'Terms and conditions for using 183 Housing Solutions services.',
       alternates: {
-        canonical: 'https://183housingsolutions.com/terms-conditions',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/terms-conditions`,
+          'vi': `${siteUrl}/vi/terms-conditions`,
+          'x-default': `${siteUrl}/vi/terms-conditions`,
+        },
       },
       robots: {
         index: true,

@@ -21,7 +21,7 @@ const FloatingContactButtons = () => {
     if (shouldHide) return
     getAgent()
       .then(r => { if (r.data?.success) setAgentData(r.data.data) })
-      .catch(() => {})
+      .catch(() => { })
   }, [shouldHide])
 
   if (shouldHide || !agentData) return null
@@ -41,7 +41,7 @@ const FloatingContactButtons = () => {
   return (
     <>
       {/* Desktop Floating Buttons (Bottom Right) */}
-      <div className="fixed right-6 bottom-28 z-[999] hidden md:flex flex-col items-end gap-3"
+      <div className="fixed right-6 bottom-20 z-[999] hidden md:flex flex-col items-end gap-3"
         onMouseLeave={() => setIsHovered(false)}>
         <div className={`flex flex-col gap-3 transition-all duration-300 ease-in-out ${isHovered ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
           {buttons.slice(1).map(btn => (

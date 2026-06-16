@@ -1,5 +1,7 @@
 // utils/display.ts
 // Small helper utilities for safe display of backend values.
+import { getImageUrl } from './baseURL';
+
 
 export function safeVal(v: unknown): string | number {
   if (v === null || v === undefined) return ''
@@ -95,3 +97,40 @@ export function stripHtml(html: unknown): string {
     .replace(/\s+/g, ' ')       // Collapse multiple spaces/newlines into one
     .trim()
 }
+
+/**
+ * Processes rich text HTML:
+ * - Fixes relative image URLs and adds responsive classes
+ * - Converts YouTube oembeds and raw links into responsive iframes
+ */
+export function processRichText(html: string): string {
+  if (!html) return '';
+  let processed = html.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ');
+
+  // 1. Process oembed YouTube tags
+  const oembedRegex = /<oembed\s+url="https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^"]*"><\/oembed>/gi;
+  processed = processed.replace(oembedRegex, (match, id) => {
+    return `<div class="w-full aspect-video rounded-2xl overflow-hidden shadow-lg relative bg-black my-6">
+                <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>`;
+  });
+
+  // 2. Process raw YouTube links pasted in paragraphs
+  const rawYtRegex = /<p>\s*(?:<a[^>]*>)?https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^<]*(?:<\/a>)?\s*<\/p>/gi;
+  processed = processed.replace(rawYtRegex, (match, id) => {
+    return `<div class="w-full aspect-video rounded-2xl overflow-hidden shadow-lg relative bg-black my-6">
+                <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>`;
+  });
+
+  // 3. Process images (fix relative URLs and add responsive classes)
+  const imgRegex = /<img([^>]+)src="([^">]+)"([^>]*)>/gi;
+  processed = processed.replace(imgRegex, (match, before, src, after) => {
+    const fullSrc = getImageUrl(src);
+    // Only add classes if not already styled, but to be safe we can inject style or class
+    return `<img${before}src="${fullSrc}"${after} class="max-w-full h-auto rounded-lg my-4 shadow-sm object-cover" style="max-width: 100%; height: auto;" />`;
+  });
+
+  return processed;
+}
+

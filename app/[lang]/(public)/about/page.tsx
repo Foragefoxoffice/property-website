@@ -9,8 +9,16 @@ import AboutFindProperty from '@/components/About/AboutFindProperty'
 import AboutAgent from '@/components/About/AboutAgent'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/about`
   try {
+
     const res = await fetchAboutCms()
     const data = (res.data as any) || {}
 
@@ -20,7 +28,12 @@ export async function generateMetadata(): Promise<Metadata> {
         data.aboutSeoMetaDescription_en ||
         'Learn about 183 Housing Solutions and our mission in Vietnam.',
       alternates: {
-        canonical: data.aboutSeoCanonicalUrl_en || 'https://183housingsolutions.com/about',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/about`,
+          'vi': `${siteUrl}/vi/about`,
+          'x-default': `${siteUrl}/vi/about`,
+        },
       },
       robots: {
         index: data.aboutSeoAllowIndexing !== false,
@@ -40,7 +53,12 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Learn about 183 Housing Solutions and our mission in Vietnam.',
       alternates: {
-        canonical: 'https://183housingsolutions.com/about',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/about`,
+          'vi': `${siteUrl}/vi/about`,
+          'x-default': `${siteUrl}/vi/about`,
+        },
       },
       robots: {
         index: true,

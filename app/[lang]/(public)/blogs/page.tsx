@@ -2,8 +2,16 @@ import { fetchBlogPage } from '@/lib/serverFetch'
 import BlogPageClient from '@/components/Blog/BlogPageClient'
 import type { Metadata } from 'next'
 
-export async function generateMetadata(): Promise<Metadata> {
+interface PageProps {
+  params: { lang: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const lang = params.lang || 'vi'
+    const siteUrl = 'https://183housingsolutions.com'
+    const currentCanonical = `${siteUrl}/${lang}/blogs`
   try {
+
     const res = await fetchBlogPage()
     const data = (res.data as any) || {}
 
@@ -13,7 +21,12 @@ export async function generateMetadata(): Promise<Metadata> {
         data.blogSeoMetaDescription_en ||
         'Read the latest news, tips, and guides from 183 Housing Solutions.',
       alternates: {
-        canonical: data.blogSeoCanonicalUrl_en || 'https://183housingsolutions.com/blogs',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/blogs`,
+          'vi': `${siteUrl}/vi/blogs`,
+          'x-default': `${siteUrl}/vi/blogs`,
+        },
       },
       robots: {
         index: data.blogSeoAllowIndexing !== false,
@@ -33,7 +46,12 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Read the latest news, tips, and guides from 183 Housing Solutions.',
       alternates: {
-        canonical: 'https://183housingsolutions.com/blogs',
+        canonical: currentCanonical,
+        languages: {
+          'en': `${siteUrl}/en/blogs`,
+          'vi': `${siteUrl}/vi/blogs`,
+          'x-default': `${siteUrl}/vi/blogs`,
+        },
       },
       robots: {
         index: true,

@@ -4,6 +4,7 @@
 
 import { useLanguage } from '@/context/LanguageContext'
 import { getImageUrl } from '@/utils/baseURL'
+import { processRichText } from '@/utils/display'
 import Image from 'next/image'
 
 export default function ProjectIntroduction({ data }: { data: Record<string, unknown> }) {
@@ -34,7 +35,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
   const youtubeId = videoUrl ? getYoutubeId(videoUrl) : null
 
   return (
-    <section className="py-16 md:py-18 bg-white overflow-hidden">
+    <section id="introduction" className="py-16 md:py-18 bg-white overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex flex-col gap-10 md:gap-14 items-center">
           <div className="w-full max-w-4xl px-4 mx-auto">
@@ -50,7 +51,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
     max-w-none
     project-intro-content
   "
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: processRichText(content) }}
             />
           </div>
 
