@@ -138,22 +138,26 @@ function PropertyCard({
   const priceNight = financial.financialDetailsPricePerNight as number
   const genericPrice = financial.financialDetailsPrice as number
 
-  const typeLower = txType.toLowerCase()
+  const cType = String(txType || '').toLowerCase()
+  const isSale = cType.includes('sale') || cType.includes('sell') || cType.includes('bán')
+  const isLease = cType.includes('lease') || cType.includes('rent') || cType.includes('cho thuê')
+  const isHomeStay = cType.includes('home stay') || cType.includes('homestay')
+
   let isPriceHidden = false
-  if (typeLower === 'sale' && visFin.price) isPriceHidden = true
-  else if (typeLower === 'lease' && visFin.leasePrice) isPriceHidden = true
-  else if (typeLower === 'home stay' && visFin.pricePerNight) isPriceHidden = true
+  if (isSale && visFin.price) isPriceHidden = true
+  else if (isLease && visFin.leasePrice) isPriceHidden = true
+  else if (isHomeStay && visFin.pricePerNight) isPriceHidden = true
 
   const fmtP = (p: number) => `${formatNumber(p)} ${dispCurrency}`.trim()
   let displayPrice = t.contactForPrice || 'Contact for price'
   let displaySuffix = ''
   if (!isPriceHidden) {
-    if (typeLower === 'sale' && priceSale) {
+    if (isSale && priceSale) {
       displayPrice = fmtP(priceSale)
-    } else if (typeLower === 'lease' && priceLease) {
+    } else if (isLease && priceLease) {
       displayPrice = fmtP(priceLease)
       displaySuffix = '/ month'
-    } else if (typeLower === 'home stay' && priceNight) {
+    } else if (isHomeStay && priceNight) {
       displayPrice = fmtP(priceNight)
       displaySuffix = '/ night'
     } else if (genericPrice) {

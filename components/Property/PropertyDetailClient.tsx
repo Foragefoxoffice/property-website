@@ -142,14 +142,18 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
 
   let displayPrice = t.contactForPrice
   let displaySuffix = ''
-  const typeLower = txType.toLowerCase()
+  
+  const cType = String(txType || '').toLowerCase()
+  const isSale = cType.includes('sale') || cType.includes('sell') || cType.includes('bán')
+  const isLease = cType.includes('lease') || cType.includes('rent') || cType.includes('cho thuê')
+  const isHomeStay = cType.includes('home stay') || cType.includes('homestay')
 
-  if (typeLower === 'sale' && priceSale && !visFin.price) {
+  if (isSale && priceSale && !visFin.price) {
     displayPrice = `${formatNumber(priceSale)} VND`
-  } else if (typeLower === 'lease' && priceLease && !visFin.leasePrice) {
+  } else if (isLease && priceLease && !visFin.leasePrice) {
     displayPrice = `${formatNumber(priceLease)} VND`
     displaySuffix = language === 'vi' ? '/ tháng' : '/ month'
-  } else if (typeLower === 'home stay' && priceNight && !visFin.pricePerNight) {
+  } else if (isHomeStay && priceNight && !visFin.pricePerNight) {
     displayPrice = `${formatNumber(priceNight)} VND`
     displaySuffix = language === 'vi' ? '/ đêm' : '/ night'
   }

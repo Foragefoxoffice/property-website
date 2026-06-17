@@ -187,13 +187,18 @@ export default function FavoritesPage() {
                   listingInfo.listingInformationTransactionType
                 )
 
+                const typeLower = String(rawType || '').toLowerCase()
+                const isSale = typeLower.includes('sale') || typeLower.includes('sell') || typeLower.includes('bán')
+                const isLease = typeLower.includes('lease') || typeLower.includes('rent') || typeLower.includes('cho thuê')
+                const isHomeStay = typeLower.includes('home stay') || typeLower.includes('homestay')
+
                 const type =
                   language === 'vi'
-                    ? rawType === 'Lease'
+                    ? isLease
                       ? 'Cho thuê'
-                      : rawType === 'Sale'
+                      : isSale
                         ? 'Bán'
-                        : rawType === 'Home Stay'
+                        : isHomeStay
                           ? 'Homestay'
                           : rawType
                     : rawType
@@ -201,19 +206,19 @@ export default function FavoritesPage() {
                 let displayPrice = t.contactForPrice
                 let isPriceHidden = false
 
-                if (rawType === 'Sale' && financialVisibility.price) isPriceHidden = true
-                else if (rawType === 'Lease' && financialVisibility.leasePrice) isPriceHidden = true
-                else if (rawType === 'Home Stay' && financialVisibility.pricePerNight) isPriceHidden = true
+                if (isSale && financialVisibility.price) isPriceHidden = true
+                else if (isLease && financialVisibility.leasePrice) isPriceHidden = true
+                else if (isHomeStay && financialVisibility.pricePerNight) isPriceHidden = true
 
                 const formatP = (p: number) => `${formatNumber(p)} ${dispCurrency}`.trim()
 
                 if (!isPriceHidden) {
-                  if (rawType === 'Sale' && priceSale) {
+                  if (isSale && priceSale) {
                     displayPrice = formatP(priceSale)
-                  } else if (rawType === 'Lease' && priceLease) {
+                  } else if (isLease && priceLease) {
                     displayPrice = `${formatP(priceLease)} ${language === 'vi' ? '/ tháng' : '/ month'
                       }`
-                  } else if (rawType === 'Home Stay' && priceNight) {
+                  } else if (isHomeStay && priceNight) {
                     displayPrice = `${formatP(priceNight)} ${language === 'vi' ? '/ đêm' : '/ night'
                       }`
                   } else if (genericPrice) {

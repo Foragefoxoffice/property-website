@@ -572,6 +572,10 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
 
               // Price logic
               const typeLower = String(txType || '').toLowerCase()
+              const isSale = typeLower.includes('sale') || typeLower.includes('sell') || typeLower.includes('bán')
+              const isLease = typeLower.includes('lease') || typeLower.includes('rent') || typeLower.includes('cho thuê')
+              const isHomeStay = typeLower.includes('home stay') || typeLower.includes('homestay')
+
               const priceSale = financial.financialDetailsPrice
               const priceLease = financial.financialDetailsLeasePrice
               const priceNight = financial.financialDetailsPricePerNight
@@ -584,12 +588,12 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
               let displayPrice = t.contactForPrice
               let displaySuffix = ''
 
-              if (typeLower === 'sale' && priceSale) {
+              if (isSale && priceSale) {
                 displayPrice = `${formatNumber(priceSale)} VND`
-              } else if (typeLower === 'lease' && priceLease) {
+              } else if (isLease && priceLease) {
                 displayPrice = `${formatNumber(priceLease)} VND`
                 displaySuffix = lang === 'en' ? '/ month' : '/ tháng'
-              } else if (typeLower === 'home stay' && priceNight) {
+              } else if (isHomeStay && priceNight) {
                 displayPrice = `${formatNumber(priceNight)} VND`
                 displaySuffix = lang === 'en' ? '/ night' : '/ đêm'
               }
