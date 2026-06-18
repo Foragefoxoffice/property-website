@@ -52,12 +52,12 @@ export default function AboutWhyChoose({ data }: { data: Record<string, unknown>
         <motion.div className="grid grid-cols-1 md:grid-cols-3 md:gap-12 gap-8" variants={containerVariants} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
           {boxes.map((box, index) => (
             <motion.div key={index} variants={itemVariants} className="group flex flex-col items-start">
-              <div className="w-25 h-25 rounded-full flex items-center justify-center md:mb-8 mb-4 transition-all duration-500 bg-transparent border border-white/20 group-hover:bg-[#41398B] group-hover:border-[#41398B]">
+              <div className="w-25 h-25 rounded-full flex items-center justify-center md:mb-8 mb-4 transition-all duration-500 bg-transparent group-hover:bg-[#41398B] group-hover:border-[#41398B]">
                 {box.icon ? (
                   <img
                     src={box.icon.startsWith('http') ? box.icon : `${BASE}${box.icon.startsWith('/') ? '' : '/'}${box.icon}`}
                     alt={language === 'en' ? (box.title_en || box.title || '') : (box.title_vn || box.title_en || box.title || '')}
-                    className="w-12 h-12 object-contain"
+                    className="w-12 h-12 object-contain rounded-full"
                   />
                 ) : (
                   <div className="w-12 h-12 bg-white/10 rounded-full" />

@@ -2,7 +2,7 @@ import { getBaseURL } from '../utils/baseURL'
 
 const BASE = getBaseURL().replace(/\/$/, '')
 
-export async function serverGet<T>(path: string, revalidate = 300): Promise<T> {
+export async function serverGet<T>(path: string, revalidate = 0): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     next: { revalidate },
     headers: { 'Content-Type': 'application/json' },

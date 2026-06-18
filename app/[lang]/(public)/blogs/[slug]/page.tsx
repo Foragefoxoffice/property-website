@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { getImageUrl } from '@/utils/baseURL'
 import { stripHtml, safeVal } from '@/utils/display'
 
-export const revalidate = 300
+export const revalidate = 0
 
 interface Props { params: { lang: string, slug: string } }
 

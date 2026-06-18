@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export const revalidate = 3600
+export const revalidate = 0
 
 export default async function PrivacyPolicyPage() {
   let data: Record<string, unknown> = {}

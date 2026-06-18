@@ -10,6 +10,8 @@ const nextConfig = {
       { protocol: 'https', hostname: '183housingsolutions.com' },
       { protocol: 'https', hostname: 'api.183housingsolutions.com' },
       { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'https', hostname: 'dev.placetest.in' },
+      { protocol: 'https', hostname: 'dev.183housingsolutions.com' },
     ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

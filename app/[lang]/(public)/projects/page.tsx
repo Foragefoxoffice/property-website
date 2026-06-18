@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export const revalidate = 300
+export const revalidate = 0
 
 export default async function ProjectsPage() {
   let projects: unknown[] = []

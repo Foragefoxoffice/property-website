@@ -33,9 +33,6 @@ interface FooterData {
 
 export default function PublicFooter() {
   const pathname = usePathname()
-
-
-
   const { language: langRaw } = useLanguage()
   const language = langRaw as 'en' | 'vi'
   const [footerData, setFooterData] = useState<FooterData | null>(null)
@@ -56,7 +53,7 @@ export default function PublicFooter() {
       const err = error as { response?: { data?: { error?: string } } }
       toast.error(
         err.response?.data?.error ||
-          (language === 'vi' ? 'Đăng ký thất bại' : 'Subscription failed')
+        (language === 'vi' ? 'Đăng ký thất bại' : 'Subscription failed')
       )
     } finally {
       setLoading(false)

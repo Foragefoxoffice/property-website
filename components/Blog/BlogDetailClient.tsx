@@ -91,14 +91,15 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
             <div className="bg-white rounded-xl shadow-xl p-4 md:p-10 border border-gray-100 ring-1 ring-black/5 overflow-hidden">
               <article
                 style={{ lineHeight: '1.8' }}
-                className="news-content prose prose-lg max-w-none w-full
-                  prose-headings:font-bold prose-headings:text-gray-900
-                  prose-h2:text-[#41398B]
-                  prose-p:text-gray-600 prose-p:leading-relaxed [&_p]:!text-left
-                  prose-a:text-[#41398B] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-                  prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-8
-                  prose-blockquote:border-l-4 prose-blockquote:border-[#41398B] prose-blockquote:bg-purple-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg
-                  prose-strong:text-gray-900 prose-li:marker:text-[#41398B]"
+                className="news-content max-w-none w-full text-lg
+                  [&_h1]:font-bold [&_h1]:text-gray-900 [&_h1]:text-3xl [&_h1]:mb-4
+                  [&_h2]:font-bold [&_h2]:text-[#41398B] [&_h2]:text-2xl [&_h2]:mb-4 [&_h2]:mt-6
+                  [&_h3]:font-bold [&_h3]:text-gray-900 [&_h3]:text-xl [&_h3]:mb-3 [&_h3]:mt-5
+                  [&_p]:text-gray-600 [&_p]:leading-relaxed [&_p]:!text-left [&_p]:mb-4
+                  [&_a]:text-blue-600 [&_a]:font-medium [&_a]:underline hover:[&_a]:text-blue-800
+                  [&_img]:rounded-2xl [&_img]:shadow-lg [&_img]:my-8 [&_img]:max-w-full
+                  [&_blockquote]:border-l-4 [&_blockquote]:border-[#41398B] [&_blockquote]:bg-purple-50 [&_blockquote]:py-4 [&_blockquote]:px-6 [&_blockquote]:rounded-r-lg [&_blockquote]:my-6
+                  [&_strong]:text-gray-900 [&_li]:mb-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4"
               >
                 <div suppressHydrationWarning className="overflow-hidden" dangerouslySetInnerHTML={{ __html: content.replace(/&nbsp;/g, ' ') }} />
               </article>
