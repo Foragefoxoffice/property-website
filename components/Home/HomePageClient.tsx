@@ -310,7 +310,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
               <div className="lg:contents grid gap-4 md:block">
                 {/* Bedrooms */}
                 <div className="order-5 lg:order-6">
-                  <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Bedrooms' : 'Phòng Ngủ'}</label>
+                  <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Bedrooms' : 'Ngủ'}</label>
                   <Select
                     className="custom-selectss"
                     popupClassName="custom-dropdown"
@@ -330,7 +330,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
 
                 {/* Bathrooms */}
                 <div className="order-6 lg:order-7">
-                  <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Bathrooms' : 'Phòng Tắm'}</label>
+                  <label className="block text-md font-bold text-black mb-2">{lang === 'en' ? 'Bathrooms' : 'Vệ sinh'}</label>
                   <Select
                     className="custom-selectss"
                     popupClassName="custom-dropdown"
@@ -640,20 +640,20 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
 
                     <div className="flex items-center pt-3 border-t border-gray-100 justify-between mt-auto">
                       <div className="flex items-center gap-1.5">
-                        <Bed size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">
-                          {beds} {lang === 'vi' ? 'Phòng ngủ' : 'Bed'}
+                        <Bed size={20} className="text-[#41398B]" />
+                        <span className="text-[15px] font-bold text-gray-700">
+                          {beds} {lang === 'vi' ? 'Ngủ' : 'Bed'}
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Bath size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">
-                          {baths} {lang === 'vi' ? 'Phòng tắm' : 'Bath'}
+                        <Bath size={20} className="text-[#41398B]" />
+                        <span className="text-[15px] font-bold text-gray-700">
+                          {baths} {lang === 'vi' ? 'Vệ sinh' : 'Bath'}
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Ruler size={18} className="text-[#41398B]" />
-                        <span className="text-[13px] font-bold text-gray-700">
+                        <Ruler size={20} className="text-[#41398B]" />
+                        <span className="text-[15px] font-bold text-gray-700">
                           {formatNumber(sqft)} m2
                         </span>
                       </div>
@@ -736,7 +736,7 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
             {faqs.map((faq, i) => (
               <div key={i} className={`border-b border-gray-200 transition-all duration-700 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}
                 style={{ transitionDelay: `${700 + i * 100}ms` }}>
-                <button 
+                <button
                   className="w-full py-4 flex items-center justify-between text-left group cursor-pointer"
                   onClick={() => setOpen(open === i ? -1 : i)}
                   aria-expanded={open === i}
@@ -925,7 +925,7 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
           {desc && <h2 className={`text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9 mt-20 md:mt-0">
           {blogs.map((blog, i) => {
             const btitle = loc(blog.title, lang) || 'Untitled'
             const slugRaw = blog.slug || blog._id

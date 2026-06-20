@@ -99,7 +99,7 @@ export default function PublicFooter() {
   }
 
   return (
-    <footer className="bg-[#161616] text-white pt-12 md:pt-16 pb-8">
+    <footer className="bg-[#161616] text-white pt-12 md:pt-16 pb-24">
       <div className="container mx-auto px-3 md:px-4 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-12 mb-4 md:mb-8 border-b border-gray-800 pb-6 md:pb-12">
           {/* Left Column - Contact Info */}

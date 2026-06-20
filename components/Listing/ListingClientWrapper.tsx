@@ -252,7 +252,7 @@ function PropertyCard({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7h18M5 7v10M19 7v10M3 17h18M7 10h4a2 2 0 012 2v5M7 10a2 2 0 00-2 2v5" />
                 </svg>
                 <span className="font-medium text-[12px]">
-                  {beds} {language === 'vi' ? 'Phòng ngủ' : 'Bed'}
+                  {beds} {language === 'vi' ? 'Ngủ' : 'Bed'}
                 </span>
               </div>
             )}
@@ -262,7 +262,7 @@ function PropertyCard({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 14h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2zM6 14V9a3 3 0 0 1 6 0" />
                 </svg>
                 <span className="font-medium text-[12px]">
-                  {baths} {language === 'vi' ? 'Phòng tắm' : 'Bath'}
+                  {baths} {language === 'vi' ? 'Vệ sinh' : 'Bath'}
                 </span>
               </div>
             )}

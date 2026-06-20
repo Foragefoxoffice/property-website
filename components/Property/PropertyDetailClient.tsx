@@ -142,7 +142,7 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
 
   let displayPrice = t.contactForPrice
   let displaySuffix = ''
-  
+
   const cType = String(txType || '').toLowerCase()
   const isSale = cType.includes('sale') || cType.includes('sell') || cType.includes('bán')
   const isLease = cType.includes('lease') || cType.includes('rent') || cType.includes('cho thuê')
@@ -217,16 +217,16 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
 
         <div className="flex items-center pt-3 border-t border-gray-100 justify-between mt-auto">
           <div className="flex items-center gap-1.5">
-            <Bed size={18} className="text-[#41398B]" />
-            <span className="text-[13px] font-bold text-gray-700">{beds} {t.rooms}</span>
+            <Bed size={20} className="text-[#41398B]" />
+            <span className="text-[15px] font-bold text-gray-700">{beds} {t.rooms}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Bath size={18} className="text-[#41398B]" />
-            <span className="text-[13px] font-bold text-gray-700">{baths} {t.rooms}</span>
+            <Bath size={20} className="text-[#41398B]" />
+            <span className="text-[15px] font-bold text-gray-700">{baths} {t.rooms}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Ruler size={18} className="text-[#41398B]" />
-            <span className="text-[13px] font-bold text-gray-700">
+            <Ruler size={20} className="text-[#41398B]" />
+            <span className="text-[15px] font-bold text-gray-700">
               {formatNumber(sqft)} m2
             </span>
           </div>
@@ -627,7 +627,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                   <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
                   <div
                     suppressHydrationWarning
-                    className="text-gray-700 leading-6 rich-text-display property-description-summary"
+                    className="text-gray-700 leading-6 rich-text-display property-description-summary [&_a]:text-blue-600 [&_a]:underline hover:[&_a]:text-blue-800"
                     dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
                   />
                 </section>
@@ -920,7 +920,8 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
         )}
       </AnimatePresence>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .property-description-summary ul {
           list-style-type: disc !important;
           padding-left: 1.5rem !important;
