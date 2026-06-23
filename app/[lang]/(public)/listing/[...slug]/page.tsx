@@ -47,7 +47,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // 4. OG Specifics
     const ogTitle = getLocalVal(seo.ogTitle) || metaTitle
     const ogDescription = getLocalVal(seo.ogDescription) || metaDescription
-    const imageUrl = seo.ogImage ? getImageUrl(seo.ogImage) : baseImageUrl
+    const ogImageVal = seo.ogImage || (seo.ogImages && seo.ogImages[0])
+    const imageUrl = ogImageVal ? getImageUrl(ogImageVal) : baseImageUrl
 
     // 5. Get URL
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
