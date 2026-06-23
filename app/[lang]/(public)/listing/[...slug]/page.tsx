@@ -3,6 +3,7 @@ import PropertyDetailClient from '@/components/Property/PropertyDetailClient'
 import type { Metadata } from 'next'
 import { getImageUrl } from '@/utils/baseURL'
 import { stripHtml, safeVal } from '@/utils/display'
+import { redirect } from 'next/navigation'
 
 interface PageProps {
   params: { lang: string, slug: string[] }
@@ -55,11 +56,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const url = `${siteUrl}/listing/${slugArray.join('/')}`
     
     // Determine the ideal canonical URL
-    const canonicalSlug = getLocalVal(seo.slugUrl) || 'property'
-    const idealCanonicalUrl = `${siteUrl}/${lang}/listing/${canonicalSlug}-${propertyId}`
+    let canonicalSlug = getLocalVal(seo.slugUrl) || 'property'
+    if (canonicalSlug && propertyId && !canonicalSlug.toLowerCase().endsWith(propertyId.toLowerCase())) {
+      canonicalSlug = `${canonicalSlug}-${propertyId}`
+    }
+    const idealCanonicalUrl = `${siteUrl}/${lang}/listing/${canonicalSlug}`
     
-    const enCanonicalUrl = `${siteUrl}/en/listing/${canonicalSlug}-${propertyId}`
-    const viCanonicalUrl = `${siteUrl}/vi/listing/${canonicalSlug}-${propertyId}`
+    let enSlug = seo.slugUrl?.en || 'property'
+    if (enSlug && propertyId && !enSlug.toLowerCase().endsWith(propertyId.toLowerCase())) {
+      enSlug = `${enSlug}-${propertyId}`
+    }
+    let viSlug = seo.slugUrl?.vi || 'property'
+    if (viSlug && propertyId && !viSlug.toLowerCase().endsWith(propertyId.toLowerCase())) {
+      viSlug = `${viSlug}-${propertyId}`
+    }
+    
+    const enCanonicalUrl = `${siteUrl}/en/listing/${enSlug}`
+    const viCanonicalUrl = `${siteUrl}/vi/listing/${viSlug}`
 
     return {
       title: `${metaTitle} | 183 Housing Solutions`,
@@ -116,13 +129,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PropertyDetailPage({ params }: PageProps) {
   let property: Record<string, unknown> | null = null
-  try {
-    const slugArray = params.slug || []
-    const lastSegment = slugArray[slugArray.length - 1] || ''
-    // Property IDs follow the pattern: XXX-NNNN (e.g. LSE-0047, SAL-0001, HST-0003)
-    const idMatch = lastSegment.match(/([A-Z]{3}-\d{3,})$/i)
-    const propertyId = idMatch ? idMatch[1] : lastSegment
+  
+  const slugArray = params.slug || []
+  const lastSegment = slugArray[slugArray.length - 1] || ''
+  // Property IDs follow the pattern: XXX-NNNN (e.g. LSE-0047, SAL-0001, HST-0003)
+  const idMatch = lastSegment.match(/([A-Z]{3}-\d{3,})$/i)
+  const propertyId = idMatch ? idMatch[1] : lastSegment
 
+  try {
     const res = await fetchPropertyById(propertyId)
     property = res.data as Record<string, unknown>
   } catch {
@@ -136,6 +150,21 @@ export default async function PropertyDetailPage({ params }: PageProps) {
         <p className="text-gray-400 mt-2">This listing may have been removed or does not exist.</p>
       </div>
     )
+  }
+
+  const lang = params.lang || 'vi'
+  const seo = (property.seoInformation as any) || {}
+  
+  // Enforce correct slug for current language
+  let expectedSlug = seo.slugUrl?.[lang] || 'property'
+  if (expectedSlug && propertyId && !expectedSlug.toLowerCase().endsWith(propertyId.toLowerCase())) {
+    expectedSlug = `${expectedSlug}-${propertyId}`
+  }
+  
+  const currentSlugPath = (params.slug || []).join('/')
+  if (currentSlugPath && currentSlugPath !== expectedSlug) {
+    // Redirect to the correct localized slug
+    redirect(`/${lang}/listing/${expectedSlug}`)
   }
 
   const listingInfo = (property.listingInformation as any) || {}
