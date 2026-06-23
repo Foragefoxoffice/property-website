@@ -11,7 +11,7 @@ interface PageProps {
 export const revalidate = 0
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const lang = params.lang || 'vi'
+  const lang = params.lang || 'vi'
   try {
     const slugArray = params.slug || []
     const lastSegment = slugArray[slugArray.length - 1] || ''
@@ -24,31 +24,45 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const listing = property.listingInformation || {}
     const seo = property.seoInformation || {}
 
+    const getLocalVal = (obj: any) => {
+      if (!obj) return ''
+      if (typeof obj === 'string') return obj
+      if (obj[lang]) return String(obj[lang])
+      return String(safeVal(obj))
+    }
+
     // 1. Get Title (Localized)
-    const title = String(safeVal(listing.listingInformationPropertyTitle) || property.title || '183 Housing Solutions')
+    const baseTitle = getLocalVal(listing.listingInformationPropertyTitle) || getLocalVal(property.title) || '183 Housing Solutions'
+    const metaTitle = getLocalVal(seo.metaTitle) || baseTitle
 
     // 2. Get Description (Localized & Stripped of HTML)
-    const rawDesc = safeVal(property.whatNearby?.whatNearbyDescription) || safeVal(property.description)
-    const description = stripHtml(rawDesc) || 'View property details on 183 Housing Solutions'
+    const rawDesc = getLocalVal(property.whatNearby?.whatNearbyDescription) || getLocalVal(property.description)
+    const baseDesc = stripHtml(String(rawDesc)) || 'View property details on 183 Housing Solutions'
+    const metaDescription = getLocalVal(seo.metaDescription) || baseDesc
 
     // 3. Get Image (Absolute URL)
     const propImages = property.imagesVideos?.propertyImages || []
-    const imageUrl = getImageUrl(propImages[0])
+    const baseImageUrl = getImageUrl(propImages[0])
 
-    // 4. Get URL
+    // 4. OG Specifics
+    const ogTitle = getLocalVal(seo.ogTitle) || metaTitle
+    const ogDescription = getLocalVal(seo.ogDescription) || metaDescription
+    const imageUrl = seo.ogImage ? getImageUrl(seo.ogImage) : baseImageUrl
+
+    // 5. Get URL
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
     const url = `${siteUrl}/listing/${slugArray.join('/')}`
     
     // Determine the ideal canonical URL
-    const canonicalSlug = safeVal(seo.slugUrl) || 'property'
+    const canonicalSlug = getLocalVal(seo.slugUrl) || 'property'
     const idealCanonicalUrl = `${siteUrl}/${lang}/listing/${canonicalSlug}-${propertyId}`
     
     const enCanonicalUrl = `${siteUrl}/en/listing/${canonicalSlug}-${propertyId}`
     const viCanonicalUrl = `${siteUrl}/vi/listing/${canonicalSlug}-${propertyId}`
 
     return {
-      title: `${title} | 183 Housing Solutions`,
-      description,
+      title: `${metaTitle} | 183 Housing Solutions`,
+      description: metaDescription,
       alternates: {
         canonical: idealCanonicalUrl,
         languages: {
@@ -62,17 +76,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         follow: seo.allowIndexing !== false,
       },
       openGraph: {
-        title,
-        description,
+        title: ogTitle,
+        description: ogDescription,
         url,
         type: 'website',
         siteName: '183 Housing Solutions',
-        images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630, alt: title }] : [],
+        images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630, alt: ogTitle }] : [],
       },
       twitter: {
         card: 'summary_large_image',
-        title,
-        description,
+        title: ogTitle,
+        description: ogDescription,
         images: imageUrl ? [imageUrl] : [],
       },
     }
