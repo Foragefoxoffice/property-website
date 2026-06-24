@@ -9,6 +9,7 @@ import AboutFindProperty from '@/components/About/AboutFindProperty'
 import AboutAgent from '@/components/About/AboutAgent'
 import type { Metadata } from 'next'
 import { getImageUrl } from '@/utils/baseURL'
+import { useEffect } from 'react'
 
 interface PageProps {
   params: { lang: string }
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const lang = params.lang || 'vi'
   const siteUrl = 'https://183housingsolutions.com'
   const currentCanonical = `${siteUrl}/${lang}/about`
+
 
   try {
     const res = await fetchAboutCms()
@@ -29,8 +31,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 
     const metaTitle = getLocalVal(
-      'aboutSeoMetaTitle_en', 
-      'aboutSeoMetaTitle_vn', 
+      'aboutSeoMetaTitle_en',
+      'aboutSeoMetaTitle_vn',
       'About Us | 183 Housing Solutions'
     )
     const metaDesc = getLocalVal(
@@ -38,10 +40,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'aboutSeoMetaDescription_vn',
       'Learn about 183 Housing Solutions and our mission in Vietnam.'
     )
-    
+
     const ogTitle = getLocalVal('aboutSeoOgTitle_en', 'aboutSeoOgTitle_vn', metaTitle)
     const ogDesc = getLocalVal('aboutSeoOgDescription_en', 'aboutSeoOgDescription_vn', metaDesc)
-    
+
     // OG Image fallback
     const rawOgImage = data.aboutSeoOgImage || (data.aboutSeoOgImages && data.aboutSeoOgImages[0])
     const ogImage = rawOgImage ? getImageUrl(rawOgImage) : undefined
