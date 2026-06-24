@@ -180,7 +180,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
           )
         }
         if (projectsRes.data?.success) {
-          setAllProjects(projectsRes.data.data.filter((p: Project) => p.published))
+          setAllProjects(projectsRes.data.data)
         }
       } catch (error) {
         console.error('Error fetching project dropdown data for Header:', error)

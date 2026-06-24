@@ -54,7 +54,6 @@ function ProjectPageInner({
   }, [categoryParam])
 
   const filteredProjects = projects.filter(p => {
-    if (!p.published) return false
     if (selectedCategory === 'all') return true
     const catId = (p.category as { _id?: string })?._id || p.category
     return catId === selectedCategory
