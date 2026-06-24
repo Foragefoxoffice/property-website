@@ -60,6 +60,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://api.183housingsolutions.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.183housingsolutions.com" />
       </head>
+      <GoogleAnalytics gaId="G-K0V8QGX8QL" />
+      <GoogleTagManager gtmId="GTM-5GZN5S6C" />
       <body className={manrope.className}>
         <Providers>
           <RouteLoader>
@@ -80,8 +82,6 @@ export default function RootLayout({
             </div>
           </RouteLoader>
         </Providers>
-        <GoogleAnalytics gaId="G-K0V8QGX8QL" />
-        <GoogleTagManager gtmId="GTM-5GZN5S6C" />
       </body>
     </html>
   )

@@ -79,9 +79,9 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       
       const newPathname = `/${lang}${newTranslatedPath === '/' ? '' : newTranslatedPath}`
       console.log("Language Switch Debug:", { pathname, urlLang, basePath, internalPath, newTranslatedPath, newPathname })
-      router.push(newPathname)
+      window.location.href = newPathname
     } else {
-      router.push(`/${lang}${pathname}`)
+      window.location.href = `/${lang}${pathname}`
     }
   }
 

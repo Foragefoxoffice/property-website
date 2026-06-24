@@ -110,17 +110,17 @@ export function processRichText(html: string): string {
   // 1. Process oembed YouTube tags
   const oembedRegex = /<oembed\s+url="https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^"]*"><\/oembed>/gi;
   processed = processed.replace(oembedRegex, (match, id) => {
-    return `<div class="w-full aspect-video rounded-2xl overflow-hidden shadow-lg relative bg-black my-6">
+    return `<span class="block w-full aspect-video rounded-2xl overflow-hidden shadow-lg relative bg-black my-6">
                 <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>`;
+            </span>`;
   });
 
   // 2. Process raw YouTube links pasted in paragraphs
   const rawYtRegex = /<p>\s*(?:<a[^>]*>)?https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})[^<]*(?:<\/a>)?\s*<\/p>/gi;
   processed = processed.replace(rawYtRegex, (match, id) => {
-    return `<div class="w-full aspect-video rounded-2xl overflow-hidden shadow-lg relative bg-black my-6">
+    return `<span class="block w-full aspect-video rounded-2xl overflow-hidden shadow-lg relative bg-black my-6">
                 <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>`;
+            </span>`;
   });
 
   // 3. Process images (fix relative URLs and add responsive classes)

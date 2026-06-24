@@ -94,7 +94,9 @@ export default function PublicFooter() {
   }
 
 
-  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
+  const isAuthPage = /^\/[a-z]{2}\/(login|register|forgot-password|reset-password)$/.test(pathname) || 
+                     ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname);
+  if (isAuthPage) {
     return null
   }
 

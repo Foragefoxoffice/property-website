@@ -227,7 +227,9 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
   const initials = userName ? userName.slice(0, 2).toUpperCase() : 'US'
 
 
-  if (pathname === '/login' || pathname === '/register' || pathname === '/forgot-password' || pathname === '/reset-password') {
+  const isAuthPage = /^\/[a-z]{2}\/(login|register|forgot-password|reset-password)$/.test(pathname) || 
+                     ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname);
+  if (isAuthPage) {
     return null
   }
 

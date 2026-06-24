@@ -9,7 +9,8 @@ export default function ScrollUpButton() {
   const [visible, setVisible] = useState(false)
 
   const hideOnPaths = ['/dashboard', '/user-dashboard', '/login', '/register', '/forgot-password', '/reset-password']
-  const shouldHide = hideOnPaths.some(p => pathname.startsWith(p))
+  const pathWithoutLang = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/'
+  const shouldHide = hideOnPaths.some(p => pathWithoutLang.startsWith(p))
 
   useEffect(() => {
     if (shouldHide) return
