@@ -18,13 +18,40 @@ export default function LanguageLink({ href, ...rest }: LinkProps) {
   if (typeof href === 'string') {
     // If it's a root-relative link and we have a locale
     if (href.startsWith('/') && isLocale) {
-      // Check if href already has a locale prefix
+      // Map internal base paths to translated slugs for SEO
+      let basePath = href;
       const hrefParts = href.split('/');
       const hrefLang = hrefParts[1];
-      if (hrefLang !== 'en' && hrefLang !== 'vi') {
-        // Prepend current locale
-        finalHref = `/${lang}${href}`;
+      
+      let hasLocalePrefix = false;
+      if (hrefLang === 'en' || hrefLang === 'vi') {
+        hasLocalePrefix = true;
+        basePath = '/' + hrefParts.slice(2).join('/');
       }
+      
+      if (!basePath) basePath = '/';
+      
+      const slugMap: Record<string, Record<string, string>> = {
+        vi: {
+          '/about': '/ve-chung-toi',
+          '/contact': '/lien-he',
+          '/terms-conditions': '/dieu-khoan-dieu-kien',
+          '/privacy-policy': '/chinh-sach-bao-mat',
+          '/blogs': '/tin-tuc',
+        },
+        en: {
+          '/about': '/about-us',
+          '/contact': '/contact',
+          '/terms-conditions': '/terms-and-conditions',
+          '/privacy-policy': '/privacy-policy',
+          '/blogs': '/blog',
+        }
+      };
+      
+      // Attempt to map the base path, fallback to original
+      const translatedPath = slugMap[lang][basePath] || basePath;
+      
+      finalHref = `/${lang}${translatedPath === '/' ? '' : translatedPath}`;
     }
   }
 

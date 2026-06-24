@@ -91,7 +91,9 @@ function RouteLoaderInner({
 
     return (
         <>
-            {loading && <Loader />}
+            <div id="loader-mount-point" style={{ display: 'contents' }}>
+                {loading && <Loader />}
+            </div>
             {children}
         </>
     )

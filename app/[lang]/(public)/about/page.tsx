@@ -8,25 +8,47 @@ import AboutBuyProcess from '@/components/About/AboutBuyProcess'
 import AboutFindProperty from '@/components/About/AboutFindProperty'
 import AboutAgent from '@/components/About/AboutAgent'
 import type { Metadata } from 'next'
+import { getImageUrl } from '@/utils/baseURL'
 
 interface PageProps {
   params: { lang: string }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const lang = params.lang || 'vi'
-    const siteUrl = 'https://183housingsolutions.com'
-    const currentCanonical = `${siteUrl}/${lang}/about`
-  try {
+  const lang = params.lang || 'vi'
+  const siteUrl = 'https://183housingsolutions.com'
+  const currentCanonical = `${siteUrl}/${lang}/about`
 
+  try {
     const res = await fetchAboutCms()
     const data = (res.data as any) || {}
 
+    const getLocalVal = (enKey: string, vnKey: string, fallback: string) => {
+      const val = lang === 'en' ? (data[enKey] || data[vnKey]) : (data[vnKey] || data[enKey])
+      return val ? String(val) : fallback
+    }
+
+    const metaTitle = getLocalVal(
+      'aboutSeoMetaTitle_en', 
+      'aboutSeoMetaTitle_vn', 
+      'About Us | 183 Housing Solutions'
+    )
+    const metaDesc = getLocalVal(
+      'aboutSeoMetaDescription_en',
+      'aboutSeoMetaDescription_vn',
+      'Learn about 183 Housing Solutions and our mission in Vietnam.'
+    )
+    
+    const ogTitle = getLocalVal('aboutSeoOgTitle_en', 'aboutSeoOgTitle_vn', metaTitle)
+    const ogDesc = getLocalVal('aboutSeoOgDescription_en', 'aboutSeoOgDescription_vn', metaDesc)
+    
+    // OG Image fallback
+    const rawOgImage = data.aboutSeoOgImage || (data.aboutSeoOgImages && data.aboutSeoOgImages[0])
+    const ogImage = rawOgImage ? getImageUrl(rawOgImage) : undefined
+
     return {
-      title: data.aboutSeoMetaTitle_en || 'About Us | 183 Housing Solutions',
-      description:
-        data.aboutSeoMetaDescription_en ||
-        'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      title: metaTitle,
+      description: metaDesc,
       alternates: {
         canonical: currentCanonical,
         languages: {
@@ -40,18 +62,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         follow: data.aboutSeoAllowIndexing !== false,
       },
       openGraph: {
-        title: data.aboutSeoOgTitle_en || data.aboutSeoMetaTitle_en,
-        description:
-          data.aboutSeoOgDescription_en ||
-          data.aboutSeoMetaDescription_en,
-        images: data.aboutSeoOgImage ? [data.aboutSeoOgImage] : [],
+        title: ogTitle,
+        description: ogDesc,
+        type: 'website',
+        images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }] : [],
       },
+      twitter: {
+        card: 'summary_large_image',
+        title: ogTitle,
+        description: ogDesc,
+        images: ogImage ? [ogImage] : [],
+      }
     }
   } catch {
     return {
       title: 'About Us | 183 Housing Solutions',
-      description:
-        'Learn about 183 Housing Solutions and our mission in Vietnam.',
+      description: 'Learn about 183 Housing Solutions and our mission in Vietnam.',
       alternates: {
         canonical: currentCanonical,
         languages: {

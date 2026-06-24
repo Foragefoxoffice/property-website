@@ -66,6 +66,29 @@ const nextConfig = {
         destination: '/listing/:id',
         permanent: true,
       },
+      // SEO Slugs
+      { source: '/en/about', destination: '/en/about-us', permanent: false },
+      { source: '/vi/about', destination: '/vi/ve-chung-toi', permanent: false },
+      { source: '/vi/contact', destination: '/vi/lien-he', permanent: false },
+      { source: '/en/terms-conditions', destination: '/en/terms-and-conditions', permanent: false },
+      { source: '/vi/terms-conditions', destination: '/vi/dieu-khoan-dieu-kien', permanent: false },
+      { source: '/vi/privacy-policy', destination: '/vi/chinh-sach-bao-mat', permanent: false },
+      { source: '/en/blogs', destination: '/en/blog', permanent: false },
+      { source: '/vi/blogs', destination: '/vi/tin-tuc', permanent: false },
+    ]
+  },
+
+  // ✅ REWRITES: Translated slugs to internal routes
+  async rewrites() {
+    return [
+      { source: '/en/about-us', destination: '/en/about' },
+      { source: '/vi/ve-chung-toi', destination: '/vi/about' },
+      { source: '/vi/lien-he', destination: '/vi/contact' },
+      { source: '/en/terms-and-conditions', destination: '/en/terms-conditions' },
+      { source: '/vi/dieu-khoan-dieu-kien', destination: '/vi/terms-conditions' },
+      { source: '/vi/chinh-sach-bao-mat', destination: '/vi/privacy-policy' },
+      { source: '/en/blog', destination: '/en/blogs' },
+      { source: '/vi/tin-tuc', destination: '/vi/blogs' },
     ]
   },
 

@@ -1,25 +1,47 @@
 import { fetchHomeCms, fetchListingProperties } from '@/lib/serverFetch'
 import HomePageClient from '@/components/Home/HomePageClient'
 import type { Metadata } from 'next'
+import { getImageUrl } from '@/utils/baseURL'
 
 interface PageProps {
   params: { lang: string }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const lang = params.lang || 'vi'
-    const siteUrl = 'https://183housingsolutions.com'
-    const currentCanonical = `${siteUrl}/${lang}`
+  const lang = params.lang || 'vi'
+  const siteUrl = 'https://183housingsolutions.com'
+  const currentCanonical = `${siteUrl}/${lang}`
+
   try {
-    
     const res = await fetchHomeCms()
     const data = (res.data as any) || {}
 
+    const getLocalVal = (enKey: string, vnKey: string, fallback: string) => {
+      const val = lang === 'en' ? (data[enKey] || data[vnKey]) : (data[vnKey] || data[enKey])
+      return val ? String(val) : fallback
+    }
+
+    const metaTitle = getLocalVal(
+      'homeSeoMetaTitle_en', 
+      'homeSeoMetaTitle_vn', 
+      '183 Housing Solutions — Find Your Home in Vietnam'
+    )
+    const metaDesc = getLocalVal(
+      'homeSeoMetaDescription_en',
+      'homeSeoMetaDescription_vn',
+      'Browse properties for lease, sale, and home stay in Vietnam.'
+    )
+    
+    const ogTitle = getLocalVal('homeSeoOgTitle_en', 'homeSeoOgTitle_vn', metaTitle)
+    const ogDesc = getLocalVal('homeSeoOgDescription_en', 'homeSeoOgDescription_vn', metaDesc)
+    
+    // OG Image fallback
+    const rawOgImage = data.homeSeoOgImage || (data.homeSeoOgImages && data.homeSeoOgImages[0])
+    const ogImage = rawOgImage ? getImageUrl(rawOgImage) : undefined
+
     return {
-      title: data.homeSeoMetaTitle_en || '183 Housing Solutions — Find Your Home in Vietnam',
-      description:
-        data.homeSeoMetaDescription_en ||
-        'Browse properties for lease, sale, and home stay in Vietnam.',
+      title: metaTitle,
+      description: metaDesc,
       alternates: {
         canonical: currentCanonical,
         languages: {
@@ -33,18 +55,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         follow: data.homeSeoAllowIndexing !== false,
       },
       openGraph: {
-        title: data.homeSeoOgTitle_en || data.homeSeoMetaTitle_en,
-        description:
-          data.homeSeoOgDescription_en ||
-          data.homeSeoMetaDescription_en,
-        images: data.homeSeoOgImage ? [data.homeSeoOgImage] : [],
+        title: ogTitle,
+        description: ogDesc,
+        type: 'website',
+        images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }] : [],
       },
+      twitter: {
+        card: 'summary_large_image',
+        title: ogTitle,
+        description: ogDesc,
+        images: ogImage ? [ogImage] : [],
+      }
     }
   } catch {
     return {
       title: '183 Housing Solutions — Find Your Home in Vietnam',
-      description:
-        'Browse properties for lease, sale, and home stay in Vietnam.',
+      description: 'Browse properties for lease, sale, and home stay in Vietnam.',
       alternates: {
         canonical: currentCanonical,
         languages: {
