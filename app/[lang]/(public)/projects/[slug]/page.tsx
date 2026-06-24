@@ -9,14 +9,18 @@ import { stripHtml, safeVal } from '@/utils/display'
 
 export const revalidate = 0
 
-interface Props { params: { lang: string, slug: string } }
+interface Props {
+  params: { lang: string; slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const lang = params.lang || 'vi'
-  const siteUrl = 'https://183housingsolutions.com'
-  
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://183housingsolutions.com'
+  const previewToken = searchParams?.previewToken as string | undefined;
+
   try {
-    const res = await fetchProjectBySlug(params.slug)
+    const res = await fetchProjectBySlug(params.slug, previewToken)
     const p = (res.data as Record<string, any>) || {}
     
     const getLocalVal = (enKey: string, vnKey: string, fallback: string) => {
@@ -94,10 +98,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProjectDetailPage({ params }: Props) {
+export default async function ProjectDetailPage({ params, searchParams }: Props) {
   let project: Record<string, unknown> = {}
+  const previewToken = searchParams?.previewToken as string | undefined;
+
   try {
-    const res = await fetchProjectBySlug(params.slug)
+    const res = await fetchProjectBySlug(params.slug, previewToken)
     project = (res.data as Record<string, unknown>) || {}
   } catch {
     notFound()

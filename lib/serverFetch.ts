@@ -42,8 +42,8 @@ export const fetchProjectPage = () =>
 export const fetchProjectCategories = () =>
   serverGet<{ success: boolean; data: unknown[] }>('/project-categories')
 
-export const fetchProjectBySlug = (slug: string) =>
-  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/projects/${slug}`)
+export const fetchProjectBySlug = (slug: string, token?: string) =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/projects/slug/${slug}`, 0, token)
 
 export const fetchHomeCms = () =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>('/home-page')
