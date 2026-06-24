@@ -1,4 +1,4 @@
-import { fetchAllProjects, fetchProjectCategories, fetchProjectPage } from '@/lib/serverFetch'
+import { fetchProjectCategories, fetchProjectPage } from '@/lib/serverFetch'
 import ProjectPageClient from '@/components/Projects/ProjectPageClient'
 import { getImageUrl } from '@/utils/baseURL'
 import type { Metadata } from 'next'
@@ -70,17 +70,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export const revalidate = 0
 
 export default async function ProjectsPage() {
-  let projects: unknown[] = []
   let categories: unknown[] = []
   let cmsData: Record<string, unknown> = {}
 
   try {
-    const [projRes, catRes, cmsRes] = await Promise.all([
-      fetchAllProjects(),
+    await new Promise(resolve => setTimeout(resolve, 1500))
+
+    const [catRes, cmsRes] = await Promise.all([
       fetchProjectCategories(),
       fetchProjectPage(),
     ])
-    projects = (projRes.data as unknown[]) || []
     categories = (catRes.data as unknown[]) || []
     cmsData = (cmsRes.data as Record<string, unknown>) || {}
   } catch (error) {
@@ -89,7 +88,7 @@ export default async function ProjectsPage() {
 
   return (
     <ProjectPageClient
-      initialProjects={projects as any}
+      initialProjects={[]}
       initialCategories={categories as any}
       cmsData={cmsData}
     />

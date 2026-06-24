@@ -10,7 +10,8 @@ import { useLanguage } from '@/context/LanguageContext'
 import ProjectBanner from './ProjectBanner'
 import ProjectIntroduction from './ProjectIntroduction'
 
-import { getImageUrl } from '@/utils/baseURL'
+import axios from 'axios'
+import { getBaseURL, getImageUrl } from '@/utils/baseURL'
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()
@@ -38,9 +39,20 @@ function ProjectPageInner({
   initialCategories: Category[];
   cmsData: Record<string, unknown>
 }) {
-  const [projects] = useState<Project[]>(initialProjects)
-  const [categories] = useState<Category[]>(initialCategories)
-  const [loading, setLoading] = useState(false)
+  const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [categories, setCategories] = useState<Category[]>(initialCategories)
+  const [loading, setLoading] = useState(true)
+  
+  useEffect(() => {
+    const BASE = getBaseURL().replace(/\/$/, '')
+    axios.get(`${BASE}/projects`).then(res => {
+      setProjects(res.data?.data || [])
+    }).catch(err => {
+      console.error('Error fetching projects:', err)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }, [])
   const searchParams = useSearchParams()
   const router = useRouter()
   const { language } = useLanguage()
