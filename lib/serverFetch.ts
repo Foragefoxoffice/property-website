@@ -2,10 +2,14 @@ import { getBaseURL } from '../utils/baseURL'
 
 const BASE = getBaseURL().replace(/\/$/, '')
 
-export async function serverGet<T>(path: string, revalidate = 0): Promise<T> {
+export async function serverGet<T>(path: string, revalidate = 0, token?: string): Promise<T> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
   const res = await fetch(`${BASE}${path}`, {
     next: { revalidate },
-    headers: { 'Content-Type': 'application/json' },
+    headers,
   })
   if (!res.ok) throw new Error(`Server fetch failed: ${path} — ${res.status}`)
   const json = await res.json()
@@ -26,8 +30,8 @@ export const fetchAllBlogs = () =>
 export const fetchBlogPage = () =>
   serverGet<{ success: boolean; data: Record<string, unknown> }>('/blog-page')
 
-export const fetchBlogBySlug = (slug: string) =>
-  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/blogs/${slug}`)
+export const fetchBlogBySlug = (slug: string, token?: string) =>
+  serverGet<{ success: boolean; data: Record<string, unknown> }>(`/blogs/${slug}`, 0, token)
 
 export const fetchAllProjects = () =>
   serverGet<{ success: boolean; data: unknown[] }>('/projects')
