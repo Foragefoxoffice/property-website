@@ -1,5 +1,6 @@
 import { fetchPrivacyPolicy } from '@/lib/serverFetch'
 import PrivacyPolicyBanner from '@/components/PrivacyPolicy/PrivacyPolicyBanner'
+import { getImageUrl } from '@/utils/baseURL'
 import PrivacyPolicyContent from '@/components/PrivacyPolicy/PrivacyPolicyContent'
 import type { Metadata } from 'next'
 
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: ogTitle,
         description: ogDesc,
         url: currentCanonical,
-        images: data.privacyPolicySeoOgImages && data.privacyPolicySeoOgImages.length > 0 ? [data.privacyPolicySeoOgImages[0]] : [],
+        images: data.privacyPolicySeoOgImage ? [{ url: getImageUrl(data.privacyPolicySeoOgImage), width: 1200, height: 630, alt: ogTitle }] : [],
       }
     }
   } catch {

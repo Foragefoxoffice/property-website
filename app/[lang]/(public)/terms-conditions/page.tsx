@@ -1,5 +1,6 @@
 import { fetchTermsConditions } from '@/lib/serverFetch'
 import TermsConditionBanner from '@/components/TermsConditions/TermsConditionBanner'
+import { getImageUrl } from '@/utils/baseURL'
 import TermsConditionContent from '@/components/TermsConditions/TermsConditionContent'
 import type { Metadata } from 'next'
 
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: ogTitle,
         description: ogDesc,
         url: currentCanonical,
-        images: data.termsConditionSeoOgImage ? [{ url: data.termsConditionSeoOgImage, width: 1200, height: 630, alt: ogTitle }] : [],
+        images: data.termsConditionSeoOgImage ? [{ url: getImageUrl(data.termsConditionSeoOgImage), width: 1200, height: 630, alt: ogTitle }] : [],
       }
     }
   } catch {

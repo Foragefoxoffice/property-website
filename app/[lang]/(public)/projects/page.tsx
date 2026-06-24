@@ -1,5 +1,6 @@
 import { fetchAllProjects, fetchProjectCategories, fetchProjectPage } from '@/lib/serverFetch'
 import ProjectPageClient from '@/components/Projects/ProjectPageClient'
+import { getImageUrl } from '@/utils/baseURL'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: ogTitle,
         description: ogDesc,
         url: currentCanonical,
-        images: data.projectSeoOgImage ? [{ url: data.projectSeoOgImage, width: 1200, height: 630, alt: ogTitle }] : [],
+        images: data.projectSeoOgImage ? [{ url: getImageUrl(data.projectSeoOgImage), width: 1200, height: 630, alt: ogTitle }] : [],
       }
     }
   } catch {

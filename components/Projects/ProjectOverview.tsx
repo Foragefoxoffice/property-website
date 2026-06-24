@@ -158,6 +158,7 @@ export default function ProjectOverview({ projectData }: any) {
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div
+                                                    key={language}
                                                     suppressHydrationWarning
                                                     className={`text-[14px] md:text-[15.5px] leading-[1.6] font-semibold project-overview-rich-text overflow-hidden ${isEmphasized ? 'text-rose-500 underline decoration-rose-200 decoration-2 underline-offset-4' : 'text-slate-600'}`}
                                                     dangerouslySetInnerHTML={{ __html: processRichText(cleanHTML(des)) }}

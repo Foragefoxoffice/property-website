@@ -19,6 +19,7 @@ export default function ProjectMainDescription({ projectData }: any) {
         <section id="main-description" className="py-12 bg-white ">
             <div className="max-w-4xl mx-auto px-6">
                 <div
+                    key={language}
                     suppressHydrationWarning
                     className="main-description-rich-text text-[#374151] text-[16px] md:text-[17px] leading-[1.8] overflow-hidden"
                     dangerouslySetInnerHTML={{ __html: processRichText(mainDescription) }}

@@ -43,6 +43,7 @@ export default function ProjectIntroduction({ data }: { data: Record<string, unk
               {title}
             </h2>
             <div
+              key={language}
               suppressHydrationWarning
               className="
     text-[15px] md:text-[16px]
