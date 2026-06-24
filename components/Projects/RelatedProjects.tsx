@@ -2,7 +2,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import Link from '@/components/LanguageLink';
-import { getProjectPage, getAllProjectsAdmin } from '@/lib/api';
+import { getProjectPage, getAllProjects } from '@/lib/api';
 import { useLanguage } from '@/context/LanguageContext';
 import { getImageUrl } from '@/utils/baseURL';
 import ProjectSkeleton from './ProjectSkeleton';
@@ -30,7 +30,7 @@ export default function RelatedProjects({ currentCategoryId, currentProjectId, c
             try {
                 setLoading(true);
                 const [projRes, pageRes] = await Promise.all([
-                    getAllProjectsAdmin(),
+                    getAllProjects(),
                     getProjectPage()
                 ]);
 
