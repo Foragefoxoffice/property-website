@@ -8,22 +8,33 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const lang = params.lang || 'vi'
-    const siteUrl = 'https://183housingsolutions.com'
-    const currentCanonical = `${siteUrl}/${lang}/privacy-policy`
+  const lang = params.lang || 'vi'
+  const siteUrl = 'https://183housingsolutions.com'
+  const currentCanonical = `${siteUrl}/${lang}/privacy-policy`
+  
   try {
-
     const res = await fetchPrivacyPolicy()
-    const data = (res.data as any) || {}
+    const data = (res.data as Record<string, any>) || {}
+
+    const getLocalVal = (enKey: string, vnKey: string, fallback: string) => {
+      const val = lang === 'en' ? (data[enKey] || data[vnKey]) : (data[vnKey] || data[enKey])
+      return val ? String(val) : fallback
+    }
+
+    const metaTitle = getLocalVal('privacyPolicySeoMetaTitle_en', 'privacyPolicySeoMetaTitle_vn', 'Privacy Policy | 183 Housing Solutions')
+    const metaDesc = getLocalVal('privacyPolicySeoMetaDescription_en', 'privacyPolicySeoMetaDescription_vn', 'Privacy policy for 183 Housing Solutions — how we handle your data.')
+    const ogTitle = getLocalVal('privacyPolicySeoOgTitle_en', 'privacyPolicySeoOgTitle_vn', metaTitle)
+    const ogDesc = getLocalVal('privacyPolicySeoOgDescription_en', 'privacyPolicySeoOgDescription_vn', metaDesc)
+
     return {
-      title: data.privacyPolicySeoMetaTitle_en || 'Privacy Policy | 183 Housing Solutions',
-      description: data.privacyPolicySeoMetaDescription_en || 'Privacy policy for 183 Housing Solutions — how we handle your data.',
+      title: metaTitle,
+      description: metaDesc,
       alternates: {
         canonical: currentCanonical,
         languages: {
           'en': `${siteUrl}/en/privacy-policy`,
-          'vi': `${siteUrl}/vi/privacy-policy`,
-          'x-default': `${siteUrl}/vi/privacy-policy`,
+          'vi': `${siteUrl}/vi/chinh-sach-bao-mat`,
+          'x-default': `${siteUrl}/vi/chinh-sach-bao-mat`,
         },
       },
       robots: {
@@ -31,8 +42,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         follow: data.privacyPolicySeoAllowIndexing !== false,
       },
       openGraph: {
-        title: data.privacyPolicySeoOgTitle_en || data.privacyPolicySeoMetaTitle_en,
-        description: data.privacyPolicySeoOgDescription_en || data.privacyPolicySeoMetaDescription_en,
+        title: ogTitle,
+        description: ogDesc,
+        url: currentCanonical,
         images: data.privacyPolicySeoOgImages && data.privacyPolicySeoOgImages.length > 0 ? [data.privacyPolicySeoOgImages[0]] : [],
       }
     }
@@ -44,8 +56,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         canonical: currentCanonical,
         languages: {
           'en': `${siteUrl}/en/privacy-policy`,
-          'vi': `${siteUrl}/vi/privacy-policy`,
-          'x-default': `${siteUrl}/vi/privacy-policy`,
+          'vi': `${siteUrl}/vi/chinh-sach-bao-mat`,
+          'x-default': `${siteUrl}/vi/chinh-sach-bao-mat`,
         },
       },
       robots: {
@@ -74,4 +86,3 @@ export default async function PrivacyPolicyPage() {
     </div>
   )
 }
-

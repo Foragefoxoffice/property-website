@@ -90,6 +90,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
           <div className="lg:col-span-8 min-w-0">
             <div className="bg-white rounded-xl shadow-xl p-4 md:p-10 border border-gray-100 ring-1 ring-black/5 overflow-hidden">
               <article
+                key={lang}
                 style={{ lineHeight: '1.8' }}
                 className="news-content max-w-none w-full text-lg
                   [&_h1]:font-bold [&_h1]:text-gray-900 [&_h1]:text-3xl [&_h1]:mb-4
@@ -110,7 +111,7 @@ function BlogDetailInner({ blog }: { blog: Blog }) {
                     <span className="font-bold text-gray-800 block mb-3">Tags:</span>
                     <div className="flex flex-wrap gap-2">
                       {tags.map((tag, i) => (
-                        <span key={i} className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-[#41398B] hover:text-white transition-all cursor-pointer">
+                        <span key={tag + i} className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-[#41398B] hover:text-white transition-all cursor-pointer">
                           #{tag}
                         </span>
                       ))}

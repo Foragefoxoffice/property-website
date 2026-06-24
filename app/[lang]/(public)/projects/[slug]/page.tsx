@@ -39,10 +39,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ogImage = p.projectSeoOgImage ? getImageUrl(p.projectSeoOgImage) : fallbackImageUrl
 
     // Determine the ideal canonical URL
-    const projectSlugObj = (p.slug as Record<string, string>) || {}
-    const canonicalSlug = lang === 'en' 
-      ? (projectSlugObj.en || projectSlugObj.vi || projectSlugObj.vn || params.slug)
-      : (projectSlugObj.vi || projectSlugObj.vn || projectSlugObj.en || params.slug)
+    const enSlug = p.projectSeoSlugUrl_en || (p.slug as any)?.en || params.slug
+    const viSlug = p.projectSeoSlugUrl_vn || p.projectSeoSlugUrl_vi || (p.slug as any)?.vi || params.slug
+    
+    const canonicalSlug = lang === 'en' ? enSlug : viSlug
     
     const canonicalUrl = `${siteUrl}/${lang}/projects/${canonicalSlug}`
 
@@ -52,9 +52,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       alternates: {
         canonical: canonicalUrl,
         languages: {
-          'en': `${siteUrl}/en/projects/${canonicalSlug}`,
-          'vi': `${siteUrl}/vi/projects/${canonicalSlug}`,
-          'x-default': `${siteUrl}/vi/projects/${canonicalSlug}`,
+          'en': `${siteUrl}/en/projects/${enSlug}`,
+          'vi': `${siteUrl}/vi/projects/${viSlug}`,
+          'x-default': `${siteUrl}/vi/projects/${viSlug}`,
         },
       },
       robots: {
@@ -64,6 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         title: ogTitle,
         description: ogDesc,
+        url: canonicalUrl,
         type: 'website',
         siteName: '183 Housing Solutions',
         images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }] : [],
@@ -107,10 +108,9 @@ export default async function ProjectDetailPage({ params }: Props) {
   const lang = params.lang || 'vi'
   
   // Enforce correct slug for current language
-  const projectSlugObj = (project.slug as Record<string, string>) || {}
   const expectedSlug = lang === 'en' 
-    ? (projectSlugObj.en || projectSlugObj.vi || projectSlugObj.vn || params.slug)
-    : (projectSlugObj.vi || projectSlugObj.vn || projectSlugObj.en || params.slug)
+    ? (project.projectSeoSlugUrl_en || (project.slug as any)?.en || params.slug)
+    : (project.projectSeoSlugUrl_vn || project.projectSeoSlugUrl_vi || (project.slug as any)?.vi || params.slug)
     
   if (expectedSlug && String(expectedSlug) !== String(params.slug)) {
     redirect(`/${lang}/projects/${expectedSlug}`)

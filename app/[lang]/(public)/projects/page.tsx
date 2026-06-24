@@ -7,16 +7,26 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const lang = params.lang || 'vi'
-    const siteUrl = 'https://183housingsolutions.com'
-    const currentCanonical = `${siteUrl}/${lang}/projects`
+  const lang = params.lang || 'vi'
+  const siteUrl = 'https://183housingsolutions.com'
+  const currentCanonical = `${siteUrl}/${lang}/projects`
   try {
-
     const res = await fetchProjectPage()
-    const data = (res.data as any) || {}
+    const data = (res.data as Record<string, any>) || {}
+
+    const getLocalVal = (enKey: string, vnKey: string, fallback: string) => {
+      const val = lang === 'en' ? (data[enKey] || data[vnKey]) : (data[vnKey] || data[enKey])
+      return val ? String(val) : fallback
+    }
+
+    const metaTitle = getLocalVal('projectSeoMetaTitle_en', 'projectSeoMetaTitle_vn', 'Projects | 183 Housing Solutions')
+    const metaDesc = getLocalVal('projectSeoMetaDescription_en', 'projectSeoMetaDescription_vn', 'Explore real estate development projects by 183 Housing Solutions in Vietnam.')
+    const ogTitle = getLocalVal('projectSeoOgTitle_en', 'projectSeoOgTitle_vn', metaTitle)
+    const ogDesc = getLocalVal('projectSeoOgDescription_en', 'projectSeoOgDescription_vn', metaDesc)
+
     return {
-      title: data.projectSeoMetaTitle_en || 'Projects | 183 Housing Solutions',
-      description: data.projectSeoMetaDescription_en || 'Explore real estate development projects by 183 Housing Solutions in Vietnam.',
+      title: metaTitle,
+      description: metaDesc,
       alternates: {
         canonical: currentCanonical,
         languages: {
@@ -30,9 +40,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         follow: data.projectSeoAllowIndexing !== false,
       },
       openGraph: {
-        title: data.projectSeoOgTitle_en || data.projectSeoMetaTitle_en,
-        description: data.projectSeoOgDescription_en || data.projectSeoMetaDescription_en,
-        images: data.projectSeoOgImage ? [data.projectSeoOgImage] : [],
+        title: ogTitle,
+        description: ogDesc,
+        url: currentCanonical,
+        images: data.projectSeoOgImage ? [{ url: data.projectSeoOgImage, width: 1200, height: 630, alt: ogTitle }] : [],
       }
     }
   } catch {
@@ -83,4 +94,3 @@ export default async function ProjectsPage() {
     />
   )
 }
-
