@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 
 interface PageProps {
   params: { lang: string, slug: string[] }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 export const revalidate = 0
@@ -127,7 +128,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function PropertyDetailPage({ params }: PageProps) {
+export default async function PropertyDetailPage({ params, searchParams }: PageProps) {
   let property: Record<string, unknown> | null = null
   
   const slugArray = params.slug || []
@@ -136,8 +137,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   const idMatch = lastSegment.match(/([A-Z]{3}-\d{3,})$/i)
   const propertyId = idMatch ? idMatch[1] : lastSegment
 
+  const previewToken = typeof searchParams?.previewToken === 'string' ? searchParams.previewToken : undefined
+
   try {
-    const res = await fetchPropertyById(propertyId)
+    const res = await fetchPropertyById(propertyId, previewToken)
     property = res.data as Record<string, unknown>
   } catch {
     property = null
