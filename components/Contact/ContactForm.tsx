@@ -166,9 +166,9 @@ export default function ContactForm({ data }: { data?: Record<string, unknown> }
                 <textarea id="message" rows={5} placeholder={language === 'en' ? 'Your Message' : 'Tin nhắn của bạn'} value={form.message} onChange={handleChange} required
                   className="w-full px-4 py-3 mt-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-[#41398B] focus:border-[#41398B] transition-all placeholder:text-gray-400 font-light resize-none" />
               </div>
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={loading}
-                className="w-full bg-black text-white cursor-pointer hover:bg-[#333] font-medium py-3 rounded-lg transition-colors duration-300">
-                {loading ? (language === 'en' ? 'Sending...' : 'Đang gửi...') : g('contactReachOutGetinButtonText_en', 'contactReachOutGetinButtonText_vn', 'Send Message')}
+              <motion.button whileTap={{ scale: 0.98 }} type="submit" disabled={loading}
+                className="w-full bg-black text-white cursor-pointer flex justify-center gap-2 hover:bg-[#41398B] font-medium py-3 rounded-full transition-colors duration-300">
+                <LucideIcons.MessageCircleCheckIcon /> {loading ? (language === 'en' ? 'Sending...' : 'Đang gửi...') : g('contactReachOutGetinButtonText_en', 'contactReachOutGetinButtonText_vn', 'Send Message')}
               </motion.button>
             </form>
           </motion.div>

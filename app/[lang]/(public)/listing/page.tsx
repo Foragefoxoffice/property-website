@@ -48,7 +48,7 @@ export default async function ListingPage({
 
   const params: Record<string, string> = {
     page: '1',
-    limit: '10',
+    limit: '20',
     sortBy: 'default'
   }
 
@@ -66,12 +66,14 @@ export default async function ListingPage({
 
   let initialProperties = []
   let totalPages = 0
+  let totalItems = 0
 
   try {
     const res = await fetchListingProperties(params)
     if (res.success) {
       initialProperties = (res.data as any) || []
       totalPages = (res as any).totalPages || 0
+      totalItems = (res as any).total || 0
     }
   } catch (error) {
     console.error("Error fetching initial properties:", error)
@@ -82,6 +84,7 @@ export default async function ListingPage({
       <ListingClientWrapper 
         initialProperties={initialProperties}
         initialTotalPages={totalPages}
+        initialTotalItems={totalItems}
       />
     </div>
   )

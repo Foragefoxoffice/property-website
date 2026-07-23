@@ -32,7 +32,7 @@ function ChangePasswordModal({
         </p>
         <button
           onClick={onClose}
-          className="w-full py-2 bg-[#41398B] text-white rounded-lg font-semibold hover:bg-[#352e7a] transition"
+          className="w-full py-2 bg-[#41398B] text-white rounded-full font-semibold hover:bg-[#352e7a] transition"
         >
           Close
         </button>
@@ -227,8 +227,8 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
   const initials = userName ? userName.slice(0, 2).toUpperCase() : 'US'
 
 
-  const isAuthPage = /^\/[a-z]{2}\/(login|register|forgot-password|reset-password)$/.test(pathname) || 
-                     ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname);
+  const isAuthPage = /^\/[a-z]{2}\/(login|register|forgot-password|reset-password)$/.test(pathname) ||
+    ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname);
   if (isAuthPage) {
     return null
   }
@@ -257,7 +257,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 bg-[#41398B] cursor-pointer text-white rounded-lg text-sm font-semibold transition-colors hover:bg-[#352e7a]"
+              className="px-4 py-2 bg-[#41398B] cursor-pointer text-white rounded-full text-sm font-semibold transition-colors hover:bg-[#352e7a]"
             >
               {labels.visitSite[language]}
             </a>
@@ -444,7 +444,7 @@ export default function PublicHeader({ showNavigation = true }: { showNavigation
         <div className="max-w-[1400px] mx-auto px-2 md:px-6 md:py-3 py-2 flex items-center justify-between relative">
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 text-gray-600 hover:text-[#41398B] transition-colors rounded-lg hover:bg-gray-50"
+            className="lg:hidden p-2 text-gray-600 hover:text-[#41398B] transition-colors rounded-full hover:bg-gray-50"
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Toggle menu"
           >

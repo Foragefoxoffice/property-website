@@ -41,7 +41,7 @@ export default function AboutFindProperty({ data }: { data: Record<string, unkno
       <div className="absolute inset-0 bg-black/70 z-0" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
         <div className="max-w-4xl">
-          <h2 className={`text-3xl md:text-4xl font-semibold text-white leading-tight mb-4 transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <h2 className={`text-3xl md:text-4xl font-bold text-white leading-tight mb-4 transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
             {title}
           </h2>
           <p className={`text-md md:text-lg text-white/90 transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>

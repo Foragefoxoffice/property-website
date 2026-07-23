@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Select, Skeleton, Tooltip } from 'antd'
+import { Select, Skeleton, Tooltip, Pagination, ConfigProvider } from 'antd'
 import { Heart, SlidersHorizontal } from 'lucide-react'
 import {
   getListingProperties,
@@ -286,9 +286,11 @@ function PropertyCard({
 function ListingInner({
   initialProperties,
   initialTotalPages,
+  initialTotalItems,
 }: {
   initialProperties?: any[]
   initialTotalPages?: number
+  initialTotalItems?: number
 }) {
   const { language } = useLanguage()
   const t = (translations[language as keyof typeof translations] || translations.en) as Record<string, string>
@@ -315,8 +317,7 @@ function ListingInner({
   const [loading, setLoading] = useState(!initialProperties)
   const [loadingMore, setLoadingMore] = useState(false)
   const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(initialTotalPages ? 1 < initialTotalPages : true)
-  const observer = useRef<IntersectionObserver | null>(null)
+  const [totalProperties, setTotalProperties] = useState(initialTotalItems || 0)
 
   const [projects, setProjects] = useState<Prop[]>([])
   const [zones, setZones] = useState<Prop[]>([])
@@ -383,7 +384,7 @@ function ListingInner({
       const params: Record<string, string | number> = {
         type: selectedCategory === 'All' ? '' : selectedCategory,
         page: currentPage,
-        limit: 10,
+        limit: 20,
         sortBy,
       }
       if (active.keyword) params.keyword = active.keyword
@@ -400,10 +401,9 @@ function ListingInner({
       const res = await getListingProperties(params)
       if (res.data?.success) {
         const incoming = res.data.data as Prop[]
-        const totalPages = res.data.totalPages || 0
-        if (isNew) setProperties(incoming)
-        else setProperties(prev => [...prev, ...incoming])
-        setHasMore(currentPage < totalPages)
+        const totalItems = res.data.total || 0
+        setProperties(incoming)
+        setTotalProperties(totalItems)
       }
     } catch { }
     finally { setLoading(false); setLoadingMore(false) }
@@ -416,7 +416,7 @@ function ListingInner({
       isFirstMountCategory.current = false
       return
     }
-    setProperties([]); setPage(1); setHasMore(true)
+    setProperties([]); setPage(1)
     fetchProperties(1, true)
   }, [selectedCategory]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -427,27 +427,19 @@ function ListingInner({
       isFirstMountSort.current = false
       return
     }
-    setProperties([]); setPage(1); setHasMore(true)
+    setProperties([]); setPage(1)
     fetchProperties(1, true)
   }, [sortBy]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Infinite scroll
-  useEffect(() => {
-    if (page > 1) fetchProperties(page, false)
-  }, [page]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const lastPropRef = useCallback((node: HTMLDivElement | null) => {
-    if (loading || loadingMore) return
-    if (observer.current) observer.current.disconnect()
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) setPage(p => p + 1)
-    })
-    if (node) observer.current.observe(node)
-  }, [loading, loadingMore, hasMore])
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+    fetchProperties(newPage, true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const handleSearch = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    setProperties([]); setPage(1); setHasMore(true)
+    setProperties([]); setPage(1)
     fetchProperties(1, true)
   }
 
@@ -455,7 +447,7 @@ function ListingInner({
     const empty = { keyword: '', projectId: '', zoneId: '', blockId: '', propertyType: '', bedrooms: '', bathrooms: '', currency: '', minPrice: '', maxPrice: '' }
     setFilters(empty)
     setZones([]); setBlocks([])
-    setProperties([]); setPage(1); setHasMore(true)
+    setProperties([]); setPage(1)
     fetchProperties(1, true, empty)
   }
 
@@ -552,12 +544,12 @@ function ListingInner({
               {/* Sliders + Search */}
               <div className="flex items-end gap-3 h-full">
                 <button
-                  className={`flex items-center justify-center p-[11px] border cursor-pointer border-[#d1d5dc] rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all ${showFilters ? 'bg-purple-50 border-[#41398B] text-[#41398B]' : ''}`}
+                  className={`flex items-center justify-center p-[11px] border cursor-pointer border-[#d1d5dc] rounded-full text-gray-700 font-semibold hover:bg-gray-50 transition-all ${showFilters ? 'bg-purple-50 border-[#41398B] text-[#41398B]' : ''}`}
                   onClick={() => setShowFilters(s => !s)} style={{ minWidth: '50px' }}>
                   <SlidersHorizontal size={22} />
                 </button>
                 <button
-                  className="w-full px-10 py-[12px] whitespace-nowrap bg-[#41398B] hover:bg-[#352e7a] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all text-base"
+                  className="w-full px-10 py-[12px] whitespace-nowrap bg-[#41398B] hover:bg-[#352e7a] text-white font-bold rounded-full hover:shadow-xl cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all text-base"
                   onClick={handleSearch}>
                   {t.search || 'Search...'}
                 </button>
@@ -629,17 +621,17 @@ function ListingInner({
 
                 {/* Mobile search */}
                 <div className="md:hidden flex items-center gap-3 mt-8">
-                  <button className={`flex items-center justify-center p-[11px] border cursor-pointer border-[#d1d5dc] rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all ${showFilters ? 'bg-purple-50 border-[#41398B] text-[#41398B]' : ''}`}
+                  <button className={`flex items-center justify-center p-[11px] border cursor-pointer border-[#d1d5dc] rounded-full text-gray-700 font-semibold hover:bg-gray-50 transition-all ${showFilters ? 'bg-purple-50 border-[#41398B] text-[#41398B]' : ''}`}
                     onClick={() => setShowFilters(s => !s)} style={{ minWidth: '50px' }}>
                     <SlidersHorizontal size={22} />
                   </button>
-                  <button className="w-full px-10 py-[12px] bg-[#41398B] whitespace-nowrap hover:bg-[#352e7a] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer transition-all text-base" onClick={handleSearch}>
+                  <button className="w-full px-10 py-[12px] bg-[#41398B] whitespace-nowrap hover:bg-[#352e7a] text-white font-bold rounded-full hover:shadow-xl cursor-pointer transition-all text-base" onClick={handleSearch}>
                     {t.search || 'Search...'}
                   </button>
                 </div>
 
                 <div className="mt-6 flex justify-end">
-                  <button className="px-4 py-2 text-gray-400 font-bold hover:text-[#41398B] transition-colors rounded-xl text-sm cursor-pointer" onClick={handleClear}>
+                  <button className="px-4 py-2 text-gray-400 font-bold hover:text-[#41398B] transition-colors rounded-full text-sm cursor-pointer" onClick={handleClear}>
                     {t.clearAll || 'Clear All'}
                   </button>
                 </div>
@@ -671,9 +663,8 @@ function ListingInner({
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-2 md:p-0">
                 {properties.map((property, index) => {
-                  const isLast = index === properties.length - 1
                   return (
-                    <div key={String(property._id)} ref={isLast ? lastPropRef : null}>
+                    <div key={String(property._id)}>
                       <PropertyCard
                         property={property}
                         language={language}
@@ -687,20 +678,23 @@ function ListingInner({
                 })}
               </div>
 
-              {loadingMore && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="bg-white rounded-2xl overflow-hidden p-4">
-                      <Skeleton.Image active className="!w-full !h-56 rounded-2xl mb-4" />
-                      <Skeleton active paragraph={{ rows: 3 }} />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {!hasMore && properties.length > 0 && (
-                <div className="text-center py-8">
-                  <p className="text-gray-500 font-medium">{"You've reached the end"}</p>
+              {totalProperties > 20 && (
+                <div className="flex justify-center mt-10 mb-8">
+                  <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: '#41398B',
+                      },
+                    }}
+                  >
+                    <Pagination 
+                      current={page} 
+                      total={totalProperties} 
+                      pageSize={20} 
+                      onChange={handlePageChange} 
+                      showSizeChanger={false}
+                    />
+                  </ConfigProvider>
                 </div>
               )}
             </>
@@ -714,13 +708,15 @@ function ListingInner({
 export default function ListingClientWrapper({
   initialProperties,
   initialTotalPages,
+  initialTotalItems,
 }: {
   initialProperties?: any[]
   initialTotalPages?: number
+  initialTotalItems?: number
 }) {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-500 font-medium">Loading properties...</div>}>
-      <ListingInner initialProperties={initialProperties} initialTotalPages={initialTotalPages} />
+      <ListingInner initialProperties={initialProperties} initialTotalPages={initialTotalPages} initialTotalItems={initialTotalItems} />
     </Suspense>
   )
 }

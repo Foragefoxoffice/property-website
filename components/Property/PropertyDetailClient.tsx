@@ -800,7 +800,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                     placeholder={t.enterMessage}
                     className="w-full px-4 py-3 bg-white rounded-xl border border-gray-500 focus:outline-none focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] transition-all resize-none h-32 text-sm"
                   />
-                  <button type="submit" disabled={sending} className="w-full text-white cursor-pointer py-3 rounded-xl font-bold transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-[#41398B] hover:bg-[#352e7a] disabled:bg-gray-400">
+                  <button type="submit" disabled={sending} className="w-full text-white cursor-pointer py-3 rounded-full font-bold transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-[#41398B] hover:bg-[#352e7a] disabled:bg-gray-400">
                     {sending ? (
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (

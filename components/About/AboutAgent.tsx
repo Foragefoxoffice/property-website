@@ -42,7 +42,7 @@ export default function AboutAgent({ data }: { data: Record<string, unknown> }) 
             <motion.p variants={itemVariants} className="md:text-xl text-lg font-bold text-[#1a1a1a] mb-2">{stats}</motion.p>
             <motion.p variants={itemVariants} className="text-gray-500 text-md leading-relaxed mb-8">{description}</motion.p>
             <motion.div variants={itemVariants}>
-              <a href={buttonLink} className="inline-flex items-center justify-center bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#41398B] transition-colors duration-300 group">
+              <a href={buttonLink} className="inline-flex items-center justify-center bg-black text-white px-6 py-3 rounded-full font-semibold hover:bg-[#41398B] transition-colors duration-300 group">
                 {buttonText}
                 <ArrowRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
               </a>

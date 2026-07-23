@@ -183,7 +183,7 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-0">
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-5xl font-medium text-white mb-4 animate-fadeInUp">
+            <h1 className="text-3xl md:text-5xl font-semibold text-white mb-4 animate-fadeInUp">
               {heroTitle}
             </h1>
             <p className="md:text-xl text-lg text-gray-200 font-medium max-w-2xl mx-auto animate-fadeInUp animation-delay-200">
@@ -291,14 +291,14 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
             <div className="order-last lg:order-5 flex items-center gap-3">
               <button
                 aria-label={lang === 'en' ? 'Toggle Filters' : 'Bật/tắt bộ lọc'}
-                className="flex items-center gap-2 px-4 py-2.5 border cursor-pointer border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-all"
+                className="flex items-center gap-2 px-4 py-2.5 border cursor-pointer border-gray-300 rounded-full text-gray-700 font-semibold hover:bg-gray-50 transition-all"
                 onClick={() => setShowMore(s => !s)}
               >
                 <SlidersHorizontal size={20} />
                 <span className="lg:hidden">{lang === 'en' ? 'Filters' : 'Bộ lọc'}</span>
               </button>
               <button
-                className="flex-1 px-8 py-2.5 bg-[#41398B] hover:bg-[#41398be1] text-white font-bold rounded-lg hover:shadow-xl cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all"
+                className="flex-1 px-8 py-2.5 bg-[#41398B] hover:bg-[#41398be1] text-white font-bold rounded-full hover:shadow-xl cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all"
                 onClick={search}
               >
                 {lang === 'en' ? 'Search' : 'Tìm Kiếm'}
@@ -451,9 +451,9 @@ function HomeAbout({ d, lang }: { d: Record<string, unknown>; lang: string }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-16 gap-8 items-start">
           <div className={`space-y-6 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>
             <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">{subtitle}</p>
-            <h2 className="text-2xl md:text-3xl font-semibold text-black leading-tight">{title}</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-black leading-tight">{title}</h2>
             <p className="text-md text-gray-600 leading-relaxed">{desc}</p>
-            <Link href={btnLink} className="inline-block mt-4 px-6 py-3 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition-all hover:shadow-xl hover:-translate-y-1">{btnText}</Link>
+            <Link href={btnLink} className="inline-block mt-4 px-6 py-3 bg-black text-white font-semibold rounded-full hover:bg-[#41398B] transition-all hover:shadow-xs">{btnText}</Link>
           </div>
           <div className="space-y-8">
             {steps.map((s, i) => (
@@ -529,7 +529,7 @@ function HomeFeaturedProperties({ properties, d, lang, t }: { properties: unknow
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-16">
           <p className={`text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
-          {desc && <h2 className={`text-2xl md:text-4xl  font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
+          {desc && <h2 className={`text-2xl md:text-4xl  font-bold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
         {properties.length === 0 ? (
@@ -718,7 +718,7 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
           <div className="relative z-10 p-6 md:p-12 flex flex-col h-full items-start">
             <h2 className="text-3xl md:text-4xl font-semibold text-white mb-2 md:mb-6 leading-tight">{cardTitle}</h2>
             <p className="text-white/90 text-lg mb-2 md:mb-8 leading-relaxed max-w-md">{cardDesc}</p>
-            <button className="mt-4 px-6 py-3 bg-black cursor-pointer text-white font-semibold rounded-md hover:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+            <button className="mt-4 px-6 py-3 bg-black cursor-pointer text-white font-semibold rounded-full hover:bg-[#41398B] transition-all duration-300 hover:shadow-xs active:translate-y-0"
               onClick={() => navigate(btnLink)}>{btnText}</button>
           </div>
         </div>
@@ -728,7 +728,7 @@ function HomeFaq({ d, lang }: { d: Record<string, unknown>; lang: string }) {
           <span className={`text-sm font-semibold tracking-[0.2em] text-gray-500 uppercase mb-3 transition-all duration-700 delay-300 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
             {faqSub}
           </span>
-          <h2 className={`text-2xl md:text-3xl font-semibold text-[#1a1a1a] mb-3 md:mb-5 leading-tight transition-all duration-700 delay-500 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
+          <h2 className={`text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-3 md:mb-5 leading-tight transition-all duration-700 delay-500 ease-out transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-8'}`}>
             {faqTitle}
           </h2>
 
@@ -922,7 +922,7 @@ function HomeLatestBlogs({ d, lang }: { d: Record<string, unknown>; lang: string
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 md:mb-28">
           <p className={`text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 transition-all duration-1000 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{title}</p>
-          {desc && <h2 className={`text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
+          {desc && <h2 className={`text-2xl md:text-4xl font-bold text-black transition-all duration-1000 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-1 translate-y-12'}`}>{desc}</h2>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9 mt-20 md:mt-0">

@@ -44,7 +44,7 @@ export default function AboutWhyChoose({ data }: { data: Record<string, unknown>
             <h2 className="text-2xl md:text-4xl font-bold leading-tight">{title}</h2>
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }} transition={{ duration: 0.8 }}>
-            <Link href={buttonLink} className="inline-block px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-[#41398B] hover:text-white transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+            <Link href={buttonLink} className="inline-block px-6 py-3 bg-white text-black font-semibold rounded-full hover:bg-[#41398B] hover:text-white transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
               {buttonText}
             </Link>
           </motion.div>

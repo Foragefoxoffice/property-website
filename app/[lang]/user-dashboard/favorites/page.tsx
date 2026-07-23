@@ -153,7 +153,7 @@ export default function FavoritesPage() {
             <p className="text-gray-500 mb-8 max-w-md mx-auto">{t.noFavoritesDesc}</p>
             <Link
               href="/listing"
-              className="inline-block bg-[#41398B] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#352e7a] transition-colors shadow-lg hover:shadow-xl"
+              className="inline-block bg-[#41398B] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#352e7a] transition-colors shadow-lg hover:shadow-xl"
             >
               {t.browseProperties}
             </Link>
@@ -320,7 +320,7 @@ export default function FavoritesPage() {
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-6 py-3 bg-[#eb4d4d] text-white font-semibold rounded-xl hover:bg-[#d44545] transition-all shadow-lg shadow-red-100 active:scale-95"
+                className="flex-1 px-6 py-3 bg-[#eb4d4d] text-white font-semibold rounded-full hover:bg-[#d44545] transition-all shadow-lg shadow-red-100 active:scale-95"
               >
                 {t.remove}
               </button>
@@ -362,7 +362,7 @@ export default function FavoritesPage() {
               </button>
               <button
                 onClick={handleSendEnquiry}
-                className="flex-1 px-6 py-3 bg-[#41398B] text-white font-semibold rounded-xl hover:bg-[#352e7a] transition-all shadow-lg active:scale-95"
+                className="flex-1 px-6 py-3 bg-[#41398B] text-white font-semibold rounded-full hover:bg-[#352e7a] transition-all shadow-lg active:scale-95"
               >
                 {t.send || 'Send'}
               </button>

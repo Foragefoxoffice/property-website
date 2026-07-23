@@ -36,7 +36,7 @@ export default function AboutOverview({ data }: { data: Record<string, unknown> 
           <motion.span variants={itemVariants} className="text-gray-400 text-sm font-bold tracking-[0.2em] uppercase md:mb-4 mb-2 block">
             {title}
           </motion.span>
-          <motion.h2 variants={itemVariants} className="text-2xl md:text-3xl lg:text-4xl font-semibold text-[#1a1a1a] leading-tight">
+          <motion.h2 variants={itemVariants} className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1a1a1a]">
             {description}
           </motion.h2>
         </motion.div>

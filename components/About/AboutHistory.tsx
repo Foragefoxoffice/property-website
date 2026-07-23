@@ -42,7 +42,7 @@ export default function AboutHistory({ data }: { data: Record<string, unknown> }
           className="text-center mb-8 md:mb-18"
         >
           <span className="text-gray-400 text-sm font-bold tracking-[0.2em] uppercase mb-4 block">{sectionTitle}</span>
-          <h2 className="text-2xl md:text-4xl font-semibold text-[#1a1a1a]">{sectionDescription}</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-[#1a1a1a]">{sectionDescription}</h2>
         </motion.div>
         <motion.div className="w-full relative" variants={containerVariants} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
           <div className="hidden lg:block absolute top-[128px] left-0 w-full h-[4px] bg-gray-200" />

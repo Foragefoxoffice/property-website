@@ -41,7 +41,7 @@ export default function AboutBuyProcess({ data }: { data: Record<string, unknown
         <motion.div className="flex flex-col" initial="hidden" animate={isInView ? 'visible' : 'hidden'} variants={containerVariants}>
           <motion.div variants={itemVariants} className="md:mb-10 mb-8">
             <span className="text-gray-400 text-sm font-semibold tracking-[0.2em] uppercase md:mb-4 mb-2 block">{subTitle}</span>
-            <h2 className="text-2xl md:text-4xl font-semibold text-[#1a1a1a]">{title}</h2>
+            <h2 className="text-2xl md:text-4xl font-bold text-[#1a1a1a]">{title}</h2>
           </motion.div>
           <div className="space-y-8 relative">
             {steps.map((step, index) => (
