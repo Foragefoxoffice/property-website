@@ -1,5 +1,5 @@
-import Loader from '@/components/Loader'
+import DynamicRootLoader from '@/components/DynamicRootLoader'
 
 export default function RootLoading() {
-  return <Loader />
+  return <DynamicRootLoader />
 }

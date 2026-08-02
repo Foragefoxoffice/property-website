@@ -1,99 +1,237 @@
 'use client'
 
-import { useEffect, useState, useRef, Suspense } from 'react'
+import { useEffect, useState, useRef, useCallback, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Loader from '@/components/Loader'
 
+function isHomePagePath(path: string | null | undefined): boolean {
+    if (!path) return false
+    return path === '/' || path === '/en' || path === '/vi' || path === '/en/' || path === '/vi/'
+}
+
+/**
+ * HomeVideoLoader lives OUTSIDE the Suspense boundary so it never gets
+ * unmounted or hidden by useSearchParams() suspending during hydration.
+ * It uses window.location for initial detection (SSR-safe with useState initializer).
+ */
+function HomeVideoLoader({ onFinished, onFading }: { onFinished: () => void, onFading: () => void }) {
+    const [visible, setVisible] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return isHomePagePath(window.location.pathname)
+        }
+        return true
+    })
+    const [fading, setFading] = useState(false)
+    const [videoKey, setVideoKey] = useState(0)
+    const videoRef = useRef<HTMLVideoElement>(null)
+    const overlayRef = useRef<HTMLDivElement>(null)
+    const hasFinished = useRef(false)
+    const fadeStarted = useRef(false)
+
+    // Duration of the crossfade in seconds
+    const FADE_DURATION = 1.5
+    // How many seconds before the video ends to start fading
+    const FADE_START_BEFORE_END = 1.8
+
+    // Final cleanup — called after CSS transition completes
+    const fullyDismiss = useCallback(() => {
+        if (hasFinished.current) return
+        hasFinished.current = true
+        setVisible(false)
+        setFading(false)
+        fadeStarted.current = false
+        onFinished()
+    }, [onFinished])
+
+    // Start the fade-out (called when video is near its end)
+    const startFade = useCallback(() => {
+        if (fadeStarted.current) return
+        fadeStarted.current = true
+        setFading(true)
+        onFading()
+
+        // After CSS transition completes, fully remove the overlay
+        setTimeout(() => {
+            fullyDismiss()
+        }, FADE_DURATION * 1000 + 100) // slight buffer past transition end
+    }, [fullyDismiss, onFading])
+
+    // Listen for events from the inner route loader to show/hide the video
+    useEffect(() => {
+        const handleShowHomeVideo = () => {
+            hasFinished.current = false
+            fadeStarted.current = false
+            setFading(false)
+            setVisible(true)
+            setVideoKey(k => k + 1)
+        }
+
+        window.addEventListener('showHomeVideoLoader', handleShowHomeVideo)
+        return () => window.removeEventListener('showHomeVideoLoader', handleShowHomeVideo)
+    }, [])
+
+    // Safety: if video fails to load or play, dismiss after 15s
+    useEffect(() => {
+        if (!visible) return
+        const timer = setTimeout(() => {
+            startFade()
+        }, 15000)
+        return () => clearTimeout(timer)
+    }, [visible, videoKey, startFade])
+
+    // Attach timeupdate to trigger crossfade near the end of the video
+    useEffect(() => {
+        if (!visible) return
+        const video = videoRef.current
+        if (!video) return
+
+        const handleTimeUpdate = () => {
+            if (video.duration && video.currentTime >= video.duration - FADE_START_BEFORE_END) {
+                startFade()
+            }
+        }
+
+        // If the video somehow ends before we start the fade, start it immediately
+        const handleEnded = () => startFade()
+
+        video.addEventListener('timeupdate', handleTimeUpdate)
+        video.addEventListener('ended', handleEnded)
+
+        return () => {
+            video.removeEventListener('timeupdate', handleTimeUpdate)
+            video.removeEventListener('ended', handleEnded)
+        }
+    }, [visible, videoKey, startFade])
+
+    if (!visible) return null
+
+    return (
+        <div
+            ref={overlayRef}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#ffffff',
+                zIndex: 9999, // Behind the app content which will have zIndex 10000 during transition
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                opacity: fading ? 0 : 1,
+                transition: fading ? `opacity ${FADE_DURATION}s cubic-bezier(0.4, 0, 0.2, 1)` : 'none',
+                pointerEvents: fading ? 'none' : 'auto',
+            }}
+        >
+            <video
+                ref={videoRef}
+                key={videoKey}
+                autoPlay
+                muted
+                playsInline
+                src="/images/property/loader_animation_home.mp4"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+        </div>
+    )
+}
+
+/**
+ * RouteLoaderInner handles non-home-page loading states and triggers
+ * the home video loader via a custom DOM event.
+ */
 function RouteLoaderInner({
     children,
+    homeVideoActive,
 }: {
     children: React.ReactNode
+    homeVideoActive: boolean
 }) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
-    const [loading, setLoading] = useState(true)
+    const searchParamsStr = searchParams ? searchParams.toString() : ''
+
+    const [showStandardLoader, setShowStandardLoader] = useState(() => {
+        // Only show standard loader for non-home pages on initial load
+        if (typeof window !== 'undefined') {
+            return !isHomePagePath(window.location.pathname)
+        }
+        return false
+    })
     const isFirstLoad = useRef(true)
 
-    // Global click listener to catch all anchor clicks
+    // Global click listener to catch navigation clicks
     useEffect(() => {
         const handleAnchorClick = (e: MouseEvent) => {
-            const target = e.target as Element;
-            const anchor = target.closest('a');
-            if (!anchor) return;
-            
-            const href = anchor.getAttribute('href');
-            // Ignore links that don't have href or are external
-            if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
-                // If it's absolute, check if it's the same origin
-                const hrefUrl = anchor.href;
-                if (!hrefUrl.startsWith(window.location.origin)) return;
-            }
-            
-            const targetAttr = anchor.getAttribute('target');
-            if (targetAttr === '_blank') return;
+            const target = e.target as Element
+            const anchor = target.closest('a')
+            if (!anchor) return
 
-            // Ignore modified clicks (ctrl+click, etc.)
-            if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+            const href = anchor.getAttribute('href')
+            if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+                const hrefUrl = anchor.href
+                if (!hrefUrl.startsWith(window.location.origin)) return
+            }
+
+            if (anchor.getAttribute('target') === '_blank') return
+            if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
 
             try {
-                // Determine if it's actually changing route
-                const currentUrl = new URL(window.location.href);
-                const targetUrl = new URL(anchor.href, window.location.href);
-                
-                // If it's a hash link on the same page, do not show loader
+                const currentUrl = new URL(window.location.href)
+                const targetUrl = new URL(anchor.href, window.location.href)
+
                 if (currentUrl.pathname === targetUrl.pathname && currentUrl.search === targetUrl.search) {
-                    return;
+                    return
                 }
-                
-                // Escape React 18 concurrent transition batching
-                setTimeout(() => {
-                    setLoading(true);
-                }, 0);
-                
-                // Safety fallback: if navigation fails or gets stuck, remove loader after 15s
-                setTimeout(() => {
-                    setLoading(false);
-                }, 15000);
-            } catch (err) {
+
+                if (isHomePagePath(targetUrl.pathname) && !isHomePagePath(currentUrl.pathname)) {
+                    // Trigger the home video loader only when coming FROM a non-home page
+                    window.dispatchEvent(new Event('showHomeVideoLoader'))
+                } else if (!isHomePagePath(targetUrl.pathname)) {
+                    setShowStandardLoader(true)
+                }
+
+                // Safety fallback
+                setTimeout(() => setShowStandardLoader(false), 15000)
+            } catch {
                 // Ignore parsing errors
             }
-        };
+        }
 
-        // Use capture phase to intercept clicks early
-        document.addEventListener('click', handleAnchorClick, true);
-        return () => document.removeEventListener('click', handleAnchorClick, true);
-    }, []);
+        document.addEventListener('click', handleAnchorClick, true)
+        return () => document.removeEventListener('click', handleAnchorClick, true)
+    }, [])
 
-    // Listen for custom route start event (if triggered manually like in router.push)
+    // Listen for programmatic route changes (router.push)
     useEffect(() => {
         const handleStart = () => {
-            setTimeout(() => setLoading(true), 0);
-            setTimeout(() => setLoading(false), 15000);
+            setShowStandardLoader(true)
+            setTimeout(() => setShowStandardLoader(false), 15000)
         }
         window.addEventListener('routeChangeStart', handleStart)
         return () => window.removeEventListener('routeChangeStart', handleStart)
     }, [])
 
-    // Stop loader when path or query changes (and on initial mount)
-    const searchParamsStr = searchParams ? searchParams.toString() : '';
+    // Dismiss standard loader when route changes
     useEffect(() => {
         if (isFirstLoad.current) {
             isFirstLoad.current = false
-            // Add a small delay on initial load so the loader is visible to the user briefly
-            const timer = setTimeout(() => {
-                setLoading(false)
-            }, 600)
-            return () => clearTimeout(timer)
+            if (!isHomePagePath(pathname)) {
+                const timer = setTimeout(() => setShowStandardLoader(false), 600)
+                return () => clearTimeout(timer)
+            }
+            return
         }
-
-        setLoading(false)
+        setShowStandardLoader(false)
     }, [pathname, searchParamsStr])
+
+    // Show standard loader only when home video is NOT active
+    const showLoader = showStandardLoader && !homeVideoActive
 
     return (
         <>
-            <div id="loader-mount-point" style={{ display: 'contents' }}>
-                {loading && <Loader />}
-            </div>
+            {showLoader && <Loader />}
             {children}
         </>
     )
@@ -104,9 +242,53 @@ export default function RouteLoader({
 }: {
     children: React.ReactNode
 }) {
+    const [homeVideoActive, setHomeVideoActive] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return isHomePagePath(window.location.pathname)
+        }
+        return true
+    })
+    const [homeVideoFading, setHomeVideoFading] = useState(false)
+
+    const handleVideoFinished = useCallback(() => {
+        setHomeVideoActive(false)
+        setHomeVideoFading(false)
+    }, [])
+    
+    const handleVideoFading = useCallback(() => {
+        setHomeVideoFading(true)
+    }, [])
+
+    // Also listen for the show event to re-activate
+    useEffect(() => {
+        const handleShow = () => {
+            setHomeVideoActive(true)
+            setHomeVideoFading(false)
+        }
+        window.addEventListener('showHomeVideoLoader', handleShow)
+        return () => window.removeEventListener('showHomeVideoLoader', handleShow)
+    }, [])
+
     return (
-        <Suspense fallback={<>{children}</>}>
-            <RouteLoaderInner>{children}</RouteLoaderInner>
-        </Suspense>
+        <>
+            {/* Home video loader lives OUTSIDE Suspense — never unmounted by useSearchParams */}
+            <HomeVideoLoader onFinished={handleVideoFinished} onFading={handleVideoFading} />
+            
+            {/* Wrap the app in a crossfading container */}
+            <div 
+                style={{ 
+                    opacity: (homeVideoActive && !homeVideoFading) ? 0 : 1, 
+                    transition: homeVideoActive ? `opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1)` : 'none',
+                    position: 'relative',
+                    zIndex: homeVideoActive ? 10000 : 'auto', // Place above video when active
+                    minHeight: '100vh',
+                    pointerEvents: (homeVideoActive && !homeVideoFading) ? 'none' : 'auto'
+                }}
+            >
+                <Suspense fallback={<>{children}</>}>
+                    <RouteLoaderInner homeVideoActive={homeVideoActive}>{children}</RouteLoaderInner>
+                </Suspense>
+            </div>
+        </>
     )
 }

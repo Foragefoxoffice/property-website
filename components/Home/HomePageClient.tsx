@@ -178,12 +178,21 @@ function HomeBanner({ d, lang, t }: { d: Record<string, unknown>; lang: string; 
 
   return (
     <>
-      <div className="relative min-h-[70vh] md:min-h-[85vh] place-content-center overflow-hidden">
+      <div className="relative min-h-[70vh] md:min-h-[85vh] flex flex-col justify-end pb-40 md:pb-52 overflow-hidden">
         <Image src={bg} alt={heroTitle} fill priority quality={60} sizes="100vw" style={{ objectFit: 'cover', objectPosition: 'center' }} />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="/images/property/home_banner_video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/50 z-0" />
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-5xl font-semibold text-white mb-4 animate-fadeInUp">
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-white mb-4 animate-fadeInUp leading-tight drop-shadow-lg">
               {heroTitle}
             </h1>
             <p className="md:text-xl text-lg text-gray-200 font-medium max-w-2xl mx-auto animate-fadeInUp animation-delay-200">

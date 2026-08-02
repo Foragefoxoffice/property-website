@@ -19,6 +19,7 @@ import { formatNumber, stripHtml } from '@/utils/display'
 import { toast } from 'react-toastify'
 import Link from '@/components/LanguageLink'
 import Image from 'next/image'
+import Loader from '@/components/Loader'
 
 /* -------------------------------------------------------
    HELPERS
@@ -439,8 +440,10 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
   const show = (flag: any) => flag === false || flag === undefined
 
   return (
-    <div className="bg-[#F8F7FC] min-h-screen pt-[20px]">
-      {/* 1. Header Section (Breadcrumb + Title) */}
+    <>
+      {(agentLoading || loadingRecent) && <Loader />}
+      <div className="bg-[#F8F7FC] min-h-screen pt-[20px]">
+        {/* 1. Header Section (Breadcrumb + Title) */}
       <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-6">
         <div className="flex items-center gap-2 text-sm text-gray-600 mb-6 overflow-hidden whitespace-nowrap">
           <Link href="/" className="hover:text-[#41398B] transition-colors">{t.home}</Link>
@@ -952,6 +955,8 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
           scrollbar-width: none;
         }
       ` }} />
-    </div>
+      </div>
+    </>
   )
 }
+
