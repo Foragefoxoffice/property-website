@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, Suspense, useEffect } from 'react'
 import { Calendar, Clock, Share2 } from 'lucide-react'
 import Link from '@/components/LanguageLink'
 import BlogSidebar from './BlogSidebar'
@@ -20,7 +20,29 @@ type Blog = {
 }
 
 function BlogDetailInner({ blog }: { blog: Blog }) {
-  const { language } = useLanguage()
+  const { language, setDynamicRouteSlugs } = useLanguage()
+
+  useEffect(() => {
+    if (setDynamicRouteSlugs && blog) {
+      const seo = (blog as any).seoInformation || {}
+      const blogSlugObj = (blog as any).slug || {}
+      
+      const viSlug = seo.slugUrl?.vi || blogSlugObj.vi || (blog as any).slug || ''
+      const enSlug = seo.slugUrl?.en || blogSlugObj.en || (blog as any).slug || ''
+      
+      if (viSlug && enSlug) {
+        setDynamicRouteSlugs({
+          vi: `/blogs/${viSlug}`,
+          en: `/blogs/${enSlug}`
+        })
+      }
+      
+      return () => {
+        setDynamicRouteSlugs(null)
+      }
+    }
+  }, [blog, setDynamicRouteSlugs])
+
   const lang = language === 'en' ? 'en' : 'vi'
 
   const title = blog.title?.[lang] || blog.title?.en || 'Untitled'

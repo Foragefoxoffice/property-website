@@ -241,7 +241,7 @@ const PropertyCard = ({ property, t, language }: { property: any, t: any, langua
    MAIN COMPONENT
 ------------------------------------------------------- */
 export default function PropertyDetailClient({ property: initialProperty }: { property: Record<string, any> }) {
-  const { language } = useLanguage()
+  const { language, setDynamicRouteSlugs } = useLanguage()
   const t = translations[language as keyof typeof translations]
   const { isFavorite, addFavorite, removeFavorite } = useFavorites()
 
@@ -262,6 +262,33 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
   const property = initialProperty || {}
   const id = String(property._id || '')
   const favorited = isFavorite(id)
+
+  useEffect(() => {
+    if (setDynamicRouteSlugs && initialProperty) {
+      const seo = initialProperty.seoInformation || {}
+      const listInfo = initialProperty.listingInformation || {}
+      const propId = listInfo.listingInformationPropertyId || initialProperty._id
+      
+      let viSlug = seo.slugUrl?.vi || 'property'
+      if (viSlug && propId && !String(viSlug).toLowerCase().endsWith(String(propId).toLowerCase())) {
+        viSlug = `${viSlug}-${propId}`
+      }
+      
+      let enSlug = seo.slugUrl?.en || 'property'
+      if (enSlug && propId && !String(enSlug).toLowerCase().endsWith(String(propId).toLowerCase())) {
+        enSlug = `${enSlug}-${propId}`
+      }
+
+      setDynamicRouteSlugs({
+        vi: `/listing/${viSlug}`,
+        en: `/listing/${enSlug}`
+      })
+
+      return () => {
+        setDynamicRouteSlugs(null)
+      }
+    }
+  }, [initialProperty, setDynamicRouteSlugs])
 
   const info = property.propertyInformation || {}
   const list = property.listingInformation || {}
@@ -441,433 +468,93 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
 
   return (
     <>
-      {(agentLoading || loadingRecent) && <Loader />}
       <div className="bg-[#F8F7FC] min-h-screen pt-[20px]">
         {/* 1. Header Section (Breadcrumb + Title) */}
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-6">
-        <div className="flex items-center gap-2 text-sm text-gray-600 mb-6 overflow-hidden whitespace-nowrap">
-          <Link href="/" className="hover:text-[#41398B] transition-colors">{t.home}</Link>
-          <span className="text-gray-400">›</span>
-          {transactionType && (
-            <>
-              <Link href={`/listing?type=${list?.listingInformationTransactionType}`} className="hover:text-gray-600 transition-colors">{transactionType}</Link>
-              <span className="text-gray-400">›</span>
-            </>
-          )}
-          <span className="text-[#41398B] font-semibold truncate">{title}</span>
-        </div>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-6">
+          <div className="flex items-center gap-2 text-sm text-gray-600 mb-6 overflow-hidden whitespace-nowrap">
+            <Link href="/" className="hover:text-[#41398B] transition-colors">{t.home}</Link>
+            <span className="text-gray-400">›</span>
+            {transactionType && (
+              <>
+                <Link href={`/listing?type=${list?.listingInformationTransactionType}`} className="hover:text-gray-600 transition-colors">{transactionType}</Link>
+                <span className="text-gray-400">›</span>
+              </>
+            )}
+            <span className="text-[#41398B] font-semibold truncate">{title}</span>
+          </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8">
-          <div>
-            <div className="flex gap-2 mb-4">
-              {transactionType && show(visList.transactionType) && (
-                <span className={`px-3 py-1.5 text-white text-xs font-bold uppercase tracking-wide rounded ${transactionType === 'Sale' ? 'bg-[#eb4d4d]' : 'bg-[#058135]'}`}>
-                  {transactionType}
-                </span>
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8">
+            <div>
+              <div className="flex gap-2 mb-4">
+                {transactionType && show(visList.transactionType) && (
+                  <span className={`px-3 py-1.5 text-white text-xs font-bold uppercase tracking-wide rounded ${transactionType === 'Sale' ? 'bg-[#eb4d4d]' : 'bg-[#058135]'}`}>
+                    {transactionType}
+                  </span>
+                )}
+                {propertyType && show(visList.transactionType) && (
+                  <span className="px-3 py-1.5 text-white text-xs font-bold uppercase tracking-wide bg-[#6B46C1] rounded">
+                    {propertyType}
+                  </span>
+                )}
+              </div>
+              {show(property.titleVisibility) && (
+                <h1 className="text-2xl md:text-[30px] font-bold text-[#222222] leading-tight mb-3">
+                  {title}
+                </h1>
               )}
-              {propertyType && show(visList.transactionType) && (
-                <span className="px-3 py-1.5 text-white text-xs font-bold uppercase tracking-wide bg-[#6B46C1] rounded">
-                  {propertyType}
-                </span>
+              {location && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <MapPin size={16} className="text-[#41398B]" />
+                  <span className="text-base">{location}</span>
+                </div>
               )}
             </div>
-            {show(property.titleVisibility) && (
-              <h1 className="text-2xl md:text-[32px] font-bold text-[#222222] leading-tight mb-3">
-                {title}
-              </h1>
-            )}
-            {location && (
-              <div className="flex items-center gap-2 text-gray-600">
-                <MapPin size={16} className="text-[#41398B]" />
-                <span className="text-base">{location}</span>
+
+            <div className="flex flex-col items-start lg:items-end gap-4">
+              <div className="flex items-baseline gap-1 md:mb-3 mb-2">
+                <span className="text-2xl md:text-3xl font-bold text-[#41398B] tracking-tight">{price}</span>
+                {suffix && <span className="text-lg text-gray-600 font-medium">{suffix}</span>}
               </div>
-            )}
-          </div>
-
-          <div className="flex flex-col items-start lg:items-end gap-4">
-            <div className="flex items-baseline gap-1 md:mb-3 mb-2">
-              <span className="text-2xl md:text-4xl font-bold text-[#41398B] tracking-tight">{price}</span>
-              {suffix && <span className="text-lg text-gray-600 font-medium">{suffix}</span>}
-            </div>
-            <div className="flex gap-4">
-              <button onClick={handleShare} className="flex items-center gap-1 text-[#41398B] font-medium text-sm hover:opacity-70 transition">
-                <Share2 size={20} /> <span className="underline">{t.share}</span>
-              </button>
-              <button onClick={handleFavoriteToggle} className="flex items-center gap-1 text-[#41398B] font-medium text-sm hover:opacity-70 transition">
-                <Heart size={20} className={favorited ? 'fill-[#eb4d4d] text-[#eb4d4d]' : ''} />
-                <span className={`underline ${favorited ? 'text-[#eb4d4d]' : ''}`}>{t.favorite}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. Photo Gallery Grid */}
-        <div className="relative rounded-xl overflow-hidden group mb-0 shadow-sm">
-          <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[350px] lg:h-[480px]">
-            <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
-              <Image priority src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
-            </div>
-            {images.slice(1, 5).map((img, i) => (
-              <div key={i} className="cursor-pointer overflow-hidden relative" onClick={() => openPopup(i + 1)}>
-                <Image src={img || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-110 hover:brightness-90" alt={`Gallery ${i + 1}`} />
-              </div>
-            ))}
-            {[...Array(Math.max(0, 4 - (images.length - 1)))].map((_, i) => (
-              <div key={i} className="bg-gray-100 flex items-center justify-center">
-                <ImageIcon className="text-gray-300" size={32} />
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile Slider */}
-          <div className="md:hidden relative h-[300px] bg-black">
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={current}
-                src={images[current]}
-                alt={title || "Mobile View"}
-                fetchPriority={current === 0 ? "high" : "auto"}
-                className="absolute inset-0 w-full h-full object-cover"
-                custom={direction}
-                variants={{
-                  enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-                  center: { x: 0, opacity: 1 },
-                  exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 }
-                }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={1}
-                onDragEnd={(e, { offset, velocity }) => {
-                  const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500
-                  if (swipe && offset.x > 0) handlePrev()
-                  else if (swipe && offset.x < 0) handleNext()
-                }}
-              />
-            </AnimatePresence>
-            <div className="absolute inset-0 flex items-center justify-between px-4 z-10 pointer-events-none">
-              <button onClick={handlePrev} className="p-2 rounded-full bg-white/20 backdrop-blur-md text-white pointer-events-auto hover:bg-white/40"><ChevronLeft size={20} /></button>
-              <button onClick={handleNext} className="p-2 rounded-full bg-white/20 backdrop-blur-md text-white pointer-events-auto hover:bg-white/40"><ChevronRight size={20} /></button>
-            </div>
-            <div className="absolute bottom-4 right-4 bg-black/60 text-white text-[10px] font-bold px-3 py-1 rounded-full backdrop-blur-sm">
-              {current + 1} / {images.length}
-            </div>
-          </div>
-
-          {images.length > 0 && (
-            <button onClick={() => openPopup(0)} className="absolute bottom-6 right-6 flex items-center gap-2 bg-white text-[#111827] px-4 py-2 rounded-lg font-semibold text-sm shadow-sm hover:bg-[#41398B] hover:text-white transition-all duration-300 z-10 group">
-              <LayoutGrid size={16} />
-              {t.viewAllPhoto}
-            </button>
-          )}
-        </div>
-
-        {/* 3. Sticky Navigation Tabs */}
-        <div className="sticky top-0 bg-[#F8F7FC]/80 backdrop-blur-md pt-4 z-40 border-b border-gray-200 mb-10 overflow-x-auto scrollbar-hide">
-          <div className="flex md:justify-center">
-            {[
-              { id: 'Overview', label: t.overview },
-              { id: 'Utility', label: t.propertyUtility },
-              { id: 'Payment', label: t.paymentOverview },
-              { id: 'Video', label: t.video },
-              { id: 'Map', label: t.map },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => scrollTo(tab.id as keyof typeof sectionRefs)}
-                className="px-5 py-4 md:text-lg text-sm font-medium text-gray-500 hover:text-[#41398B] relative group transition-colors"
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 4. Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-[1320px] mx-auto">
-          {/* Main Content Area */}
-          <div className="lg:col-span-2 space-y-12">
-            {/* Overview Section */}
-            <section id="Overview" ref={sectionRefs.Overview} className="scroll-mt-32">
-              <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.overview}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 pb-10 border-b border-gray-100">
-                  {show(visList.projectCommunity) && <EcoparkItem label={`${t.projectCommunity}:`} value={getLoc(list?.listingInformationProjectCommunity)} />}
-                  {show(visList.areaZone) && <EcoparkItem label={`${t.areaZone}:`} value={getLoc(list?.listingInformationZoneSubArea)} />}
-                  {show(visList.blockName) && <EcoparkItem label={`${t.block}:`} value={getLoc(list?.listingInformationBlockName)} />}
-                  {/* {show(visList.availableFrom) && <EcoparkItem label={`${t.availableFrom}:`} value={formatDate(list?.listingInformationAvailableFrom)} />} */}
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {show(visList.propertyId) && <OverviewCard icon={<House />} label={`${t.propertyId}:`} value={safeVal(list?.listingInformationPropertyId)} />}
-                  {show(visList.propertyType) &&
-                    getLoc(list?.listingInformationPropertyType) && (
-                      <OverviewCard
-                        icon={<SlidersHorizontal />}
-                        label={`${t.propertyType}:`}
-                        value={getLoc(list?.listingInformationPropertyType)}
-                      />
-                    )}
-                  {show(visProp.bedrooms) && <OverviewCard icon={<Bed />} label={`${t.bedrooms}:`} value={`${safeVal(info?.informationBedrooms)} ${t.rooms}`} />}
-                  {show(visProp.bathrooms) && <OverviewCard icon={<Bath />} label={`${t.bathrooms}:`} value={`${safeVal(info?.informationBathrooms)} ${t.rooms}`} />}
-                  {show(visProp.furnishing) && <OverviewCard icon={<Armchair />} label={`${t.furnishing}:`} value={getLoc(info?.informationFurnishing)} />}
-                  {show(visProp.unit) && <OverviewCard icon={<Ruler />} label={`${t.size}:`} value={`${safeVal(info?.informationUnitSize)} ${safeVal(info?.informationUnit)}`} />}
-                  {show(visProp.floorRange) && <OverviewCard icon={<Layers />} label={`${t.floorRange}:`} value={getLoc(info?.informationFloors)} />}
-                  {show(visProp.view) && <OverviewCard icon={<Eye />} label="View:" value={getLoc(info?.informationView)} />}
-                </div>
-              </div>
-            </section>
-
-            {/* Description Section */}
-            {(property.descriptionVisibility === false ||
-              property.descriptionVisibility === undefined) && (
-                <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
-                  <div
-                    suppressHydrationWarning
-                    className="text-gray-700 leading-6 rich-text-display property-description-summary [&_a]:text-blue-600 [&_a]:underline hover:[&_a]:text-blue-800"
-                    dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
-                  />
-                </section>
-              )}
-
-            {/* Utility Section */}
-            {utilities.length > 0 && show(property.propertyUtilityVisibility) && (
-              <section id="Utility" ref={sectionRefs.Utility} className="scroll-mt-32">
-                <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.propertyUtility}</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-12">
-                    {utilities.map((item: any, idx: number) => (
-                      <div key={idx} className="flex items-center gap-3 border-b py-3 last:border-b-0 group">
-                        {item?.propertyUtilityIcon ? <Image width={24} height={24} src={item.propertyUtilityIcon} className="object-contain" alt="" /> : null}
-                        <span className="font-medium text-gray-700">{safeVal(item?.propertyUtilityUnitName)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* Payment Overview */}
-            <section id="Payment" ref={sectionRefs.Payment} className="scroll-mt-32">
-              <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                <h2 className="text-xl font-semibold mb-4 text-[#41398B]">{t.paymentOverview}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
-                  {show(visFin.deposit) && <InfoItem label={`${t.deposit}:`} value={safeVal(fin?.financialDetailsDeposit)} />}
-                  {show(visFin.paymentTerm) && <InfoItem label={`${t.paymentTerms}:`} value={getLoc(fin?.financialDetailsMainFee)} />}
-                  {transactionType === 'Lease' && show(visFin.contractLength) && <InfoItem label={`${t.contractLength}:`} value={getLoc(fin?.financialDetailsContractLength)} />}
-                  {transactionType === 'Home Stay' && (
-                    <>
-                      {show(visFin.checkIn) && <InfoItem label={t.checkIn} value={safeVal(fin?.financialDetailsCheckIn)} />}
-                      {show(visFin.checkOut) && <InfoItem label={t.checkOutLabel} value={safeVal(fin?.financialDetailsCheckOut)} />}
-                    </>
-                  )}
-                </div>
-              </div>
-            </section>
-
-            {/* Video Section */}
-            {videos.length > 0 && show(property.videoVisibility) && (
-              <section id="Video" ref={sectionRefs.Video} className="scroll-mt-32">
-                <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.video}</h2>
-
-                  <div className="grid gap-6">
-                    {videos.map((url, i) => (
-                      <div
-                        key={i}
-                        onClick={() => setPreviewVideoUrl(url)}
-                        className="relative group rounded-3xl overflow-hidden cursor-pointer h-[400px] bg-black"
-                      >
-                        {/* Video Thumbnail */}
-                        <video
-                          src={url}
-                          className="w-full h-full object-cover"
-                          preload="metadata"
-                          muted
-                        />
-
-                        {/* Overlay */}
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-300" />
-
-                        {/* Play Button */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                          <div className="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-2xl">
-                            <div className="w-14 h-14 bg-[#41398B] rounded-full flex items-center justify-center">
-                              <PlayIcon className="text-white fill-white ml-1" size={24} />
-                            </div>
-                          </div>
-
-                          <span className="mt-4 text-white font-extrabold tracking-widest text-xs uppercase">
-                            {language === 'vi' ? 'Xem Video' : 'Play Video'}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* Map Section */}
-            {show(visList.googleMap) && (
-              <section id="Map" ref={sectionRefs.Map} className="scroll-mt-32">
-                <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.map}</h2>
-                  {decodedMap ? (
-                    <div className="w-full h-[500px] rounded-3xl overflow-hidden border border-gray-100 shadow-inner">
-                      <div
-                        className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full"
-                        dangerouslySetInnerHTML={{ __html: decodedMap }}
-                      />
-                    </div>
-                  ) : (
-                    <p className="text-gray-400 italic text-center py-12">{t.noMap}</p>
-                  )}
-                </div>
-              </section>
-            )}
-          </div>
-
-          {/* Sidebar Area */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-28 space-y-6">
-              {/* Agent Card */}
-              <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4">
-                  <h3 className="text-2xl text-[#41398B] font-semibold mb-4">{t.contact}</h3>
-                </div>
-                <div className="px-6 pb-6">
-                  {agentLoading ? (
-                    <div className="flex justify-center py-10"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#41398B]" /></div>
-                  ) : (
-                    <>
-                      <div className="mb-4">
-                        <Image
-                          width={250}
-                          height={250}
-                          src={agentData?.agentImage ? getImageUrl(agentData.agentImage) : "/placeholder.jpg"}
-                          className="w-[250px] h-auto object-cover"
-                          alt="Agent"
-                        />
-                      </div>
-                      <h4 className="text-xl text-[#41398B] font-semibold mb-4">{t.agent}</h4>
-
-                      <div className="space-y-3 mb-8">
-                        {safeArray(agentData?.agentNumber).map((p: any, idx: number) => (
-                          <a key={idx} href={`tel:${getLoc(p)}`} className="flex items-center gap-3 text-gray-600 hover:text-[#41398B] transition font-bold text-sm">
-                            <Phone size={16} /> {getLoc(p)}
-                          </a>
-                        ))}
-                        {safeArray(agentData?.agentEmail).map((e: any, idx: number) => (
-                          <a key={idx} href={`mailto:${getLoc(e)}`} className="flex items-center gap-3 text-gray-600 hover:text-[#41398B] transition font-bold text-sm truncate">
-                            <Mail size={16} /> {getLoc(e)}
-                          </a>
-                        ))}
-                      </div>
-
-                      <div className="flex justify-center gap-3 pt-4 border-t">
-                        {agentData?.agentZaloLink && (
-                          <a href={agentData.agentZaloLink} target="_blank" className="w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 flex items-center justify-center text-white transition shadow-sm">
-                            <SiZalo size={20} />
-                          </a>
-                        )}
-                        {agentData?.agentMessengerLink && (
-                          <a href={agentData.agentMessengerLink} target="_blank" className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white transition shadow-sm">
-                            <SiMessenger size={20} />
-                          </a>
-                        )}
-                        {agentData?.agentWhatsappLink && (
-                          <a href={agentData.agentWhatsappLink} target="_blank" className="w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center text-white transition shadow-sm">
-                            <FaWhatsapp size={20} />
-                          </a>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Enquiry Form */}
-              <div className="mt-6 md:p-6 p-3 rounded-xl bg-white shadow-sm border border-gray-100">
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t.message}</label>
-                <form onSubmit={handleEnquiry} className="space-y-4">
-                  <textarea
-                    value={enquiryMsg}
-                    onChange={e => setEnquiryMsg(e.target.value)}
-                    placeholder={t.enterMessage}
-                    className="w-full px-4 py-3 bg-white rounded-xl border border-gray-500 focus:outline-none focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] transition-all resize-none h-32 text-sm"
-                  />
-                  <button type="submit" disabled={sending} className="w-full text-white cursor-pointer py-3 rounded-full font-bold transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-[#41398B] hover:bg-[#352e7a] disabled:bg-gray-400">
-                    {sending ? (
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <Send size={18} />
-                        {t.sendRequest}
-                      </>
-                    )}
-                  </button>
-                </form>
+              <div className="flex gap-4">
+                <button onClick={handleShare} className="flex items-center gap-1 text-[#41398B] font-medium text-sm hover:opacity-70 transition">
+                  <Share2 size={20} /> <span className="underline">{t.share}</span>
+                </button>
+                <button onClick={handleFavoriteToggle} className="flex items-center gap-1 text-[#41398B] font-medium text-sm hover:opacity-70 transition">
+                  <Heart size={20} className={favorited ? 'fill-[#eb4d4d] text-[#eb4d4d]' : ''} />
+                  <span className={`underline ${favorited ? 'text-[#eb4d4d]' : ''}`}>{t.favorite}</span>
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* 5. Recently Updated Properties */}
-      <section className="py-24 bg-white">
-        <div className="max-w-[1440px] mx-auto px-10">
-          <div className="text-center mb-8 md:mb-10">
-            <p className="text-[#a4aeb5] font-semibold text-sm uppercase tracking-wider mb-3">{t.recentProperties}</p>
-            <h2 className="text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100">
-              {language === 'vi' ? 'Bất động sản mới được cập nhật' : 'Recently Updated Properties'}
-            </h2>
-          </div>
-
-          {loadingRecent ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="bg-gray-50 rounded-[2.5rem] p-6 h-80 animate-pulse" />
+          {/* 2. Photo Gallery Grid */}
+          <div className="relative rounded-xl overflow-hidden group mb-0 shadow-sm">
+            <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[350px] lg:h-[480px]">
+              <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+                <Image priority src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
+              </div>
+              {images.slice(1, 5).map((img, i) => (
+                <div key={i} className="cursor-pointer overflow-hidden relative" onClick={() => openPopup(i + 1)}>
+                  <Image src={img || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-110 hover:brightness-90" alt={`Gallery ${i + 1}`} />
+                </div>
+              ))}
+              {[...Array(Math.max(0, 4 - (images.length - 1)))].map((_, i) => (
+                <div key={i} className="bg-gray-100 flex items-center justify-center">
+                  <ImageIcon className="text-gray-300" size={32} />
+                </div>
               ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {recentProperties.map((p, idx) => (
-                <PropertyCard key={idx} property={p} t={t} language={language} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
 
-      {/* 6. Modals */}
-      <AnimatePresence>
-        {isPopupOpen && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-[100] flex flex-col"
-          >
-            <div className="p-6 flex justify-between items-center text-white z-[110]">
-              <button onClick={() => setIsPopupOpen(false)} className="flex items-center gap-2 font-bold uppercase tracking-widest text-xs hover:opacity-70">
-                <X size={24} /> {t.close}
-              </button>
-              <div className="text-xs font-extrabold tracking-widest">{popupIndex + 1} / {images.length}</div>
-              <div className="w-10" />
-            </div>
-
-            <div className="flex-1 relative flex items-center justify-center overflow-hidden px-4">
-              <AnimatePresence initial={false} custom={popupDirection}>
+            {/* Mobile Slider */}
+            <div className="md:hidden relative h-[300px] bg-black">
+              <AnimatePresence initial={false} custom={direction}>
                 <motion.img
-                  key={popupIndex}
-                  src={images[popupIndex]}
-                  className="max-w-full max-h-[80vh] object-contain shadow-2xl absolute inset-0 m-auto"
-                  custom={popupDirection}
+                  key={current}
+                  src={images[current]}
+                  alt={title || "Mobile View"}
+                  fetchPriority={current === 0 ? "high" : "auto"}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  custom={direction}
                   variants={{
                     enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
                     center: { x: 0, opacity: 1 },
@@ -885,46 +572,385 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
                   dragElastic={1}
                   onDragEnd={(e, { offset, velocity }) => {
                     const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500
-                    if (swipe && offset.x > 0) {
-                      setPopupDirection(-1);
-                      setPopupIndex(i => (i - 1 + images.length) % images.length);
-                    } else if (swipe && offset.x < 0) {
-                      setPopupDirection(1);
-                      setPopupIndex(i => (i + 1) % images.length);
-                    }
+                    if (swipe && offset.x > 0) handlePrev()
+                    else if (swipe && offset.x < 0) handleNext()
                   }}
                 />
               </AnimatePresence>
-
-              <button onClick={() => { setPopupDirection(-1); setPopupIndex(i => (i - 1 + images.length) % images.length) }} className="absolute left-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"><ChevronLeft size={40} /></button>
-              <button onClick={() => { setPopupDirection(1); setPopupIndex(i => (i + 1) % images.length) }} className="absolute right-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"><ChevronRight size={40} /></button>
+              <div className="absolute inset-0 flex items-center justify-between px-4 z-10 pointer-events-none">
+                <button onClick={handlePrev} className="p-2 rounded-full bg-white/20 backdrop-blur-md text-white pointer-events-auto hover:bg-white/40"><ChevronLeft size={20} /></button>
+                <button onClick={handleNext} className="p-2 rounded-full bg-white/20 backdrop-blur-md text-white pointer-events-auto hover:bg-white/40"><ChevronRight size={20} /></button>
+              </div>
+              <div className="absolute bottom-4 right-4 bg-black/60 text-white text-[10px] font-bold px-3 py-1 rounded-full backdrop-blur-sm">
+                {current + 1} / {images.length}
+              </div>
             </div>
 
-            <div className="p-10 bg-black flex gap-3 overflow-x-auto justify-start md:justify-center scrollbar-hide">
-              {images.map((img, i) => (
-                <button key={i} onClick={() => { setPopupDirection(i > popupIndex ? 1 : -1); setPopupIndex(i) }} className={`w-20 h-14 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 relative ${popupIndex === i ? 'ring-4 ring-white scale-110' : 'opacity-40 hover:opacity-100'}`}>
-                  <Image src={img} fill className="object-cover" alt="" />
+            {images.length > 0 && (
+              <button onClick={() => openPopup(0)} className="absolute bottom-6 right-6 flex items-center gap-2 bg-white text-[#111827] px-4 py-2 rounded-lg font-semibold text-sm shadow-sm hover:bg-[#41398B] hover:text-white transition-all duration-300 z-10 group">
+                <LayoutGrid size={16} />
+                {t.viewAllPhoto}
+              </button>
+            )}
+          </div>
+
+          {/* 3. Sticky Navigation Tabs */}
+          <div className="sticky top-0 bg-[#F8F7FC]/80 backdrop-blur-md pt-4 z-40 border-b border-gray-200 mb-10 overflow-x-auto scrollbar-hide">
+            <div className="flex md:justify-center">
+              {[
+                { id: 'Overview', label: t.overview },
+                { id: 'Utility', label: t.propertyUtility },
+                { id: 'Payment', label: t.paymentOverview },
+                { id: 'Video', label: t.video },
+                { id: 'Map', label: t.map },
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => scrollTo(tab.id as keyof typeof sectionRefs)}
+                  className="px-5 py-4 md:text-lg text-sm font-medium text-gray-500 hover:text-[#41398B] relative group transition-colors"
+                >
+                  {tab.label}
                 </button>
               ))}
             </div>
-          </motion.div>
-        )}
+          </div>
 
-        {previewVideoUrl && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex items-center justify-center p-4"
-          >
-            <button onClick={() => setPreviewVideoUrl(null)} className="absolute top-10 right-10 text-white hover:rotate-90 transition-transform"><X size={40} /></button>
-            <div className="w-full max-w-5xl aspect-video rounded-[3rem] overflow-hidden shadow-2xl bg-black border border-white/10">
-              <video src={previewVideoUrl} controls autoPlay className="w-full h-full object-contain" />
+          {/* 4. Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-[1320px] mx-auto">
+            {/* Main Content Area */}
+            <div className="lg:col-span-2 space-y-12">
+              {/* Overview Section */}
+              <section id="Overview" ref={sectionRefs.Overview} className="scroll-mt-32">
+                <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                  <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.overview}</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 pb-10 border-b border-gray-100">
+                    {show(visList.projectCommunity) && <EcoparkItem label={`${t.projectCommunity}:`} value={getLoc(list?.listingInformationProjectCommunity)} />}
+                    {show(visList.areaZone) && <EcoparkItem label={`${t.areaZone}:`} value={getLoc(list?.listingInformationZoneSubArea)} />}
+                    {show(visList.blockName) && <EcoparkItem label={`${t.block}:`} value={getLoc(list?.listingInformationBlockName)} />}
+                    {/* {show(visList.availableFrom) && <EcoparkItem label={`${t.availableFrom}:`} value={formatDate(list?.listingInformationAvailableFrom)} />} */}
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {show(visList.propertyId) && <OverviewCard icon={<House />} label={`${t.propertyId}:`} value={safeVal(list?.listingInformationPropertyId)} />}
+                    {show(visList.propertyType) &&
+                      getLoc(list?.listingInformationPropertyType) && (
+                        <OverviewCard
+                          icon={<SlidersHorizontal />}
+                          label={`${t.propertyType}:`}
+                          value={getLoc(list?.listingInformationPropertyType)}
+                        />
+                      )}
+                    {show(visProp.bedrooms) && <OverviewCard icon={<Bed />} label={`${t.bedrooms}:`} value={`${safeVal(info?.informationBedrooms)} ${t.rooms}`} />}
+                    {show(visProp.bathrooms) && <OverviewCard icon={<Bath />} label={`${t.bathrooms}:`} value={`${safeVal(info?.informationBathrooms)} ${t.rooms}`} />}
+                    {show(visProp.furnishing) && <OverviewCard icon={<Armchair />} label={`${t.furnishing}:`} value={getLoc(info?.informationFurnishing)} />}
+                    {show(visProp.unit) && <OverviewCard icon={<Ruler />} label={`${t.size}:`} value={`${safeVal(info?.informationUnitSize)} ${safeVal(info?.informationUnit)}`} />}
+                    {show(visProp.floorRange) && <OverviewCard icon={<Layers />} label={`${t.floorRange}:`} value={getLoc(info?.informationFloors)} />}
+                    {show(visProp.view) && <OverviewCard icon={<Eye />} label="View:" value={getLoc(info?.informationView)} />}
+                  </div>
+                </div>
+              </section>
+
+              {/* Description Section */}
+              {(property.descriptionVisibility === false ||
+                property.descriptionVisibility === undefined) && (
+                  <section className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.description}</h2>
+                    <div
+                      suppressHydrationWarning
+                      className="text-gray-700 leading-6 rich-text-display property-description-summary [&_a]:text-blue-600 [&_a]:underline hover:[&_a]:text-blue-800"
+                      dangerouslySetInnerHTML={{ __html: cleanHtml(getLoc(what?.whatNearbyDescription)) || t.noDescription }}
+                    />
+                  </section>
+                )}
+
+              {/* Utility Section */}
+              {utilities.length > 0 && show(property.propertyUtilityVisibility) && (
+                <section id="Utility" ref={sectionRefs.Utility} className="scroll-mt-32">
+                  <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.propertyUtility}</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-12">
+                      {utilities.map((item: any, idx: number) => (
+                        <div key={idx} className="flex items-center gap-3 border-b py-3 last:border-b-0 group">
+                          {item?.propertyUtilityIcon ? <Image width={24} height={24} src={item.propertyUtilityIcon} className="object-contain" alt="" /> : null}
+                          <span className="font-medium text-gray-700">{safeVal(item?.propertyUtilityUnitName)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* Payment Overview */}
+              <section id="Payment" ref={sectionRefs.Payment} className="scroll-mt-32">
+                <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                  <h2 className="text-xl font-semibold mb-4 text-[#41398B]">{t.paymentOverview}</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+                    {show(visFin.deposit) && <InfoItem label={`${t.deposit}:`} value={safeVal(fin?.financialDetailsDeposit)} />}
+                    {show(visFin.paymentTerm) && <InfoItem label={`${t.paymentTerms}:`} value={getLoc(fin?.financialDetailsMainFee)} />}
+                    {transactionType === 'Lease' && show(visFin.contractLength) && <InfoItem label={`${t.contractLength}:`} value={getLoc(fin?.financialDetailsContractLength)} />}
+                    {transactionType === 'Home Stay' && (
+                      <>
+                        {show(visFin.checkIn) && <InfoItem label={t.checkIn} value={safeVal(fin?.financialDetailsCheckIn)} />}
+                        {show(visFin.checkOut) && <InfoItem label={t.checkOutLabel} value={safeVal(fin?.financialDetailsCheckOut)} />}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              {/* Video Section */}
+              {videos.length > 0 && show(property.videoVisibility) && (
+                <section id="Video" ref={sectionRefs.Video} className="scroll-mt-32">
+                  <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.video}</h2>
+
+                    <div className="grid gap-6">
+                      {videos.map((url, i) => (
+                        <div
+                          key={i}
+                          onClick={() => setPreviewVideoUrl(url)}
+                          className="relative group rounded-3xl overflow-hidden cursor-pointer h-[400px] bg-black"
+                        >
+                          {/* Video Thumbnail */}
+                          <video
+                            src={url}
+                            className="w-full h-full object-cover"
+                            preload="metadata"
+                            muted
+                          />
+
+                          {/* Overlay */}
+                          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-300" />
+
+                          {/* Play Button */}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                            <div className="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+                              <div className="w-14 h-14 bg-[#41398B] rounded-full flex items-center justify-center">
+                                <PlayIcon className="text-white fill-white ml-1" size={24} />
+                              </div>
+                            </div>
+
+                            <span className="mt-4 text-white font-extrabold tracking-widest text-xs uppercase">
+                              {language === 'vi' ? 'Xem Video' : 'Play Video'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* Map Section */}
+              {show(visList.googleMap) && (
+                <section id="Map" ref={sectionRefs.Map} className="scroll-mt-32">
+                  <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-5 text-[#41398B]">{t.map}</h2>
+                    {decodedMap ? (
+                      <div className="w-full h-[500px] rounded-3xl overflow-hidden border border-gray-100 shadow-inner">
+                        <div
+                          className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full"
+                          dangerouslySetInnerHTML={{ __html: decodedMap }}
+                        />
+                      </div>
+                    ) : (
+                      <p className="text-gray-400 italic text-center py-12">{t.noMap}</p>
+                    )}
+                  </div>
+                </section>
+              )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
+            {/* Sidebar Area */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-28 space-y-6">
+                {/* Agent Card */}
+                <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                  <div className="px-6 py-4">
+                    <h3 className="text-2xl text-[#41398B] font-semibold mb-4">{t.contact}</h3>
+                  </div>
+                  <div className="px-6 pb-6">
+                    {agentLoading ? (
+                      <div className="flex justify-center py-10"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#41398B]" /></div>
+                    ) : (
+                      <>
+                        <div className="mb-4">
+                          <Image
+                            width={250}
+                            height={250}
+                            src={agentData?.agentImage ? getImageUrl(agentData.agentImage) : "/placeholder.jpg"}
+                            className="w-[250px] h-auto object-cover"
+                            alt="Agent"
+                          />
+                        </div>
+                        <h4 className="text-xl text-[#41398B] font-semibold mb-4">{t.agent}</h4>
+
+                        <div className="space-y-3 mb-8">
+                          {safeArray(agentData?.agentNumber).map((p: any, idx: number) => (
+                            <a key={idx} href={`tel:${getLoc(p)}`} className="flex items-center gap-3 text-gray-600 hover:text-[#41398B] transition font-bold text-sm">
+                              <Phone size={16} /> {getLoc(p)}
+                            </a>
+                          ))}
+                          {safeArray(agentData?.agentEmail).map((e: any, idx: number) => (
+                            <a key={idx} href={`mailto:${getLoc(e)}`} className="flex items-center gap-3 text-gray-600 hover:text-[#41398B] transition font-bold text-sm truncate">
+                              <Mail size={16} /> {getLoc(e)}
+                            </a>
+                          ))}
+                        </div>
+
+                        <div className="flex justify-center gap-3 pt-4 border-t">
+                          {agentData?.agentZaloLink && (
+                            <a href={agentData.agentZaloLink} target="_blank" className="w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 flex items-center justify-center text-white transition shadow-sm">
+                              <SiZalo size={20} />
+                            </a>
+                          )}
+                          {agentData?.agentMessengerLink && (
+                            <a href={agentData.agentMessengerLink} target="_blank" className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white transition shadow-sm">
+                              <SiMessenger size={20} />
+                            </a>
+                          )}
+                          {agentData?.agentWhatsappLink && (
+                            <a href={agentData.agentWhatsappLink} target="_blank" className="w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center text-white transition shadow-sm">
+                              <FaWhatsapp size={20} />
+                            </a>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Enquiry Form */}
+                <div className="mt-6 md:p-6 p-3 rounded-xl bg-white shadow-sm border border-gray-100">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t.message}</label>
+                  <form onSubmit={handleEnquiry} className="space-y-4">
+                    <textarea
+                      value={enquiryMsg}
+                      onChange={e => setEnquiryMsg(e.target.value)}
+                      placeholder={t.enterMessage}
+                      className="w-full px-4 py-3 bg-white rounded-xl border border-gray-500 focus:outline-none focus:ring-2 focus:ring-[#41398B]/20 focus:border-[#41398B] transition-all resize-none h-32 text-sm"
+                    />
+                    <button type="submit" disabled={sending} className="w-full text-white cursor-pointer py-3 rounded-full font-bold transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-[#41398B] hover:bg-[#352e7a] disabled:bg-gray-400">
+                      {sending ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <Send size={18} />
+                          {t.sendRequest}
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 5. Recently Updated Properties */}
+        <section className="py-24 bg-white">
+          <div className="max-w-[1440px] mx-auto px-10">
+            <div className="text-center mb-8 md:mb-10">
+              <p className="text-[#a4aeb5] font-semibold text-sm uppercase tracking-wider mb-3">{t.recentProperties}</p>
+              <h2 className="text-2xl md:text-4xl font-semibold text-black transition-all duration-1000 delay-100">
+                {language === 'vi' ? 'Bất động sản mới được cập nhật' : 'Recently Updated Properties'}
+              </h2>
+            </div>
+
+            {loadingRecent ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="bg-gray-50 rounded-[2.5rem] p-6 h-80 animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {recentProperties.map((p, idx) => (
+                  <PropertyCard key={idx} property={p} t={t} language={language} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 6. Modals */}
+        <AnimatePresence>
+          {isPopupOpen && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black z-[100] flex flex-col"
+            >
+              <div className="p-6 flex justify-between items-center text-white z-[110]">
+                <button onClick={() => setIsPopupOpen(false)} className="flex items-center gap-2 font-bold uppercase tracking-widest text-xs hover:opacity-70">
+                  <X size={24} /> {t.close}
+                </button>
+                <div className="text-xs font-extrabold tracking-widest">{popupIndex + 1} / {images.length}</div>
+                <div className="w-10" />
+              </div>
+
+              <div className="flex-1 relative flex items-center justify-center overflow-hidden px-4">
+                <AnimatePresence initial={false} custom={popupDirection}>
+                  <motion.img
+                    key={popupIndex}
+                    src={images[popupIndex]}
+                    className="max-w-full max-h-[80vh] object-contain shadow-2xl absolute inset-0 m-auto"
+                    custom={popupDirection}
+                    variants={{
+                      enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+                      center: { x: 0, opacity: 1 },
+                      exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 }
+                    }}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={1}
+                    onDragEnd={(e, { offset, velocity }) => {
+                      const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500
+                      if (swipe && offset.x > 0) {
+                        setPopupDirection(-1);
+                        setPopupIndex(i => (i - 1 + images.length) % images.length);
+                      } else if (swipe && offset.x < 0) {
+                        setPopupDirection(1);
+                        setPopupIndex(i => (i + 1) % images.length);
+                      }
+                    }}
+                  />
+                </AnimatePresence>
+
+                <button onClick={() => { setPopupDirection(-1); setPopupIndex(i => (i - 1 + images.length) % images.length) }} className="absolute left-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"><ChevronLeft size={40} /></button>
+                <button onClick={() => { setPopupDirection(1); setPopupIndex(i => (i + 1) % images.length) }} className="absolute right-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"><ChevronRight size={40} /></button>
+              </div>
+
+              <div className="p-10 bg-black flex gap-3 overflow-x-auto justify-start md:justify-center scrollbar-hide">
+                {images.map((img, i) => (
+                  <button key={i} onClick={() => { setPopupDirection(i > popupIndex ? 1 : -1); setPopupIndex(i) }} className={`w-20 h-14 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 relative ${popupIndex === i ? 'ring-4 ring-white scale-110' : 'opacity-40 hover:opacity-100'}`}>
+                    <Image src={img} fill className="object-cover" alt="" />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {previewVideoUrl && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex items-center justify-center p-4"
+            >
+              <button onClick={() => setPreviewVideoUrl(null)} className="absolute top-10 right-10 text-white hover:rotate-90 transition-transform"><X size={40} /></button>
+              <div className="w-full max-w-5xl aspect-video rounded-[3rem] overflow-hidden shadow-2xl bg-black border border-white/10">
+                <video src={previewVideoUrl} controls autoPlay className="w-full h-full object-contain" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <style dangerouslySetInnerHTML={{
+          __html: `
         .property-description-summary ul {
           list-style-type: disc !important;
           padding-left: 1.5rem !important;

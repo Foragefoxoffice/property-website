@@ -13,7 +13,28 @@ import ProjectVideo from './ProjectVideo'
 import RelatedProjects from './RelatedProjects'
 import ProjectTOC from './ProjectTOC'
 
+import { useEffect } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
+
 export default function ProjectDetailClient({ project }: { project: Record<string, unknown> }) {
+  const { setDynamicRouteSlugs } = useLanguage()
+
+  useEffect(() => {
+    if (setDynamicRouteSlugs) {
+      const slug = project.slug
+      const viSlug = project.projectSeoSlugUrl_vn || project.projectSeoSlugUrl_vi || (slug && typeof slug === 'object' ? (slug as any).vi : null) || (typeof slug === 'string' ? slug : null) || project._id
+      const enSlug = project.projectSeoSlugUrl_en || (slug && typeof slug === 'object' ? (slug as any).en : null) || (typeof slug === 'string' ? slug : null) || project._id
+      
+      if (viSlug && enSlug) {
+        setDynamicRouteSlugs({
+          vi: `/projects/${viSlug}`,
+          en: `/projects/${enSlug}`
+        })
+      }
+
+      return () => setDynamicRouteSlugs(null)
+    }
+  }, [project, setDynamicRouteSlugs])
   if (!project) return null
 
   return (

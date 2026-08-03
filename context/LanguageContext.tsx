@@ -1,22 +1,34 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 
 interface LanguageContextValue {
   language: string
   toggleLanguage: (lang: string) => void
+  setDynamicRouteSlugs: (slugs: Record<string, string> | null) => void
 }
 
 const LanguageContext = createContext<LanguageContextValue>({
   language: 'vi',
   toggleLanguage: () => {},
+  setDynamicRouteSlugs: () => {},
 })
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
   const pathname = usePathname() || ''
   
+  const [dynamicSlugs, setDynamicSlugs] = useState<Record<string, string> | null>(null)
+
+  const setDynamicRouteSlugs = useCallback((slugs: Record<string, string> | null) => {
+    setDynamicSlugs(prev => {
+      if (!prev && !slugs) return null;
+      if (prev && slugs && prev.vi === slugs.vi && prev.en === slugs.en) return prev;
+      return slugs;
+    })
+  }, [])
+
   const urlLang = pathname.split('/')[1]
   const isLocale = urlLang === 'en' || urlLang === 'vi'
   const language = isLocale ? urlLang : 'vi'
@@ -31,8 +43,15 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       window.dispatchEvent(new Event('routeChangeStart'));
     }
     
+    const currentPathWithoutLang = isLocale ? '/' + pathname.split('/').slice(2).join('/') : pathname;
+    if (dynamicSlugs && dynamicSlugs[lang] && dynamicSlugs[language]?.toLowerCase() === currentPathWithoutLang.toLowerCase()) {
+      const search = window.location.search;
+      router.push(`/${lang}${dynamicSlugs[lang]}${search}`)
+      return;
+    }
+
     if (isLocale) {
-      let basePath = pathname.replace(`/${urlLang}`, '')
+      let basePath = '/' + pathname.split('/').slice(2).join('/')
       
       // Remove trailing slash for reliable matching
       if (basePath.endsWith('/') && basePath.length > 1) {
@@ -80,17 +99,17 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       const search = window.location.search;
       const newPathname = `/${lang}${newTranslatedPath === '/' ? '' : newTranslatedPath}${search}`
       console.log("Language Switch Debug:", { pathname, urlLang, basePath, internalPath, newTranslatedPath, newPathname })
-      window.location.href = newPathname
+      router.push(newPathname)
     } else {
       const search = window.location.search;
-      window.location.href = `/${lang}${pathname}${search}`
+      router.push(`/${lang}${pathname}${search}`)
     }
   }
 
 
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, setDynamicRouteSlugs }}>
       {children}
     </LanguageContext.Provider>
   )
