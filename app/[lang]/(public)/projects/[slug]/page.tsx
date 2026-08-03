@@ -119,7 +119,8 @@ export default async function ProjectDetailPage({ params, searchParams }: Props)
     : (project.projectSeoSlugUrl_vn || project.projectSeoSlugUrl_vi || (project.slug as any)?.vi || params.slug)
     
   if (expectedSlug && String(expectedSlug) !== String(params.slug)) {
-    redirect(`/${lang}/projects/${expectedSlug}`)
+    const searchString = previewToken ? `?previewToken=${previewToken}` : ''
+    redirect(`/${lang}/projects/${expectedSlug}${searchString}`)
   }
 
   const title = (project.title as Record<string, string>)?.en || String(project.title || 'Untitled')

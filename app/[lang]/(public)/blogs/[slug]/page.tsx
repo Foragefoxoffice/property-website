@@ -120,7 +120,8 @@ export default async function BlogDetailPage({ params, searchParams }: Props) {
   // Enforce correct slug for current language
   const expectedSlug = seo.slugUrl?.[lang] || (blog.slug as any)?.[lang] || params.slug
   if (expectedSlug && expectedSlug !== params.slug) {
-    redirect(`/${lang}/blogs/${expectedSlug}`)
+    const searchString = previewToken ? `?previewToken=${previewToken}` : ''
+    redirect(`/${lang}/blogs/${expectedSlug}${searchString}`)
   }
 
   return <BlogDetailClient blog={blog as Parameters<typeof BlogDetailClient>[0]['blog']} />
