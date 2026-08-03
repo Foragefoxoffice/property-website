@@ -77,11 +77,13 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       // 2. Map to the new language's translated slug
       const newTranslatedPath = slugMap[lang]?.[internalPath] || internalPath;
       
-      const newPathname = `/${lang}${newTranslatedPath === '/' ? '' : newTranslatedPath}`
+      const search = window.location.search;
+      const newPathname = `/${lang}${newTranslatedPath === '/' ? '' : newTranslatedPath}${search}`
       console.log("Language Switch Debug:", { pathname, urlLang, basePath, internalPath, newTranslatedPath, newPathname })
       window.location.href = newPathname
     } else {
-      window.location.href = `/${lang}${pathname}`
+      const search = window.location.search;
+      window.location.href = `/${lang}${pathname}${search}`
     }
   }
 
