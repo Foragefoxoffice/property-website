@@ -314,6 +314,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
   const videos = safeArray(property?.imagesVideos?.propertyVideo).filter(Boolean).map(v => getImageUrl(v))
   const utilities = safeArray(property?.propertyUtility)
   const transactionType = getLoc(list?.listingInformationTransactionType)
+  const isSale = ['sale', 'bán'].includes(transactionType?.toLowerCase().trim())
   const propertyType = getLoc(list?.listingInformationPropertyType)
   const title = getLoc(list?.listingInformationPropertyTitle) || property.title || t.untitledProperty
   const location = getLoc(list?.listingInformationCity)
@@ -323,6 +324,7 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
     Overview: useRef<HTMLElement>(null),
     Utility: useRef<HTMLElement>(null),
     Payment: useRef<HTMLElement>(null),
+    Financial: useRef<HTMLElement>(null),
     Video: useRef<HTMLElement>(null),
     Map: useRef<HTMLElement>(null),
   }
@@ -600,7 +602,8 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
               {[
                 { id: 'Overview', label: t.overview },
                 { id: 'Utility', label: t.propertyUtility },
-                { id: 'Payment', label: t.paymentOverview },
+                ...((transactionType === 'Lease' || transactionType === 'Home Stay') ? [{ id: 'Payment', label: t.paymentOverview }] : []),
+                ...(transactionType === 'Sale' ? [{ id: 'Financial', label: t.financialDetails }] : []),
                 { id: 'Video', label: t.video },
                 { id: 'Map', label: t.map },
               ].map(tab => (
@@ -680,22 +683,47 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
               )}
 
               {/* Payment Overview */}
-              <section id="Payment" ref={sectionRefs.Payment} className="scroll-mt-32">
-                <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <h2 className="text-xl font-semibold mb-4 text-[#41398B]">{t.paymentOverview}</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
-                    {show(visFin.deposit) && <InfoItem label={`${t.deposit}:`} value={safeVal(fin?.financialDetailsDeposit)} />}
-                    {show(visFin.paymentTerm) && <InfoItem label={`${t.paymentTerms}:`} value={getLoc(fin?.financialDetailsMainFee)} />}
-                    {transactionType === 'Lease' && show(visFin.contractLength) && <InfoItem label={`${t.contractLength}:`} value={getLoc(fin?.financialDetailsContractLength)} />}
-                    {transactionType === 'Home Stay' && (
-                      <>
-                        {show(visFin.checkIn) && <InfoItem label={t.checkIn} value={safeVal(fin?.financialDetailsCheckIn)} />}
-                        {show(visFin.checkOut) && <InfoItem label={t.checkOutLabel} value={safeVal(fin?.financialDetailsCheckOut)} />}
-                      </>
-                    )}
+              {(transactionType === 'Lease' || transactionType === 'Home Stay') && (
+                <section id="Payment" ref={sectionRefs.Payment} className="scroll-mt-32">
+                  <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-4 text-[#41398B]">{t.paymentOverview}</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+                      {show(visFin.deposit) && <InfoItem label={`${t.deposit}:`} value={safeVal(fin?.financialDetailsDeposit)} />}
+                      {show(visFin.paymentTerm) && <InfoItem label={`${t.paymentTerms}:`} value={getLoc(fin?.financialDetailsMainFee)} />}
+                      {transactionType === 'Lease' && show(visFin.contractLength) && <InfoItem label={`${t.contractLength}:`} value={getLoc(fin?.financialDetailsContractLength)} />}
+                      {transactionType === 'Home Stay' && (
+                        <>
+                          {show(visFin.checkIn) && <InfoItem label={t.checkIn} value={safeVal(fin?.financialDetailsCheckIn)} />}
+                          {show(visFin.checkOut) && <InfoItem label={t.checkOutLabel} value={safeVal(fin?.financialDetailsCheckOut)} />}
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              )}
+
+              {/* Financial Details (For Sale) */}
+              {transactionType === 'Sale' && (
+                <section id="Financial" ref={sectionRefs.Financial} className="scroll-mt-32">
+                  <div className="bg-white md:p-6 p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 className="text-xl font-semibold mb-4 text-[#41398B]">{t.financialDetails}</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+                      {show(visFin.price) && (
+                        <InfoItem
+                          label={`${t.price}:`}
+                          value={`${formatNumber(fin?.financialDetailsPrice)} ${(typeof fin?.financialDetailsCurrency === 'object' ? fin?.financialDetailsCurrency?.code : fin?.financialDetailsCurrency) || 'USD'}`}
+                        />
+                      )}
+                      {show(visFin.legalDocs) && (
+                        <InfoItem
+                          label={`${t.legalDoc}:`}
+                          value={getLoc(fin?.financialDetailsLegalDoc)}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </section>
+              )}
 
               {/* Video Section */}
               {videos.length > 0 && show(property.videoVisibility) && (
