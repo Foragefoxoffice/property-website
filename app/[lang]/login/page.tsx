@@ -43,7 +43,7 @@ function LoginForm() {
     setError('')
     setLoading(true)
     try {
-      const res = await loginUser(data)
+      const res = await loginUser({ ...data, portal: 'user' })
       if (res.data.success) {
         const user = res.data.user
         if (user?.role === 'user') {
