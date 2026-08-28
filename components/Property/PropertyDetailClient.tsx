@@ -268,12 +268,12 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
       const seo = initialProperty.seoInformation || {}
       const listInfo = initialProperty.listingInformation || {}
       const propId = listInfo.listingInformationPropertyId || initialProperty._id
-      
+
       let viSlug = seo.slugUrl?.vi || 'property'
       if (viSlug && propId && !String(viSlug).toLowerCase().endsWith(String(propId).toLowerCase())) {
         viSlug = `${viSlug}-${propId}`
       }
-      
+
       let enSlug = seo.slugUrl?.en || 'property'
       if (enSlug && propId && !String(enSlug).toLowerCase().endsWith(String(propId).toLowerCase())) {
         enSlug = `${enSlug}-${propId}`
@@ -467,6 +467,10 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
   }
 
   const show = (flag: any) => flag === false || flag === undefined
+
+  useEffect(() => {
+    window.dispatchEvent(new Event('hideStandardLoader'))
+  }, [])
 
   return (
     <>

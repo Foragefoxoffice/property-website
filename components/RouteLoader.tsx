@@ -15,12 +15,8 @@ function isHomePagePath(path: string | null | undefined): boolean {
  * It uses window.location for initial detection (SSR-safe with useState initializer).
  */
 function HomeVideoLoader({ onFinished, onFading }: { onFinished: () => void, onFading: () => void }) {
-    const [visible, setVisible] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return isHomePagePath(window.location.pathname)
-        }
-        return true
-    })
+    const pathname = usePathname()
+    const [visible, setVisible] = useState(() => isHomePagePath(pathname))
     const [fading, setFading] = useState(false)
     const [videoKey, setVideoKey] = useState(0)
     const videoRef = useRef<HTMLVideoElement>(null)
@@ -142,23 +138,14 @@ function HomeVideoLoader({ onFinished, onFading }: { onFinished: () => void, onF
  * the home video loader via a custom DOM event.
  */
 function RouteLoaderInner({
-    children,
     homeVideoActive,
 }: {
-    children: React.ReactNode
     homeVideoActive: boolean
 }) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const searchParamsStr = searchParams ? searchParams.toString() : ''
 
-    const [showStandardLoader, setShowStandardLoader] = useState(() => {
-        // Only show standard loader for non-home pages on initial load
-        if (typeof window !== 'undefined') {
-            return !isHomePagePath(window.location.pathname)
-        }
-        return false
-    })
     const isFirstLoad = useRef(true)
 
     // Global click listener to catch navigation clicks
@@ -189,11 +176,11 @@ function RouteLoaderInner({
                     // Trigger the home video loader only when coming FROM a non-home page
                     window.dispatchEvent(new Event('showHomeVideoLoader'))
                 } else if (!isHomePagePath(targetUrl.pathname)) {
-                    setShowStandardLoader(true)
+                    window.dispatchEvent(new CustomEvent('setStandardLoader', { detail: true }))
                 }
 
                 // Safety fallback
-                setTimeout(() => setShowStandardLoader(false), 15000)
+                setTimeout(() => window.dispatchEvent(new CustomEvent('setStandardLoader', { detail: false })), 15000)
             } catch {
                 // Ignore parsing errors
             }
@@ -206,8 +193,8 @@ function RouteLoaderInner({
     // Listen for programmatic route changes (router.push)
     useEffect(() => {
         const handleStart = () => {
-            setShowStandardLoader(true)
-            setTimeout(() => setShowStandardLoader(false), 15000)
+            window.dispatchEvent(new CustomEvent('setStandardLoader', { detail: true }))
+            setTimeout(() => window.dispatchEvent(new CustomEvent('setStandardLoader', { detail: false })), 15000)
         }
         window.addEventListener('routeChangeStart', handleStart)
         return () => window.removeEventListener('routeChangeStart', handleStart)
@@ -215,26 +202,23 @@ function RouteLoaderInner({
 
     // Dismiss standard loader when route changes
     useEffect(() => {
+        const isPropertyDetailPage = pathname.match(/\/listing\/.+/)
+        const isRedirectPage = pathname.match(/\/redirect/)
+        
         if (isFirstLoad.current) {
             isFirstLoad.current = false
-            if (!isHomePagePath(pathname)) {
-                const timer = setTimeout(() => setShowStandardLoader(false), 600)
+            if (!isHomePagePath(pathname) && !isPropertyDetailPage && !isRedirectPage) {
+                const timer = setTimeout(() => window.dispatchEvent(new CustomEvent('setStandardLoader', { detail: false })), 600)
                 return () => clearTimeout(timer)
             }
             return
         }
-        setShowStandardLoader(false)
+        if (!isPropertyDetailPage && !isRedirectPage) {
+            window.dispatchEvent(new CustomEvent('setStandardLoader', { detail: false }))
+        }
     }, [pathname, searchParamsStr])
 
-    // Show standard loader only when home video is NOT active
-    const showLoader = showStandardLoader && !homeVideoActive
-
-    return (
-        <>
-            {showLoader && <Loader />}
-            {children}
-        </>
-    )
+    return null
 }
 
 export default function RouteLoader({
@@ -242,12 +226,8 @@ export default function RouteLoader({
 }: {
     children: React.ReactNode
 }) {
-    const [homeVideoActive, setHomeVideoActive] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return isHomePagePath(window.location.pathname)
-        }
-        return true
-    })
+    const pathname = usePathname()
+    const [homeVideoActive, setHomeVideoActive] = useState(() => isHomePagePath(pathname))
     const [homeVideoFading, setHomeVideoFading] = useState(false)
 
     const handleVideoFinished = useCallback(() => {
@@ -269,11 +249,30 @@ export default function RouteLoader({
         return () => window.removeEventListener('showHomeVideoLoader', handleShow)
     }, [])
 
+    const [showStandardLoader, setShowStandardLoader] = useState(() => !isHomePagePath(pathname))
+
+    useEffect(() => {
+        const handleSet = (e: any) => setShowStandardLoader(e.detail)
+        const handleHide = () => setShowStandardLoader(false)
+        
+        window.addEventListener('setStandardLoader', handleSet)
+        window.addEventListener('hideStandardLoader', handleHide)
+        
+        return () => {
+            window.removeEventListener('setStandardLoader', handleSet)
+            window.removeEventListener('hideStandardLoader', handleHide)
+        }
+    }, [])
+
+    const showLoader = showStandardLoader && !homeVideoActive
+
     return (
         <>
             {/* Home video loader lives OUTSIDE Suspense — never unmounted by useSearchParams */}
             <HomeVideoLoader onFinished={handleVideoFinished} onFading={handleVideoFading} />
             
+            {showLoader && <Loader />}
+
             {/* Wrap the app in a crossfading container */}
             <div 
                 style={{ 
@@ -285,9 +284,10 @@ export default function RouteLoader({
                     pointerEvents: (homeVideoActive && !homeVideoFading) ? 'none' : 'auto'
                 }}
             >
-                <Suspense fallback={<>{children}</>}>
-                    <RouteLoaderInner homeVideoActive={homeVideoActive}>{children}</RouteLoaderInner>
+                <Suspense fallback={null}>
+                    <RouteLoaderInner homeVideoActive={homeVideoActive} />
                 </Suspense>
+                {children}
             </div>
         </>
     )
