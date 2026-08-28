@@ -536,19 +536,69 @@ export default function PropertyDetailClient({ property: initialProperty }: { pr
           {/* 2. Photo Gallery Grid */}
           <div className="relative rounded-xl overflow-hidden group mb-0 shadow-sm">
             <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[350px] lg:h-[480px]">
-              <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
-                <Image priority src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
-              </div>
-              {images.slice(1, 5).map((img, i) => (
-                <div key={i} className="cursor-pointer overflow-hidden relative" onClick={() => openPopup(i + 1)}>
-                  <Image src={img || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-110 hover:brightness-90" alt={`Gallery ${i + 1}`} />
+              {images.length === 0 ? (
+                <>
+                  <div className="col-span-2 row-span-2 bg-gray-100 flex items-center justify-center">
+                    <ImageIcon className="text-gray-300" size={64} />
+                  </div>
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="bg-gray-100 flex items-center justify-center">
+                      <ImageIcon className="text-gray-300" size={32} />
+                    </div>
+                  ))}
+                </>
+              ) : images.length === 1 ? (
+                <div className="col-span-4 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+                  <Image priority src={images[0]} fill sizes="(max-width: 768px) 100vw, 100vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
                 </div>
-              ))}
-              {[...Array(Math.max(0, 4 - (images.length - 1)))].map((_, i) => (
-                <div key={i} className="bg-gray-100 flex items-center justify-center">
-                  <ImageIcon className="text-gray-300" size={32} />
-                </div>
-              ))}
+              ) : images.length === 2 ? (
+                <>
+                  <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+                    <Image priority src={images[0]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
+                  </div>
+                  <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(1)}>
+                    <Image priority src={images[1]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={`Gallery 1`} />
+                  </div>
+                </>
+              ) : images.length === 3 ? (
+                <>
+                  <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+                    <Image priority src={images[0]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
+                  </div>
+                  <div className="col-span-2 row-span-1 cursor-pointer overflow-hidden relative" onClick={() => openPopup(1)}>
+                    <Image src={images[1]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={`Gallery 1`} />
+                  </div>
+                  <div className="col-span-2 row-span-1 cursor-pointer overflow-hidden relative" onClick={() => openPopup(2)}>
+                    <Image src={images[2]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={`Gallery 2`} />
+                  </div>
+                </>
+              ) : images.length === 4 ? (
+                <>
+                  <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+                    <Image priority src={images[0]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
+                  </div>
+                  <div className="col-span-1 row-span-1 cursor-pointer overflow-hidden relative" onClick={() => openPopup(1)}>
+                    <Image src={images[1]} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={`Gallery 1`} />
+                  </div>
+                  <div className="col-span-1 row-span-1 cursor-pointer overflow-hidden relative" onClick={() => openPopup(2)}>
+                    <Image src={images[2]} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={`Gallery 2`} />
+                  </div>
+                  <div className="col-span-2 row-span-1 cursor-pointer overflow-hidden relative" onClick={() => openPopup(3)}>
+                    <Image src={images[3]} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={`Gallery 3`} />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="col-span-2 row-span-2 cursor-pointer overflow-hidden relative" onClick={() => openPopup(0)}>
+                    <Image priority src={images[0] || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105 hover:brightness-90" alt={title || "Main"} />
+                  </div>
+                  {images.slice(1, 5).map((img, i) => (
+                    <div key={i} className="cursor-pointer overflow-hidden relative" onClick={() => openPopup(i + 1)}>
+                      <Image src={img || '/images/property/dummy-img.avif'} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover transition-all duration-700 hover:scale-110 hover:brightness-90" alt={`Gallery ${i + 1}`} />
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
 
             {/* Mobile Slider */}
