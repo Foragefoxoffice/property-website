@@ -67,17 +67,17 @@ const FloatingContactButtons = () => {
 
       {/* Mobile Sticky Bottom Bar */}
       <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 z-[9999] md:hidden shadow-[0_-2px_15px_rgba(0,0,0,0.15)]">
-        <div className="flex justify-around items-center h-16 px-2 pb-1">
+        <div className="flex justify-around items-center h-20 px-2 pb-0">
           {buttons.map(btn => (
             <a key={btn.id} href={btn.link!} target="_blank" rel="noopener noreferrer" aria-label={btn.mobileLabel}
-              className="flex flex-col items-center justify-center gap-0 min-w-[70px] active:scale-95 transition-transform">
-              <div className="mb-0.5">
-                {btn.id === 'messenger' && <SiMessenger className="w-7 h-7" style={{ color: btn.mobileColor }} title="Messenger" />}
-                {btn.id === 'zalo' && <SiZalo className="w-7 h-7" style={{ color: btn.mobileColor }} title="Zalo" />}
-                {btn.id === 'call' && <Phone className="w-7 h-7" fill={btn.mobileColor} style={{ color: btn.mobileColor }} />}
-                {btn.id === 'whatsapp' && <FaWhatsapp className="w-7 h-7" style={{ color: btn.mobileColor }} title="WhatsApp" />}
+              className="flex flex-col items-center justify-center gap-1 min-w-[70px] active:scale-95 transition-transform">
+              <div className={`${btn.color} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md`}>
+                {btn.id === 'messenger' && <SiMessenger className="w-5 h-5" title="Messenger" />}
+                {btn.id === 'zalo' && <SiZalo className="w-5 h-5" title="Zalo" />}
+                {btn.id === 'call' && <Phone className="w-5 h-5" fill="white" />}
+                {btn.id === 'whatsapp' && <FaWhatsapp className="w-5 h-5" title="WhatsApp" />}
               </div>
-              <span className="text-[11px] font-bold text-gray-500 tracking-tight">{btn.mobileLabel}</span>
+              <span className="text-[11px] font-bold text-gray-600 tracking-tight">{btn.mobileLabel}</span>
             </a>
           ))}
         </div>

@@ -542,7 +542,7 @@ function ListingInner({
               </div>
 
               {/* Sliders + Search */}
-              <div className="flex items-end gap-3 h-full">
+              <div className={`items-end gap-3 h-full ${showFilters ? 'hidden md:flex' : 'flex'}`}>
                 <button
                   className={`flex items-center justify-center p-[11px] border cursor-pointer border-[#d1d5dc] rounded-full text-gray-700 font-semibold hover:bg-gray-50 transition-all ${showFilters ? 'bg-purple-50 border-[#41398B] text-[#41398B]' : ''}`}
                   onClick={() => setShowFilters(s => !s)} style={{ minWidth: '50px' }}>
@@ -630,8 +630,8 @@ function ListingInner({
                   </button>
                 </div>
 
-                <div className="mt-6 flex justify-end">
-                  <button className="px-4 py-2 text-gray-400 font-bold hover:text-[#41398B] transition-colors rounded-full text-sm cursor-pointer" onClick={handleClear}>
+                <div className="md:mt-6 mt-2 flex justify-end">
+                  <button className="px-4 py-2 text-red-500 font-bold hover:text-[#41398B] transition-colors rounded-full text-sm cursor-pointer" onClick={handleClear}>
                     {t.clearAll || 'Clear All'}
                   </button>
                 </div>
@@ -687,11 +687,11 @@ function ListingInner({
                       },
                     }}
                   >
-                    <Pagination 
-                      current={page} 
-                      total={totalProperties} 
-                      pageSize={20} 
-                      onChange={handlePageChange} 
+                    <Pagination
+                      current={page}
+                      total={totalProperties}
+                      pageSize={20}
+                      onChange={handlePageChange}
                       showSizeChanger={false}
                     />
                   </ConfigProvider>
